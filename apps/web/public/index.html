@@ -3,18 +3,26 @@
   <head>
     <meta charset="utf-8" />
 
-    <title>Uniswap Interface</title>
+    <title>Tacitus Swap</title>
 
     <!--
       %PUBLIC_URL% will be replaced with the URL of the `public` folder during build.
       Only files inside the `public` folder can be referenced from the HTML.
     -->
+    <!-- Favicon tags with multiple sizes for better browser support -->
+    <!-- Primary favicon - browsers should prefer this -->
+    <link rel="icon" href="%PUBLIC_URL%/favicon.png" />
+    <!-- Size-specific favicons for browser tabs -->
+    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="%PUBLIC_URL%/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="%PUBLIC_URL%/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="144x144" href="%PUBLIC_URL%/favicon-144x144.png" />
     <link rel="shortcut icon" type="image/png" href="%PUBLIC_URL%/favicon.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="%PUBLIC_URL%/images/192x192_App_Icon.png" />
     <link rel="apple-touch-icon" sizes="512x512" href="%PUBLIC_URL%/images/512x512_App_Icon.png" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#fff" />
+    <meta name="theme-color" content="#0a0b0e" />
     <% const cspConfig = require('./csp.json'); %>
     <meta
       http-equiv="Content-Security-Policy" 
@@ -22,10 +30,8 @@
     >
     
     <!-- 
-      Apple Smart App Banner for Safari on iOS
-      https://developer.apple.com/documentation/webkit/promoting_apps_with_smart_app_banners
+      Apple Smart App Banner for Safari on iOS - Removed Uniswap app reference
      -->
-    <meta name="apple-itunes-app" content="app-id=6443944476">
 
     <!--
       manifest.json provides metadata used when the app is installed as a PWA.
@@ -40,10 +46,23 @@
     <link rel="preload" href="%PUBLIC_URL%/fonts/Basel-Grotesk-Book.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="%PUBLIC_URL%/fonts/Basel-Grotesk-Medium.woff" as="font" type="font/woff" crossorigin />
     <link rel="preload" href="%PUBLIC_URL%/fonts/Basel-Grotesk-Medium.woff2" as="font" type="font/woff2" crossorigin />
+    
+    <!-- Import Space Grotesk font for Matrix theme -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
    
     <style>
+      :root {
+        --neon-blue: #00f3ff;
+        --neon-purple: #7b2ff7;
+        --matrix-green: #00ff00;
+        --dark-bg: #0a0b0e;
+        --grid-color: rgba(0, 243, 255, 0.1);
+      }
+
       * {
-        font-family: 'Basel', sans-serif;
+        font-family: 'Space Grotesk', 'Basel', sans-serif;
         box-sizing: border-box;
       }
 
@@ -72,7 +91,7 @@
 
       @supports (font-variation-settings: normal) {
         * {
-          font-family: 'Basel', sans-serif;
+          font-family: 'Space Grotesk', 'Basel', sans-serif;
         }
       }
 
@@ -110,22 +129,61 @@
         z-index: -1;
       }
 
+      /* Grid background pattern */
+      .grid-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+          linear-gradient(var(--grid-color) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+        background-size: 30px 30px;
+        opacity: 0.2;
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      /* Glass effect for cards */
+      .glass-card {
+        background: rgba(10, 11, 14, 0.8) !important;
+        backdrop-filter: blur(15px) !important;
+        border: 1px solid rgba(0, 243, 255, 0.2) !important;
+        border-radius: 10px !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.1) !important;
+      }
+
+      /* Neon text for buttons */
+      .neon-text {
+        color: var(--neon-blue) !important;
+        text-shadow: 0 0 10px var(--neon-blue) !important;
+      }
+
+      /* Neon button effect */
+      .neon-button {
+        border-color: var(--neon-blue) !important;
+        box-shadow: 0 0 10px rgba(0, 243, 255, 0.5) !important;
+        transition: all 0.3s ease !important;
+      }
+      
+      .neon-button:hover {
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.8) !important;
+      }
+
       html,
       body,
       #root {
         min-height: 100%;
       }
 
-      @media (prefers-color-scheme: dark) {
-        html {
-          background: linear-gradient(rgb(19, 19, 19) 0%, rgb(19, 19, 19) 100%);
-        }
-      }
-
-      @media (prefers-color-scheme: light) {
-        html {
-          background: radial-gradient(100% 100% at 50% 0%, rgba(255, 184, 226, 0) 0%, rgba(255, 255, 255, 0) 100%), rgb(255, 255, 255);
-        }
+      html {
+        background: var(--dark-bg);
+        background-image: 
+          linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+        background-size: 30px 30px;
       }
     </style>
   </head>
@@ -139,5 +197,6 @@
     </div>
 
     <div id="background-radial-gradient"></div>
+    <div class="grid-background"></div>
   </body>
 </html>
