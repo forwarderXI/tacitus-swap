@@ -2,6 +2,7 @@
   "rewrites":  [
     {"source": "/(.*)", "destination": "/"}
   ],
-  "buildCommand": "cd apps/web && yarn build:production",
-  "outputDirectory": "apps/web/build"
+  "buildCommand": "cd apps/web && yarn --network-timeout 100000 && yarn build:production || (echo 'Build failed. Error details:' && ls -la && pwd)",
+  "outputDirectory": "apps/web/build",
+  "installCommand": "yarn install --network-timeout 100000"
 }
