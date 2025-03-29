@@ -70,7 +70,7 @@ export const colors = {
   green700: '#053117',
   green800: '#091F10',
   green900: '#09130B',
-  greenVibrant: '#5CFE9D',
+  greenVibrant: '#00FF00', // Matrix green
   blue50: '#EDEFF8',
   blue100: '#DEE1FF',
   blue200: '#ADBCFF',
@@ -81,10 +81,10 @@ export const colors = {
   blue700: '#09265E',
   blue800: '#0B193F',
   blue900: '#040E34',
-  blueVibrant: '#587BFF',
+  blueVibrant: '#00F3FF', // Neon blue
   // TODO: add magenta 50-900
   magenta300: '#FD82FF',
-  magentaVibrant: '#FC72FF',
+  magentaVibrant: '#7B2FF7', // Neon purple
   purple300: '#8440F2',
   purple900: '#1C0337',
   purpleVibrant: '#6100FF',
@@ -98,18 +98,18 @@ export const colors = {
   networkPolygonSoft: 'rgba(164, 87, 255, 0.16)',
   networkEthereumSoft: 'rgba(98, 126, 234, 0.16)',
   networkBase: '#0052FF',
-  //NEW COLORS FOR SPORE - need to define light/dark here cause they are root colors now (different system)
+  // CYBERPUNK COLORS - dark theme is primary for our app
   neutral1_dark: '#FFFFFF',
   neutral2_dark: '#9B9B9B',
   neutral3_dark: '#5E5E5E',
-  surface1_dark: '#131313',
-  surface2_dark: '#1B1B1B',
-  surface3_dark: '#FFFFFF12',
-  surface4_dark: '#FFFFFF20',
+  surface1_dark: '#0a0b0e', // Dark background
+  surface2_dark: '#121317', // Slightly lighter background
+  surface3_dark: '#00F3FF12', // Neon blue with transparency
+  surface4_dark: '#00F3FF20', // Neon blue with more opacity
   surface5_dark: '#00000004',
-  accent1_dark: '#FC72FF',
-  accent2_dark: '#311C31',
-  accent3_dark: '#4C82FB',
+  accent1_dark: '#00F3FF', // Neon blue
+  accent2_dark: '#0E1D20', // Dark blue-green
+  accent3_dark: '#00FF00', // Matrix green
   neutral1_light: '#222222',
   neutral2_light: '#7D7D7D',
   neutral3_light: '#CECECE',
@@ -118,10 +118,10 @@ export const colors = {
   surface3_light: '#22222212',
   surface4_light: '#FFFFFF64',
   surface5_light: '#00000004',
-  accent1_light: '#FC72FF',
-  accent2_light: '#FFEFFF',
-  accent3_light: '#4C82FB',
-  success: '#40B66B',
+  accent1_light: '#00F3FF', // Neon blue
+  accent2_light: '#E6FEFF', // Light cyan
+  accent3_light: '#00FF00', // Matrix green
+  success: '#00FF00', // Matrix green
   critical: '#FF5F52',
   critical2_dark: '#2E0805',
   critical2_light: '#FFF2F1',
@@ -154,9 +154,9 @@ const commonTheme = {
   chain_42161_background: colors.blue900,
   chain_84531: colors.networkBase,
   chain_56_background: colors.networkBsc,
-  promotional: colors.magenta300,
+  promotional: colors.blueVibrant,
 
-  brandedGradient: 'linear-gradient(139.57deg, #FF79C9 4.35%, #FFB8E2 96.44%);',
+  brandedGradient: 'linear-gradient(139.57deg, #00F3FF 4.35%, #7B2FF7 96.44%);',
   promotionalGradient: colors.accent1_light,
 }
 
