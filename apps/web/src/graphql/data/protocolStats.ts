@@ -49,12 +49,18 @@ function mapDataByTimestamp(
   const dataByTime: Record<number, Record<ProtocolVersion, number>> = {}
   v2Data?.forEach((v2Point) => {
     const timestamp = v2Point.timestamp
-    dataByTime[timestamp] = { [ProtocolVersion.V2]: v2Point.value, [ProtocolVersion.V3]: 0 }
+    dataByTime[timestamp] = {
+      [ProtocolVersion.V2]: v2Point.value,
+      [ProtocolVersion.V3]: 0,
+    }
   })
   v3Data?.forEach((v3Point) => {
     const timestamp = v3Point.timestamp
     if (!dataByTime[timestamp]) {
-      dataByTime[timestamp] = { [ProtocolVersion.V2]: 0, [ProtocolVersion.V3]: v3Point.value }
+      dataByTime[timestamp] = {
+        [ProtocolVersion.V2]: 0,
+        [ProtocolVersion.V3]: v3Point.value,
+      }
     } else {
       dataByTime[timestamp][ProtocolVersion.V3] = v3Point.value
     }

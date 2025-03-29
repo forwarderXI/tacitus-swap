@@ -144,7 +144,9 @@ const calcAmmBasedPoolprice = (asset: GenieAsset, position = 0): string => {
           ethReserves: number
         }
       >
-    )?.poolMetadata?.ethReserves?.toLocaleString('fullwide', { useGrouping: false }) ?? 1
+    )?.poolMetadata?.ethReserves?.toLocaleString('fullwide', {
+      useGrouping: false,
+    }) ?? 1
   )
   const tokenReserves = BigNumber.from(
     (
@@ -154,7 +156,9 @@ const calcAmmBasedPoolprice = (asset: GenieAsset, position = 0): string => {
           tokenReserves: number
         }
       >
-    )?.poolMetadata?.tokenReserves?.toLocaleString('fullwide', { useGrouping: false }) ?? 1
+    )?.poolMetadata?.tokenReserves?.toLocaleString('fullwide', {
+      useGrouping: false,
+    }) ?? 1
   )
   const numerator = ethReserves.mul(amountToBuy).mul(1000)
   const denominator = tokenReserves.sub(amountToBuy).mul(997)

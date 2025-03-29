@@ -37,7 +37,12 @@ export const BagContent = () => {
       .map((item) => item.asset)
     const availableItems = itemsInBag.filter((item) => item.status !== BagItemStatus.UNAVAILABLE)
 
-    return { unchangedAssets, priceChangedAssets, unavailableAssets, availableItems }
+    return {
+      unchangedAssets,
+      priceChangedAssets,
+      unavailableAssets,
+      availableItems,
+    }
   }, [itemsInBag])
 
   useEffect(() => {

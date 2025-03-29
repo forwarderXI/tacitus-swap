@@ -227,7 +227,10 @@ function useSweepFetcherVars({ contractAddress, markets, price, traits }: SweepF
       traits:
         traits && traits.length > 0
           ? traits?.map((trait) => {
-              return { name: trait.trait_type, values: [trait.trait_value] } as unknown as NftAssetTraitInput
+              return {
+                name: trait.trait_type,
+                values: [trait.trait_value],
+              } as unknown as NftAssetTraitInput
             })
           : undefined,
       marketplaces:

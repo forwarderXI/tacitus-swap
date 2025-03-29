@@ -200,7 +200,10 @@ function CurrentPriceCard({
           <Trans>Current price</Trans>
         </ExtentsText>
         <ThemedText.DeprecatedMediumHeader textAlign="center">
-          {formatPrice({ price: inverted ? pool.token1Price : pool.token0Price, type: NumberType.TokenTx })}
+          {formatPrice({
+            price: inverted ? pool.token1Price : pool.token0Price,
+            type: NumberType.TokenTx,
+          })}
         </ThemedText.DeprecatedMediumHeader>
         <ExtentsText>
           <Trans>
@@ -216,8 +219,14 @@ const TokenLink = ({
   children,
   chainId,
   address,
-}: PropsWithChildren<{ chainId: keyof typeof CHAIN_IDS_TO_NAMES; address: string }>) => {
-  const tokenLink = getTokenDetailsURL({ address, chain: chainIdToBackendName(chainId) })
+}: PropsWithChildren<{
+  chainId: keyof typeof CHAIN_IDS_TO_NAMES
+  address: string
+}>) => {
+  const tokenLink = getTokenDetailsURL({
+    address,
+    chain: chainIdToBackendName(chainId),
+  })
   return <StyledRouterLink to={tokenLink}>{children}</StyledRouterLink>
 }
 
@@ -355,7 +364,13 @@ const useInverter = ({
 export function PositionPageUnsupportedContent() {
   return (
     <PageWrapper>
-      <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}
+      >
         <ThemedText.HeadlineLarge style={{ marginBottom: '8px' }}>
           <Trans>Position unavailable</Trans>
         </ThemedText.HeadlineLarge>
@@ -434,7 +449,12 @@ function PositionPageContent() {
   const [poolState, pool] = usePool(token0 ?? undefined, token1 ?? undefined, feeAmount)
   const position = useMemo(() => {
     if (pool && liquidity && typeof tickLower === 'number' && typeof tickUpper === 'number') {
-      return new Position({ pool, liquidity: liquidity.toString(), tickLower, tickUpper })
+      return new Position({
+        pool,
+        liquidity: liquidity.toString(),
+        tickLower,
+        tickUpper,
+      })
     }
     return undefined
   }, [liquidity, pool, tickLower, tickUpper])
@@ -688,7 +708,11 @@ function PositionPageContent() {
             <AutoColumn gap="sm">
               <Link
                 data-cy="visit-pool"
-                style={{ textDecoration: 'none', width: 'fit-content', marginBottom: '0.5rem' }}
+                style={{
+                  textDecoration: 'none',
+                  width: 'fit-content',
+                  marginBottom: '0.5rem',
+                }}
                 to="/pool"
               >
                 <HoverText>
@@ -700,7 +724,8 @@ function PositionPageContent() {
                   <DoubleCurrencyLogo currency0={currencyBase} currency1={currencyQuote} size={24} margin={true} />
                   <StyledPoolLink to={poolAddress ? getPoolDetailsURL(poolAddress, chainIdToBackendName(chainId)) : ''}>
                     <PairHeader>
-                      &nbsp;{currencyQuote?.symbol}&nbsp;/&nbsp;{currencyBase?.symbol}
+                      &nbsp;{currencyQuote?.symbol}&nbsp;/&nbsp;
+                      {currencyBase?.symbol}
                     </PairHeader>
                   </StyledPoolLink>
                   <Badge style={{ marginRight: '8px' }}>
@@ -807,7 +832,9 @@ function PositionPageContent() {
                           <LinkedCurrency chainId={chainId ?? ChainId.MAINNET} currency={currencyQuote} />
                           <RowFixed>
                             <ThemedText.DeprecatedMain>
-                              {formatCurrencyAmount({ amount: inverted ? position?.amount0 : position?.amount1 })}
+                              {formatCurrencyAmount({
+                                amount: inverted ? position?.amount0 : position?.amount1,
+                              })}
                             </ThemedText.DeprecatedMain>
                             {typeof ratio === 'number' && !removed ? (
                               <Badge style={{ marginLeft: '10px' }}>
@@ -822,7 +849,9 @@ function PositionPageContent() {
                           <LinkedCurrency chainId={chainId ?? ChainId.MAINNET} currency={currencyBase} />
                           <RowFixed>
                             <ThemedText.DeprecatedMain>
-                              {formatCurrencyAmount({ amount: inverted ? position?.amount1 : position?.amount0 })}
+                              {formatCurrencyAmount({
+                                amount: inverted ? position?.amount1 : position?.amount0,
+                              })}
                             </ThemedText.DeprecatedMain>
                             {typeof ratio === 'number' && !removed ? (
                               <Badge style={{ marginLeft: '10px' }}>
@@ -848,7 +877,10 @@ function PositionPageContent() {
                           {fiatValueOfFees?.greaterThan(new Fraction(1, 100)) ? (
                             <ThemedText.DeprecatedLargeHeader color={theme.success} fontSize="36px" fontWeight={535}>
                               <Trans>
-                                {formatCurrencyAmount({ amount: fiatValueOfFees, type: NumberType.FiatTokenPrice })}
+                                {formatCurrencyAmount({
+                                  amount: fiatValueOfFees,
+                                  type: NumberType.FiatTokenPrice,
+                                })}
                               </Trans>
                             </ThemedText.DeprecatedLargeHeader>
                           ) : (
@@ -903,7 +935,11 @@ function PositionPageContent() {
                           </RowFixed>
                           <RowFixed>
                             <ThemedText.DeprecatedMain>
-                              {feeValueUpper ? formatCurrencyAmount({ amount: feeValueUpper }) : '-'}
+                              {feeValueUpper
+                                ? formatCurrencyAmount({
+                                    amount: feeValueUpper,
+                                  })
+                                : '-'}
                             </ThemedText.DeprecatedMain>
                           </RowFixed>
                         </RowBetween>
@@ -918,7 +954,11 @@ function PositionPageContent() {
                           </RowFixed>
                           <RowFixed>
                             <ThemedText.DeprecatedMain>
-                              {feeValueLower ? formatCurrencyAmount({ amount: feeValueLower }) : '-'}
+                              {feeValueLower
+                                ? formatCurrencyAmount({
+                                    amount: feeValueLower,
+                                  })
+                                : '-'}
                             </ThemedText.DeprecatedMain>
                           </RowFixed>
                         </RowBetween>

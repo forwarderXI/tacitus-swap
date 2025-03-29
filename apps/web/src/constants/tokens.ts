@@ -464,7 +464,9 @@ export function nativeOnChain(chainId: number): NativeCurrency | Token {
   return (cachedNativeCurrency[chainId] = nativeCurrency)
 }
 
-export const TOKEN_SHORTHANDS: { [shorthand: string]: { [chainId in ChainId]?: string } } = {
+export const TOKEN_SHORTHANDS: {
+  [shorthand: string]: { [chainId in ChainId]?: string }
+} = {
   USDC: {
     [ChainId.MAINNET]: USDC_MAINNET.address,
     [ChainId.ARBITRUM_ONE]: USDC_ARBITRUM.address,

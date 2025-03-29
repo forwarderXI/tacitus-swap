@@ -21,7 +21,9 @@ export const useTraitsOpen = create<TraitsOpenState>()(
     (set) => ({
       traitsOpen: {},
       setTraitsOpen: (index, isOpen) => {
-        set(({ traitsOpen }) => ({ traitsOpen: { ...traitsOpen, [index]: isOpen } }))
+        set(({ traitsOpen }) => ({
+          traitsOpen: { ...traitsOpen, [index]: isOpen },
+        }))
       },
     }),
     { name: 'useTraitsOpen' }

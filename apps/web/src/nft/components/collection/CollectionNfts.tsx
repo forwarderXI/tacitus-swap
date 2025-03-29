@@ -271,7 +271,10 @@ export const CollectionNfts = ({ contractAddress, collectionStats, rarityVerifie
       traits:
         traits.length > 0
           ? traits.map((trait) => {
-              return { name: trait.trait_type, values: [trait.trait_value] } as unknown as NftAssetTraitInput
+              return {
+                name: trait.trait_type,
+                values: [trait.trait_value],
+              } as unknown as NftAssetTraitInput
             })
           : undefined,
     },
@@ -497,7 +500,10 @@ export const CollectionNfts = ({ contractAddress, collectionStats, rarityVerifie
               element={InterfaceElementName.NFT_FILTER_BUTTON}
               name={NFTEventName.NFT_FILTER_OPENED}
               shouldLogImpression={!isFiltersExpanded}
-              properties={{ collection_address: contractAddress, chain_id: chainId }}
+              properties={{
+                collection_address: contractAddress,
+                chain_id: chainId,
+              }}
             >
               <FilterButton
                 isMobile={isMobile}

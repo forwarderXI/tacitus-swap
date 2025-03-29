@@ -46,7 +46,10 @@ export default function useENSAvatar(
   )
 }
 
-function useAvatarFromNode(node?: string): { avatar?: string; loading: boolean } {
+function useAvatarFromNode(node?: string): {
+  avatar?: string
+  loading: boolean
+} {
   const nodeArgument = useMemo(() => [node], [node])
   const textArgument = useMemo(() => [node, 'avatar'], [node])
   const registrarContract = useENSRegistrarContract()

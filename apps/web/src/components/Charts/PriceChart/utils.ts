@@ -4,7 +4,10 @@ import { CandlestickData } from 'lightweight-charts'
 /**
  * Returns the minimum and maximum values in the given array of PricePoints.
  */
-export function getPriceBounds(prices: PricePoint[]): { min: number; max: number } {
+export function getPriceBounds(prices: PricePoint[]): {
+  min: number
+  max: number
+} {
   if (!prices.length) return { min: 0, max: 0 }
 
   let min = prices[0].value
@@ -25,7 +28,10 @@ export function getPriceBounds(prices: PricePoint[]): { min: number; max: number
 /**
  * Returns the minimum and maximum values in the given array of candlestick data.
  */
-export function getCandlestickPriceBounds(data: CandlestickData[]): { min: number; max: number } {
+export function getCandlestickPriceBounds(data: CandlestickData[]): {
+  min: number
+  max: number
+} {
   if (!data.length) return { min: 0, max: 0 }
 
   let min = data[0].low

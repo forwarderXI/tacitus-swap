@@ -91,7 +91,8 @@ export const SuccessScreen = ({ overlayClick }: { overlayClick: () => void }) =>
     <>
       <TitleRow>
         <ThemedText.HeadlineSmall lineHeight="28px">
-          <Trans>Successfully listed</Trans>&nbsp;{sellAssets.length > 1 ? ` ${sellAssets.length} ` : ''}
+          <Trans>Successfully listed</Trans>&nbsp;
+          {sellAssets.length > 1 ? ` ${sellAssets.length} ` : ''}
           NFT{pluralize(sellAssets.length)}!
         </ThemedText.HeadlineSmall>
         <X size={24} cursor="pointer" onClick={overlayClick} />
@@ -111,7 +112,11 @@ export const SuccessScreen = ({ overlayClick }: { overlayClick: () => void }) =>
         </ThemedText.SubHeader>
         <ProceedsColumn>
           <ThemedText.SubHeader>
-            {formatNumberOrString({ input: totalEthListingValue, type: NumberType.NFTToken })} ETH
+            {formatNumberOrString({
+              input: totalEthListingValue,
+              type: NumberType.NFTToken,
+            })}{' '}
+            ETH
           </ThemedText.SubHeader>
           {usdcValue && (
             <ThemedText.BodySmall lineHeight="20px" color="neutral2">

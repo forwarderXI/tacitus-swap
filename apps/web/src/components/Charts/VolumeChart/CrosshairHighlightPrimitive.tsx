@@ -125,7 +125,10 @@ class CrosshairHighlightPaneView implements ISeriesPrimitivePaneView {
   }
 
   renderer(): ISeriesPrimitivePaneRenderer | null {
-    return new CrosshairHighlightPaneRenderer({ ...this._data, ...this._options })
+    return new CrosshairHighlightPaneRenderer({
+      ...this._data,
+      ...this._options,
+    })
   }
 }
 

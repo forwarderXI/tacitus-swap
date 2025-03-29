@@ -161,7 +161,11 @@ export const SelectMarketplacesDropdown = ({
       </HeaderButtonWrap>
       <DropdownWrapper isOpen={isOpen}>
         {ListingMarkets.map((market) => {
-          return MarketplaceRow({ market, setSelectedMarkets, selectedMarkets })
+          return MarketplaceRow({
+            market,
+            setSelectedMarkets,
+            selectedMarkets,
+          })
         })}
       </DropdownWrapper>
     </ModalWrapper>

@@ -28,7 +28,11 @@ export function useV2Pairs(currencies: [Currency | undefined, Currency | undefin
           tokenA.chainId === tokenB.chainId &&
           !tokenA.equals(tokenB) &&
           V2_FACTORY_ADDRESSES[tokenA.chainId]
-          ? computePairAddress({ factoryAddress: V2_FACTORY_ADDRESSES[tokenA.chainId], tokenA, tokenB })
+          ? computePairAddress({
+              factoryAddress: V2_FACTORY_ADDRESSES[tokenA.chainId],
+              tokenA,
+              tokenB,
+            })
           : undefined
       }),
     [tokens]

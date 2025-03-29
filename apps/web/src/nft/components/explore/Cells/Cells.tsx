@@ -96,7 +96,14 @@ export const CollectionTitleCell = ({ value }: CellProps) => {
 export const DiscreteNumberCell = ({ value }: CellProps) => {
   const { formatNumberOrString } = useFormatter()
   return (
-    <span>{value.value ? formatNumberOrString({ input: value.value, type: NumberType.NFTCollectionStats }) : '-'}</span>
+    <span>
+      {value.value
+        ? formatNumberOrString({
+            input: value.value,
+            type: NumberType.NFTCollectionStats,
+          })
+        : '-'}
+    </span>
   )
 }
 

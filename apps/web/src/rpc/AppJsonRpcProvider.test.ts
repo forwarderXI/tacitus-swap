@@ -73,7 +73,9 @@ describe('AppJsonRpcProvider', () => {
     afterAll(() => jest.useRealTimers())
 
     it('should retry the first provider after exponential backoff', async () => {
-      const provider = new AppJsonRpcProvider(mockProviders, { minimumBackoffTime: 1 })
+      const provider = new AppJsonRpcProvider(mockProviders, {
+        minimumBackoffTime: 1,
+      })
       mockProvider1.perform.mockRejectedValue(new Error('Failed'))
       await provider.perform('call', { transaction: {} })
       expect(mockProvider2.perform).toHaveBeenCalledAfter(mockProvider1.perform)

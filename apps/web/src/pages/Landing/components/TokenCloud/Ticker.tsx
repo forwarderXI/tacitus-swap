@@ -17,7 +17,10 @@ const TickerText = styled(motion.div)<{ $tickerPosition: TickerPosition }>`
   color: ${(props) => `${props.color}`};
   text-align: ${({ $tickerPosition }) => ($tickerPosition === TickerPosition.RIGHT ? 'left' : 'right')};
 `
-const TickerContainer = styled(motion.div)<{ $tickerPosition: TickerPosition; size: number }>`
+const TickerContainer = styled(motion.div)<{
+  $tickerPosition: TickerPosition
+  size: number
+}>`
   pointer-events: none;
   position: absolute;
   display: flex;

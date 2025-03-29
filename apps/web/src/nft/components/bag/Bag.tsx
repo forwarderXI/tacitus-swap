@@ -28,7 +28,10 @@ interface SeparatorProps {
   show?: boolean
 }
 
-const BagContainer = styled.div<{ raiseZIndex: boolean; isProfilePage: boolean }>`
+const BagContainer = styled.div<{
+  raiseZIndex: boolean
+  isProfilePage: boolean
+}>`
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -109,7 +112,9 @@ const Bag = () => {
     bagIsLocked: state.isLocked,
     uncheckedItemsInBag: state.itemsInBag,
   }))
-  const { uncheckedItemsInBag } = useBag(({ itemsInBag }) => ({ uncheckedItemsInBag: itemsInBag }))
+  const { uncheckedItemsInBag } = useBag(({ itemsInBag }) => ({
+    uncheckedItemsInBag: itemsInBag,
+  }))
 
   const isProfilePage = useIsNftProfilePage()
   const isDetailsPage = useIsNftDetailsPage()

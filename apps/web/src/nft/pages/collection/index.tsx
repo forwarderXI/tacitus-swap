@@ -82,7 +82,10 @@ const CollectionDescriptionSection = styled(Column)`
   ${styles.ScreenBreakpointsPaddings}
 `
 
-const FiltersContainer = styled.div<{ isMobile: boolean; isFiltersExpanded: boolean }>`
+const FiltersContainer = styled.div<{
+  isMobile: boolean
+  isFiltersExpanded: boolean
+}>`
   position: ${({ isMobile }) => (isMobile ? 'fixed' : 'sticky')};
   top: 0px;
   left: 0px;
@@ -188,7 +191,11 @@ const Collection = () => {
       </Helmet>
       <Trace
         page={InterfacePageName.NFT_COLLECTION_PAGE}
-        properties={{ collection_address: contractAddress, chain_id: chainId, is_activity_view: isActivityToggled }}
+        properties={{
+          collection_address: contractAddress,
+          chain_id: chainId,
+          is_activity_view: isActivityToggled,
+        }}
         shouldLogImpression
       >
         <AnimatedCollectionContainer

@@ -14,19 +14,85 @@ describe('document', () => {
   describe('matchDocument', () => {
     const TEST_DOCUMENTS = [
       [{ request: {}, url: { hostname: 'example.com', pathname: '' } }, false],
-      [{ request: { mode: 'navigate' }, url: { hostname: 'example.com', pathname: '' } }, false],
+      [
+        {
+          request: { mode: 'navigate' },
+          url: { hostname: 'example.com', pathname: '' },
+        },
+        false,
+      ],
       [{ request: {}, url: { hostname: 'app.uniswap.org', pathname: '' } }, false],
-      [{ request: { mode: 'navigate' }, url: { hostname: 'app.uniswap.org', pathname: '' } }, true],
-      [{ request: { mode: 'navigate' }, url: { hostname: 'app.uniswap.org', pathname: '/swap' } }, true],
-      [{ request: { mode: 'navigate' }, url: { hostname: 'app.uniswap.org', pathname: '/asset.gif' } }, false],
-      [{ request: {}, url: { hostname: 'app.corn-staging.com', pathname: '' } }, false],
-      [{ request: { mode: 'navigate' }, url: { hostname: 'app.corn-staging.com', pathname: '' } }, true],
-      [{ request: { mode: 'navigate' }, url: { hostname: 'app.corn-staging.com', pathname: '/swap' } }, true],
-      [{ request: { mode: 'navigate' }, url: { hostname: 'app.corn-staging.com', pathname: '/asset.gif' } }, false],
+      [
+        {
+          request: { mode: 'navigate' },
+          url: { hostname: 'app.uniswap.org', pathname: '' },
+        },
+        true,
+      ],
+      [
+        {
+          request: { mode: 'navigate' },
+          url: { hostname: 'app.uniswap.org', pathname: '/swap' },
+        },
+        true,
+      ],
+      [
+        {
+          request: { mode: 'navigate' },
+          url: { hostname: 'app.uniswap.org', pathname: '/asset.gif' },
+        },
+        false,
+      ],
+      [
+        {
+          request: {},
+          url: { hostname: 'app.corn-staging.com', pathname: '' },
+        },
+        false,
+      ],
+      [
+        {
+          request: { mode: 'navigate' },
+          url: { hostname: 'app.corn-staging.com', pathname: '' },
+        },
+        true,
+      ],
+      [
+        {
+          request: { mode: 'navigate' },
+          url: { hostname: 'app.corn-staging.com', pathname: '/swap' },
+        },
+        true,
+      ],
+      [
+        {
+          request: { mode: 'navigate' },
+          url: { hostname: 'app.corn-staging.com', pathname: '/asset.gif' },
+        },
+        false,
+      ],
       [{ request: {}, url: { hostname: 'localhost', pathname: '' } }, false],
-      [{ request: { mode: 'navigate' }, url: { hostname: 'localhost', pathname: '' } }, true],
-      [{ request: { mode: 'navigate' }, url: { hostname: 'localhost', pathname: '/swap' } }, true],
-      [{ request: { mode: 'navigate' }, url: { hostname: 'localhost', pathname: '/asset.gif' } }, false],
+      [
+        {
+          request: { mode: 'navigate' },
+          url: { hostname: 'localhost', pathname: '' },
+        },
+        true,
+      ],
+      [
+        {
+          request: { mode: 'navigate' },
+          url: { hostname: 'localhost', pathname: '/swap' },
+        },
+        true,
+      ],
+      [
+        {
+          request: { mode: 'navigate' },
+          url: { hostname: 'localhost', pathname: '/asset.gif' },
+        },
+        false,
+      ],
     ] as [RouteMatchCallbackOptions, boolean][]
 
     it.each(TEST_DOCUMENTS)('%j', (document: RouteMatchCallbackOptions, expected: boolean) => {
@@ -114,7 +180,9 @@ describe('document', () => {
       }
 
       beforeEach(() => {
-        fetched = new Response('test_body', { headers: { etag: FETCHED_ETAGS } })
+        fetched = new Response('test_body', {
+          headers: { etag: FETCHED_ETAGS },
+        })
         fetch.mockReturnValueOnce(fetched)
       })
 
@@ -122,7 +190,9 @@ describe('document', () => {
         let cached: Response
 
         beforeEach(() => {
-          cached = new Response('<html><head></head><body>mock</body></html>', { headers: { etag: 'cached' } })
+          cached = new Response('<html><head></head><body>mock</body></html>', {
+            headers: { etag: 'cached' },
+          })
           matchPrecache.mockResolvedValueOnce(cached)
         })
 

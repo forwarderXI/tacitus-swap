@@ -160,7 +160,10 @@ export function TopPoolTable() {
   }, [resetSortAscending, resetSortMethod])
 
   const { topPools, loading, error } = useTopPools(
-    { sortBy: sortMethod, sortDirection: sortAscending ? OrderDirection.Asc : OrderDirection.Desc },
+    {
+      sortBy: sortMethod,
+      sortDirection: sortAscending ? OrderDirection.Asc : OrderDirection.Desc,
+    },
     chainId
   )
 
@@ -272,7 +275,10 @@ export function PoolsTable({
             cell: (txCount) => (
               <Cell justifyContent="flex-end" loading={showLoadingSkeleton} minWidth={120} grow>
                 <ThemedText.BodyPrimary>
-                  {formatNumber({ input: txCount.getValue?.(), type: NumberType.NFTCollectionStats })}
+                  {formatNumber({
+                    input: txCount.getValue?.(),
+                    type: NumberType.NFTCollectionStats,
+                  })}
                 </ThemedText.BodyPrimary>
               </Cell>
             ),
@@ -293,7 +299,10 @@ export function PoolsTable({
             cell: (tvl) => (
               <Cell loading={showLoadingSkeleton} minWidth={120} grow>
                 <ThemedText.BodyPrimary>
-                  {formatNumber({ input: tvl.getValue?.(), type: NumberType.FiatTokenStats })}
+                  {formatNumber({
+                    input: tvl.getValue?.(),
+                    type: NumberType.FiatTokenStats,
+                  })}
                 </ThemedText.BodyPrimary>
               </Cell>
             ),
@@ -314,7 +323,10 @@ export function PoolsTable({
             cell: (volume24h) => (
               <Cell minWidth={120} loading={showLoadingSkeleton} grow>
                 <ThemedText.BodyPrimary>
-                  {formatNumber({ input: volume24h.getValue?.(), type: NumberType.FiatTokenStats })}
+                  {formatNumber({
+                    input: volume24h.getValue?.(),
+                    type: NumberType.FiatTokenStats,
+                  })}
                 </ThemedText.BodyPrimary>
               </Cell>
             ),
@@ -335,7 +347,10 @@ export function PoolsTable({
             cell: (volumeWeek) => (
               <Cell minWidth={120} loading={showLoadingSkeleton} grow>
                 <ThemedText.BodyPrimary>
-                  {formatNumber({ input: volumeWeek.getValue?.(), type: NumberType.FiatTokenStats })}
+                  {formatNumber({
+                    input: volumeWeek.getValue?.(),
+                    type: NumberType.FiatTokenStats,
+                  })}
                 </ThemedText.BodyPrimary>
               </Cell>
             ),

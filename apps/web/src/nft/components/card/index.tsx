@@ -81,7 +81,10 @@ export const NftCard = ({
   const marketplace = collectionNft ? asset.marketplace : undefined
   const listedPrice =
     profileNft && !isDisabled && asset.floor_sell_order_price
-      ? formatNumberOrString({ input: asset.floor_sell_order_price, type: NumberType.NFTTokenFloorPrice })
+      ? formatNumberOrString({
+          input: asset.floor_sell_order_price,
+          type: NumberType.NFTTokenFloorPrice,
+        })
       : undefined
 
   return (

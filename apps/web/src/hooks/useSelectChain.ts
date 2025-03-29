@@ -26,7 +26,10 @@ export default function useSelectChain() {
           console.error('Failed to switch networks', error)
           dispatch(
             addPopup({
-              content: { failedSwitchNetwork: targetChain, type: PopupType.FailedSwitchNetwork },
+              content: {
+                failedSwitchNetwork: targetChain,
+                type: PopupType.FailedSwitchNetwork,
+              },
               key: 'failed-network-switch',
             })
           )

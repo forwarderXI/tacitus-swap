@@ -205,7 +205,9 @@ const AssetView = ({
   asset: GenieAsset
   dominantColor: [number, number, number]
 }) => {
-  const style = { ['--shadow' as string]: `rgba(${dominantColor.join(', ')}, 0.5)` }
+  const style = {
+    ['--shadow' as string]: `rgba(${dominantColor.join(', ')}, 0.5)`,
+  }
 
   switch (mediaType) {
     case MediaType.Video:
@@ -282,7 +284,10 @@ export const AssetDetails = ({ asset, collection }: AssetDetailsProps) => {
 
   const weiPrice = gqlPriceData?.[0]?.price
   const formattedPrice = weiPrice
-    ? formatNumberOrString({ input: parseFloat(weiPrice), type: NumberType.NFTToken })
+    ? formatNumberOrString({
+        input: parseFloat(weiPrice),
+        type: NumberType.NFTToken,
+      })
     : undefined
 
   const [activeFilters, filtersDispatch] = useReducer(reduceFilters, initialFilterState)
@@ -362,7 +367,11 @@ export const AssetDetails = ({ asset, collection }: AssetDetailsProps) => {
                 placement="top"
               >
                 <RarityWrap>
-                  Rarity: {formatNumberOrString({ input: rarity.score, type: NumberType.WholeNumber })}
+                  Rarity:{' '}
+                  {formatNumberOrString({
+                    input: rarity.score,
+                    type: NumberType.WholeNumber,
+                  })}
                 </RarityWrap>
               </MouseoverTooltip>
             ) : null

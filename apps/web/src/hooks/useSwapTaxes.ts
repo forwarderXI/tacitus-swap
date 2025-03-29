@@ -34,7 +34,9 @@ function useFeeOnTransferDetectorContract(): FeeOnTransferDetector | null {
 const WETH_ADDRESS = getWethAddress(ChainId.MAINNET)
 const AMOUNT_TO_BORROW = 10000 // smallest amount that has full precision over bps
 
-const FEE_CACHE: { [address in string]?: { sellTax?: Percent; buyTax?: Percent } } = {}
+const FEE_CACHE: {
+  [address in string]?: { sellTax?: Percent; buyTax?: Percent }
+} = {}
 
 async function getSwapTaxes(
   fotDetector: FeeOnTransferDetector,
@@ -74,7 +76,10 @@ async function getSwapTaxes(
 
 export function useSwapTaxes(inputTokenAddress?: string, outputTokenAddress?: string) {
   const fotDetector = useFeeOnTransferDetectorContract()
-  const [{ inputTax, outputTax }, setTaxes] = useState({ inputTax: ZERO_PERCENT, outputTax: ZERO_PERCENT })
+  const [{ inputTax, outputTax }, setTaxes] = useState({
+    inputTax: ZERO_PERCENT,
+    outputTax: ZERO_PERCENT,
+  })
   const { chainId } = useWeb3React()
 
   useEffect(() => {

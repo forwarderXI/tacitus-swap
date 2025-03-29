@@ -84,7 +84,10 @@ const userSlice = createSlice({
     setRecentConnectionDisconnected(state) {
       if (!state.recentConnectionMeta) return
 
-      const disconnectedMeta = { ...state.recentConnectionMeta, disconnected: true }
+      const disconnectedMeta = {
+        ...state.recentConnectionMeta,
+        disconnected: true,
+      }
       setRecentConnectionMeta(disconnectedMeta)
       state.recentConnectionMeta = disconnectedMeta
     },

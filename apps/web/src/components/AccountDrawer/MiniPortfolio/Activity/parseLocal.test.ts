@@ -81,15 +81,24 @@ function mockMultiStatus(info: TransactionInfo, id: string): [TransactionDetails
   // Mocks a transaction with multiple statuses
   return [
     [
-      { info, ...mockCommonFields(id, mockAccount2, MockTxStatus.Pending) } as unknown as TransactionDetails,
+      {
+        info,
+        ...mockCommonFields(id, mockAccount2, MockTxStatus.Pending),
+      } as unknown as TransactionDetails,
       mockChainId,
     ],
     [
-      { info, ...mockCommonFields(id, mockAccount2, MockTxStatus.Confirmed) } as unknown as TransactionDetails,
+      {
+        info,
+        ...mockCommonFields(id, mockAccount2, MockTxStatus.Confirmed),
+      } as unknown as TransactionDetails,
       mockChainId,
     ],
     [
-      { info, ...mockCommonFields(id, mockAccount2, MockTxStatus.Failed) } as unknown as TransactionDetails,
+      {
+        info,
+        ...mockCommonFields(id, mockAccount2, MockTxStatus.Failed),
+      } as unknown as TransactionDetails,
       mockChainId,
     ],
   ]

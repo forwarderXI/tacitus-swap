@@ -76,9 +76,10 @@ describe('PoolDetailsPage', () => {
   })
 
   it('not found page displayed when given invalid chainName', () => {
-    jest
-      .spyOn(Router, 'useParams')
-      .mockReturnValue({ poolAddress: validParams.poolAddress, chainName: 'invalid-chain' })
+    jest.spyOn(Router, 'useParams').mockReturnValue({
+      poolAddress: validParams.poolAddress,
+      chainName: 'invalid-chain',
+    })
     render(<PoolDetails />)
 
     waitFor(() => {
@@ -87,7 +88,10 @@ describe('PoolDetailsPage', () => {
   })
 
   it('not found page displayed when given invalid pool address', () => {
-    jest.spyOn(Router, 'useParams').mockReturnValue({ poolAddress: '0xFakeAddress', chainName: validParams.chainName })
+    jest.spyOn(Router, 'useParams').mockReturnValue({
+      poolAddress: '0xFakeAddress',
+      chainName: validParams.chainName,
+    })
     render(<PoolDetails />)
 
     waitFor(() => {

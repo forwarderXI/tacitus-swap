@@ -212,7 +212,10 @@ export function PoolDetailsTransactionsTable({
               grow
             >
               <ThemedText.BodyPrimary>
-                {formatNumber({ input: Math.abs(inputTokenAmount.getValue?.() ?? 0), type: NumberType.TokenTx })}
+                {formatNumber({
+                  input: Math.abs(inputTokenAmount.getValue?.() ?? 0),
+                  type: NumberType.TokenTx,
+                })}
               </ThemedText.BodyPrimary>
             </Cell>
           ),
@@ -240,7 +243,10 @@ export function PoolDetailsTransactionsTable({
               grow
             >
               <ThemedText.BodyPrimary>
-                {formatNumber({ input: Math.abs(outputTokenAmount.getValue?.() ?? 0), type: NumberType.TokenTx })}
+                {formatNumber({
+                  input: Math.abs(outputTokenAmount.getValue?.() ?? 0),
+                  type: NumberType.TokenTx,
+                })}
               </ThemedText.BodyPrimary>
             </Cell>
           ),

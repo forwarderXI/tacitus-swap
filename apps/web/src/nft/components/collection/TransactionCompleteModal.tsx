@@ -162,7 +162,8 @@ const TxCompleteModal = () => {
                   >
                     <Row>
                       <Box marginRight="16">
-                        {nftsPurchased.length} NFT{nftsPurchased.length === 1 ? '' : 's'}
+                        {nftsPurchased.length} NFT
+                        {nftsPurchased.length === 1 ? '' : 's'}
                       </Box>
                       <Box>
                         {formatEther({
@@ -232,7 +233,10 @@ const TxCompleteModal = () => {
                           ETH
                         </p>
                         <p className={styles.totalUsdRefund}>
-                          {formatNumberOrString({ input: totalUSDRefund, type: NumberType.FiatNFTToken })}
+                          {formatNumberOrString({
+                            input: totalUSDRefund,
+                            type: NumberType.FiatNFTToken,
+                          })}
                         </p>
                         <p className={styles.totalEthCost} style={{ width: '100%' }}>
                           for {nftsNotPurchased.length} unavailable item
@@ -294,8 +298,11 @@ const TxCompleteModal = () => {
                         `Selected item${
                           nftsPurchased.length === 1 ? ' is' : 's are'
                         } no longer available. Uniswap instantly refunded you for this incomplete transaction. `}
-                      {formatNumberOrString({ input: txFeeFiat, type: NumberType.FiatNFTToken })} was used for gas in
-                      attempt to complete this transaction. For support, please visit our{' '}
+                      {formatNumberOrString({
+                        input: txFeeFiat,
+                        type: NumberType.FiatNFTToken,
+                      })}{' '}
+                      was used for gas in attempt to complete this transaction. For support, please visit our{' '}
                       <a href="https://discord.gg/FCfyBSbCU5">Discord</a>
                     </p>
                     <Box className={styles.allUnavailableAssets}>
@@ -317,7 +324,8 @@ const TxCompleteModal = () => {
                           <Box color={showUnavailable ? 'neutral1' : 'neutral2'} className={styles.unavailableText}>
                             Unavailable
                             <Box className={styles.unavailableItems}>
-                              {nftsNotPurchased.length} item{nftsNotPurchased.length === 1 ? '' : 's'}
+                              {nftsNotPurchased.length} item
+                              {nftsNotPurchased.length === 1 ? '' : 's'}
                             </Box>
                           </Box>
                           <ChevronUpIcon className={`${!showUnavailable && styles.chevronDown} ${styles.chevron}`} />
@@ -364,7 +372,10 @@ const TxCompleteModal = () => {
                       ETH
                     </p>
                     <p className={styles.totalUsdRefund}>
-                      {formatNumberOrString({ input: totalUSDRefund, type: NumberType.FiatNFTToken })}
+                      {formatNumberOrString({
+                        input: totalUSDRefund,
+                        type: NumberType.FiatNFTToken,
+                      })}
                     </p>
                     <Box className={styles.walletAddress} marginLeft="auto" marginRight="0">
                       <a href={txHashUrl} target="_blank" rel="noreferrer">

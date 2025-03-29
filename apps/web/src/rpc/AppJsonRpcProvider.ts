@@ -71,7 +71,10 @@ export default class AppJsonRpcProvider extends ConfiguredJsonRpcProvider {
     super(undefined, providers[0].network)
     // AppJsonRpcProvider configures its own pollingInterval, so the encapsulated providers do not need to poll.
     // providers.forEach((provider) => (provider.pollingInterval = Infinity))
-    this.providers = providers.map((provider) => ({ provider, controller: new Controller(minimumBackoffTime) }))
+    this.providers = providers.map((provider) => ({
+      provider,
+      controller: new Controller(minimumBackoffTime),
+    }))
   }
 
   async perform(method: string, params: { [name: string]: any }): Promise<any> {

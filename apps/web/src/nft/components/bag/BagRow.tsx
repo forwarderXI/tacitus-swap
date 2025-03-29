@@ -101,7 +101,10 @@ export const BagRow = ({ asset, usdPrice, removeAsset, showRemove, grayscale, is
   const showRemoveButton = Boolean(showRemove && cardHovered && !isMobile)
 
   const assetEthPrice = asset.updatedPriceInfo ? asset.updatedPriceInfo.ETHPrice : asset.priceInfo.ETHPrice
-  const assetEthPriceFormatted = formatEther({ input: assetEthPrice, type: NumberType.NFTToken })
+  const assetEthPriceFormatted = formatEther({
+    input: assetEthPrice,
+    type: NumberType.NFTToken,
+  })
   const assetUSDPriceFormatted = formatNumberOrString({
     input: usdPrice ? parseFloat(ethersFormatEther(assetEthPrice)) * usdPrice : usdPrice,
     type: NumberType.FiatNFTToken,

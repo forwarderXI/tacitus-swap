@@ -19,7 +19,10 @@ import GasEstimateTooltip from './GasEstimateTooltip'
 import SwapLineItem, { SwapLineItemType } from './SwapLineItem'
 import TradePrice from './TradePrice'
 
-const StyledHeaderRow = styled(RowBetween)<{ disabled: boolean; open: boolean }>`
+const StyledHeaderRow = styled(RowBetween)<{
+  disabled: boolean
+  open: boolean
+}>`
   padding: 0;
   align-items: center;
   cursor: ${({ disabled }) => (disabled ? 'initial' : 'pointer')};

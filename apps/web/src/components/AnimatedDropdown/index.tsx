@@ -1,7 +1,10 @@
 import { animated, useSpring, UseSpringProps } from 'react-spring'
 import useResizeObserver from 'use-resize-observer'
 
-type AnimatedDropdownProps = React.PropsWithChildren<{ open: boolean; springProps?: UseSpringProps }>
+type AnimatedDropdownProps = React.PropsWithChildren<{
+  open: boolean
+  springProps?: UseSpringProps
+}>
 /**
  * @param open conditional to show content or hide
  * @param springProps additional props to include in spring animation
@@ -26,7 +29,13 @@ export default function AnimatedDropdown({ open, springProps, children }: Animat
   })
   return (
     <animated.div
-      style={{ ...props, overflow: 'hidden', width: '100%', minWidth: 'min-content', willChange: 'height' }}
+      style={{
+        ...props,
+        overflow: 'hidden',
+        width: '100%',
+        minWidth: 'min-content',
+        willChange: 'height',
+      }}
     >
       <div ref={ref}>{children}</div>
     </animated.div>

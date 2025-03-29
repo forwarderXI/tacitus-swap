@@ -17,8 +17,15 @@ export enum ActivationStatus {
   IDLE,
 }
 
-type ActivationPendingState = { status: ActivationStatus.PENDING; connection: Connection }
-type ActivationErrorState = { status: ActivationStatus.ERROR; connection: Connection; error: any }
+type ActivationPendingState = {
+  status: ActivationStatus.PENDING
+  connection: Connection
+}
+type ActivationErrorState = {
+  status: ActivationStatus.ERROR
+  connection: Connection
+  error: any
+}
 const IDLE_ACTIVATION_STATE = { status: ActivationStatus.IDLE } as const
 type ActivationState = ActivationPendingState | ActivationErrorState | typeof IDLE_ACTIVATION_STATE
 
@@ -38,10 +45,17 @@ function useTryActivation() {
 
       const { name } = connection.getProviderInfo()
       return trace(
-        { name: 'Connect', op: 'wallet.connect', tags: { type: connection.type, wallet: name } },
+        {
+          name: 'Connect',
+          op: 'wallet.connect',
+          tags: { type: connection.type, wallet: name },
+        },
         async (trace) => {
           try {
-            setActivationState({ status: ActivationStatus.PENDING, connection })
+            setActivationState({
+              status: ActivationStatus.PENDING,
+              connection,
+            })
 
             console.debug(`Connection activating: ${name}`)
             await connection.connector.activate()
@@ -72,7 +86,11 @@ function useTryActivation() {
               page: currentPage,
               error: error.message,
             })
-            setActivationState({ status: ActivationStatus.ERROR, connection, error })
+            setActivationState({
+              status: ActivationStatus.ERROR,
+              connection,
+              error,
+            })
           }
         }
       )

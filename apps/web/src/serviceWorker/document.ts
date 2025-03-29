@@ -69,7 +69,10 @@ export async function handleDocument(this: HandlerContext, { request }: RouteHan
   const controller = new AbortController()
   let response
   try {
-    response = await fetch(requestUrl || DOCUMENT, { cache: 'reload', signal: controller.signal })
+    response = await fetch(requestUrl || DOCUMENT, {
+      cache: 'reload',
+      signal: controller.signal,
+    })
     if (!cachedResponse) {
       return new Response(response.body, response)
     }

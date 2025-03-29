@@ -71,7 +71,11 @@ function parseTokens(addresses: string[], chainId: ChainId, returnData: CallResu
 }
 
 const createCalls = (target: string, callData: string[]): Call[] =>
-  callData.map((callData) => ({ target, callData, gasLimit: DEFAULT_GAS_LIMIT }))
+  callData.map((callData) => ({
+    target,
+    callData,
+    gasLimit: DEFAULT_GAS_LIMIT,
+  }))
 
 function createCallsForToken(address: string) {
   return createCalls(address, [
@@ -84,7 +88,9 @@ function createCallsForToken(address: string) {
 }
 
 // Prevents tokens from being fetched multiple times
-const TokenPromiseCache: { [key: CurrencyKey]: Promise<Token | undefined> | undefined } = {}
+const TokenPromiseCache: {
+  [key: CurrencyKey]: Promise<Token | undefined> | undefined
+} = {}
 
 // Returns tokens using a single RPC call to the multicall contract
 export async function getTokensAsync(

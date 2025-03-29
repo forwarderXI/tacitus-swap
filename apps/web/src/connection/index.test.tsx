@@ -38,7 +38,9 @@ describe('connection utility/metadata tests', () => {
   })
 
   it('MetaMask-Injected Desktop', async () => {
-    const { displayed, injected } = createWalletEnvironment({ isMetaMask: true })
+    const { displayed, injected } = createWalletEnvironment({
+      isMetaMask: true,
+    })
 
     expect(displayed.includes(injected)).toBe(true)
     expect(injected.getProviderInfo().name).toBe('MetaMask')
@@ -48,7 +50,9 @@ describe('connection utility/metadata tests', () => {
   })
 
   it('Coinbase-Injected Desktop', async () => {
-    const { displayed, injected, coinbase } = createWalletEnvironment({ isCoinbaseWallet: true })
+    const { displayed, injected, coinbase } = createWalletEnvironment({
+      isCoinbaseWallet: true,
+    })
 
     expect(displayed.includes(coinbase)).toBe(true)
     expect(displayed.includes(injected)).toBe(true)
@@ -59,7 +63,10 @@ describe('connection utility/metadata tests', () => {
   })
 
   it('Coinbase and MetaMask Injected Desktop', async () => {
-    const { displayed, injected, coinbase } = createWalletEnvironment({ isCoinbaseWallet: true, isMetaMask: true })
+    const { displayed, injected, coinbase } = createWalletEnvironment({
+      isCoinbaseWallet: true,
+      isMetaMask: true,
+    })
 
     expect(displayed.includes(coinbase)).toBe(true)
     expect(displayed.includes(injected)).toBe(true)
@@ -80,7 +87,10 @@ describe('connection utility/metadata tests', () => {
   })
 
   it('Rabby Wallet Injected Desktop', async () => {
-    const { displayed, injected } = createWalletEnvironment({ isRabby: true, isMetaMask: true }) // Rabby sets isMetaMask to true
+    const { displayed, injected } = createWalletEnvironment({
+      isRabby: true,
+      isMetaMask: true,
+    }) // Rabby sets isMetaMask to true
 
     expect(displayed.includes(injected)).toBe(true)
     expect(injected.getProviderInfo().name).toBe('Rabby')
@@ -90,7 +100,9 @@ describe('connection utility/metadata tests', () => {
   })
 
   it('LedgerConnect Wallet Injected Desktop', async () => {
-    const { displayed, injected } = createWalletEnvironment({ isLedgerConnect: true })
+    const { displayed, injected } = createWalletEnvironment({
+      isLedgerConnect: true,
+    })
 
     expect(displayed.includes(injected)).toBe(true)
     expect(injected.getProviderInfo().name).toBe('Ledger')
@@ -100,7 +112,9 @@ describe('connection utility/metadata tests', () => {
   })
 
   it('Brave Browser Wallet Injected Desktop', async () => {
-    const { displayed, injected } = createWalletEnvironment({ isBraveWallet: true })
+    const { displayed, injected } = createWalletEnvironment({
+      isBraveWallet: true,
+    })
 
     expect(displayed.includes(injected)).toBe(true)
     expect(injected.getProviderInfo().name).toBe('Brave')
@@ -109,7 +123,10 @@ describe('connection utility/metadata tests', () => {
     expect(displayed.length).toEqual(4)
   })
 
-  const UNKNOWN_MM_INJECTOR = { isRandomWallet: true, isMetaMask: true } as Window['window']['ethereum']
+  const UNKNOWN_MM_INJECTOR = {
+    isRandomWallet: true,
+    isMetaMask: true,
+  } as Window['window']['ethereum']
   it('Generic Browser Wallet that injects as MetaMask', async () => {
     const { displayed, injected } = createWalletEnvironment(UNKNOWN_MM_INJECTOR)
 
@@ -120,7 +137,9 @@ describe('connection utility/metadata tests', () => {
     expect(displayed.length).toEqual(4)
   })
 
-  const UNKNOWN_INJECTOR = { isRandomWallet: true } as Window['window']['ethereum']
+  const UNKNOWN_INJECTOR = {
+    isRandomWallet: true,
+  } as Window['window']['ethereum']
   it('Generic Unknown Injected Wallet Browser', async () => {
     const { displayed, injected } = createWalletEnvironment(UNKNOWN_INJECTOR, true)
 

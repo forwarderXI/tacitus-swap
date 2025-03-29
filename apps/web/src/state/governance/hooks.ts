@@ -230,7 +230,10 @@ function countToIndices(count: number | undefined, skip = 0) {
 }
 
 // get data for all past and active proposals
-export function useAllProposalData(): { data: ProposalData[]; loading: boolean } {
+export function useAllProposalData(): {
+  data: ProposalData[]
+  loading: boolean
+} {
   const { chainId } = useWeb3React()
   const gov0 = useGovernanceV0Contract()
   const gov1 = useGovernanceV1Contract()
@@ -363,7 +366,10 @@ export function useUserDelegatee(): string {
 }
 
 // gets the users current votes
-export function useUserVotes(): { loading: boolean; votes?: CurrencyAmount<Token> } {
+export function useUserVotes(): {
+  loading: boolean
+  votes?: CurrencyAmount<Token>
+} {
   const { account, chainId } = useWeb3React()
   const uniContract = useUniContract()
 
@@ -371,7 +377,10 @@ export function useUserVotes(): { loading: boolean; votes?: CurrencyAmount<Token
   const { result, loading } = useSingleCallResult(uniContract, 'getCurrentVotes', [account ?? undefined])
   return useMemo(() => {
     const uni = chainId ? UNI[chainId] : undefined
-    return { loading, votes: uni && result ? CurrencyAmount.fromRawAmount(uni, result?.[0]) : undefined }
+    return {
+      loading,
+      votes: uni && result ? CurrencyAmount.fromRawAmount(uni, result?.[0]) : undefined,
+    }
   }, [chainId, loading, result])
 }
 
@@ -400,7 +409,10 @@ export function useDelegateCallback(): (delegatee: string | undefined) => undefi
       if (!uniContract) throw new Error('No UNI Contract!')
       return uniContract.estimateGas.delegate(...args, {}).then((estimatedGasLimit) => {
         return uniContract
-          .delegate(...args, { value: null, gasLimit: calculateGasMargin(estimatedGasLimit) })
+          .delegate(...args, {
+            value: null,
+            gasLimit: calculateGasMargin(estimatedGasLimit),
+          })
           .then((response: TransactionResponse) => {
             addTransaction(response, {
               type: TransactionType.DELEGATE,
@@ -428,7 +440,10 @@ export function useVoteCallback(): (
       const args = [proposalId, voteOption === VoteOption.Against ? 0 : voteOption === VoteOption.For ? 1 : 2]
       return latestGovernanceContract.estimateGas.castVote(...args, {}).then((estimatedGasLimit) => {
         return latestGovernanceContract
-          .castVote(...args, { value: null, gasLimit: calculateGasMargin(estimatedGasLimit) })
+          .castVote(...args, {
+            value: null,
+            gasLimit: calculateGasMargin(estimatedGasLimit),
+          })
           .then((response: TransactionResponse) => {
             addTransaction(response, {
               type: TransactionType.VOTE,
@@ -456,7 +471,10 @@ export function useQueueCallback(): (proposalId: string | undefined) => undefine
       const args = [proposalId]
       return latestGovernanceContract.estimateGas.queue(...args, {}).then((estimatedGasLimit) => {
         return latestGovernanceContract
-          .queue(...args, { value: null, gasLimit: calculateGasMargin(estimatedGasLimit) })
+          .queue(...args, {
+            value: null,
+            gasLimit: calculateGasMargin(estimatedGasLimit),
+          })
           .then((response: TransactionResponse) => {
             addTransaction(response, {
               type: TransactionType.QUEUE,
@@ -482,7 +500,10 @@ export function useExecuteCallback(): (proposalId: string | undefined) => undefi
       const args = [proposalId]
       return latestGovernanceContract.estimateGas.execute(...args, {}).then((estimatedGasLimit) => {
         return latestGovernanceContract
-          .execute(...args, { value: null, gasLimit: calculateGasMargin(estimatedGasLimit) })
+          .execute(...args, {
+            value: null,
+            gasLimit: calculateGasMargin(estimatedGasLimit),
+          })
           .then((response: TransactionResponse) => {
             addTransaction(response, {
               type: TransactionType.EXECUTE,
@@ -518,7 +539,9 @@ export function useCreateProposalCallback(): (
 
       return latestGovernanceContract.estimateGas.propose(...args).then((estimatedGasLimit) => {
         return latestGovernanceContract
-          .propose(...args, { gasLimit: calculateGasMargin(estimatedGasLimit) })
+          .propose(...args, {
+            gasLimit: calculateGasMargin(estimatedGasLimit),
+          })
           .then((response: TransactionResponse) => {
             addTransaction(response, {
               type: TransactionType.SUBMIT_PROPOSAL,

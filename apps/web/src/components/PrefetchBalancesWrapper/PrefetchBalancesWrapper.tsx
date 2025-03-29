@@ -34,7 +34,11 @@ export default function PrefetchBalancesWrapper({
   shouldFetchOnAccountUpdate,
   shouldFetchOnHover = true,
   className,
-}: PropsWithChildren<{ shouldFetchOnAccountUpdate: boolean; shouldFetchOnHover?: boolean; className?: string }>) {
+}: PropsWithChildren<{
+  shouldFetchOnAccountUpdate: boolean
+  shouldFetchOnHover?: boolean
+  className?: string
+}>) {
   const { account } = useWeb3React()
   const [prefetchPortfolioBalances] = usePortfolioBalancesLazyQuery()
 
@@ -48,7 +52,9 @@ export default function PrefetchBalancesWrapper({
         // TODO(WEB-3131): remove this timeout after websocket is implemented
         setTimeout(
           () => {
-            prefetchPortfolioBalances({ variables: { ownerAddress: account, chains: GQL_MAINNET_CHAINS } })
+            prefetchPortfolioBalances({
+              variables: { ownerAddress: account, chains: GQL_MAINNET_CHAINS },
+            })
             setHasUnfetchedBalances(false)
           },
           withDelay ? ms('3.5s') : 0

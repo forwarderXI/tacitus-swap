@@ -54,7 +54,11 @@ const PoolDetailsStatsButtonsRow = styled(Row)`
   }
 `
 
-const PoolButton = styled.button<{ $open?: boolean; $hideOnMobile?: boolean; $fixedWidth?: boolean }>`
+const PoolButton = styled.button<{
+  $open?: boolean
+  $hideOnMobile?: boolean
+  $fixedWidth?: boolean
+}>`
   display: flex;
   flex-direction: row;
   padding: 12px 16px 12px 12px;

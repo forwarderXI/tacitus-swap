@@ -112,19 +112,22 @@ function VoteSummary({ info }: { info: VoteTransactionInfo }) {
       case VoteOption.For:
         return (
           <Trans>
-            Vote for proposal {proposalKey} with reason &quot;{info.reason}&quot;
+            Vote for proposal {proposalKey} with reason &quot;{info.reason}
+            &quot;
           </Trans>
         )
       case VoteOption.Abstain:
         return (
           <Trans>
-            Vote to abstain on proposal {proposalKey} with reason &quot;{info.reason}&quot;
+            Vote to abstain on proposal {proposalKey} with reason &quot;
+            {info.reason}&quot;
           </Trans>
         )
       case VoteOption.Against:
         return (
           <Trans>
-            Vote against proposal {proposalKey} with reason &quot;{info.reason}&quot;
+            Vote against proposal {proposalKey} with reason &quot;{info.reason}
+            &quot;
           </Trans>
         )
     }

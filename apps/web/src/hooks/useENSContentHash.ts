@@ -8,7 +8,10 @@ import { useENSRegistrarContract, useENSResolverContract } from './useContract'
 /**
  * Does a lookup for an ENS name to find its contenthash.
  */
-export default function useENSContentHash(ensName?: string | null): { loading: boolean; contenthash: string | null } {
+export default function useENSContentHash(ensName?: string | null): {
+  loading: boolean
+  contenthash: string | null
+} {
   const ensNodeArgument = useMemo(() => [ensName ? safeNamehash(ensName) : undefined], [ensName])
   const registrarContract = useENSRegistrarContract()
   const resolverAddressResult = useMainnetSingleCallResult(registrarContract, 'resolver', ensNodeArgument, NEVER_RELOAD)

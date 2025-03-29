@@ -33,7 +33,10 @@ const SmallButton = styled(ButtonGray)`
   padding: 4px;
 `
 
-const FocusedOutlineCard = styled(OutlineCard)<{ active?: boolean; pulsing?: boolean }>`
+const FocusedOutlineCard = styled(OutlineCard)<{
+  active?: boolean
+  pulsing?: boolean
+}>`
   border-color: ${({ active, theme }) => active && theme.deprecated_stateOverlayPressed};
   padding: 12px;
   animation: ${({ pulsing, theme }) => pulsing && pulse(theme.accent1)} 0.8s linear;

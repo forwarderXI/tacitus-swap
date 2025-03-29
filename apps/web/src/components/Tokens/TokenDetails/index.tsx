@@ -118,7 +118,9 @@ function TDPSwapComponent() {
   const initialInputCurrency = useSwapInitialInputCurrency()
 
   const [openTokenSafetyModal, setOpenTokenSafetyModal] = useState(false)
-  const [continueSwap, setContinueSwap] = useState<{ resolve: (value: boolean | PromiseLike<boolean>) => void }>()
+  const [continueSwap, setContinueSwap] = useState<{
+    resolve: (value: boolean | PromiseLike<boolean>) => void
+  }>()
 
   const onResolveSwap = useCallback(
     (value: boolean) => {

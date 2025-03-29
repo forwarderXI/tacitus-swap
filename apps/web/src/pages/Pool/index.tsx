@@ -321,7 +321,11 @@ export default function Pool() {
                       element={InterfaceElementName.CONNECT_WALLET_BUTTON}
                     >
                       <ButtonPrimary
-                        style={{ marginTop: '2em', marginBottom: '2em', padding: '8px 16px' }}
+                        style={{
+                          marginTop: '2em',
+                          marginBottom: '2em',
+                          padding: '8px 16px',
+                        }}
                         onClick={toggleWalletDrawer}
                       >
                         <Trans>Connect a wallet</Trans>

@@ -12,7 +12,13 @@ describe('mint reducer', () => {
 
   describe('typeInput', () => {
     it('sets typed value', () => {
-      store.dispatch(typeInput({ field: Field.CURRENCY_A, typedValue: '1.0', noLiquidity: false }))
+      store.dispatch(
+        typeInput({
+          field: Field.CURRENCY_A,
+          typedValue: '1.0',
+          noLiquidity: false,
+        })
+      )
       expect(store.getState()).toEqual({
         ...initialState,
         independentField: Field.CURRENCY_A,
@@ -21,8 +27,20 @@ describe('mint reducer', () => {
       })
     })
     it('clears other value', () => {
-      store.dispatch(typeInput({ field: Field.CURRENCY_A, typedValue: '1.0', noLiquidity: false }))
-      store.dispatch(typeInput({ field: Field.CURRENCY_B, typedValue: '1.0', noLiquidity: false }))
+      store.dispatch(
+        typeInput({
+          field: Field.CURRENCY_A,
+          typedValue: '1.0',
+          noLiquidity: false,
+        })
+      )
+      store.dispatch(
+        typeInput({
+          field: Field.CURRENCY_B,
+          typedValue: '1.0',
+          noLiquidity: false,
+        })
+      )
       expect(store.getState()).toEqual({
         ...initialState,
         independentField: Field.CURRENCY_B,

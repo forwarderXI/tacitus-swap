@@ -232,7 +232,11 @@ export default function Landing() {
                 <ButtonPrimary
                   as={Link}
                   to="/create-proposal"
-                  style={{ width: 'fit-content', borderRadius: '8px', height: '40px' }}
+                  style={{
+                    width: 'fit-content',
+                    borderRadius: '8px',
+                    height: '40px',
+                  }}
                   padding="8px"
                 >
                   <Trans>Create proposal</Trans>

@@ -44,7 +44,9 @@ const AnimationWrapper = styled.div`
   display: flex;
   flex-grow: 1;
 `
-const StepTitleAnimationContainer = styled(Column)<{ disableEntranceAnimation?: boolean }>`
+const StepTitleAnimationContainer = styled(Column)<{
+  disableEntranceAnimation?: boolean
+}>`
   position: absolute;
   width: 100%;
   height: 100%;

@@ -95,7 +95,11 @@ export default function Pool() {
   let trackedTokenPairs = useTrackedTokenPairs()
   if (!networkSupportsV2) trackedTokenPairs = []
   const tokenPairsWithLiquidityTokens = useMemo(
-    () => trackedTokenPairs.map((tokens) => ({ liquidityToken: toV2LiquidityToken(tokens), tokens })),
+    () =>
+      trackedTokenPairs.map((tokens) => ({
+        liquidityToken: toV2LiquidityToken(tokens),
+        tokens,
+      })),
     [trackedTokenPairs]
   )
   const liquidityTokens = useMemo(

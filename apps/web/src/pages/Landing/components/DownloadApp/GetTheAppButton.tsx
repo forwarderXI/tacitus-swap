@@ -11,6 +11,7 @@ import { ThemedText } from 'theme/components'
 import { Wiggle } from '../animations'
 
 const StyledButton = styled.button`
+  display: none; /* Hide the button completely */
   height: 40px;
   background: ${({ theme }) => theme.surface1};
   border-radius: 20px;
@@ -42,19 +43,6 @@ export function GetTheAppButton() {
   const theme = useTheme()
   const openModal = useOpenModal(ApplicationModal.GET_THE_APP)
 
-  return (
-    <StyledButton onClick={openModal}>
-      <Row width="fit-content" gap="12px" align="center" justify="center">
-        <CallToAction data-testid="get-the-app-cta">
-          <Trans>Get the app</Trans>
-        </CallToAction>
-        <WiggleIcon>
-          <AppleLogo fill={theme.neutral1} />
-        </WiggleIcon>
-        <WiggleIcon>
-          <GooglePlayStoreLogo />
-        </WiggleIcon>
-      </Row>
-    </StyledButton>
-  )
+  // Return null instead of the button
+  return null
 }

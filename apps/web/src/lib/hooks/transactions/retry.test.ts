@@ -30,13 +30,21 @@ describe('retry', () => {
   })
 
   it('cancel causes promise to reject', async () => {
-    const { promise, cancel } = retry(makeFn(2, 'abc'), { n: 3, minWait: 100, maxWait: 100 })
+    const { promise, cancel } = retry(makeFn(2, 'abc'), {
+      n: 3,
+      minWait: 100,
+      maxWait: 100,
+    })
     cancel()
     await expect(promise).rejects.toThrow(expect.any(CanceledError))
   })
 
   it('cancel no-op after complete', async () => {
-    const { promise, cancel } = retry(makeFn(0, 'abc'), { n: 3, minWait: 100, maxWait: 100 })
+    const { promise, cancel } = retry(makeFn(0, 'abc'), {
+      n: 3,
+      minWait: 100,
+      maxWait: 100,
+    })
     // defer
     setTimeout(cancel, 0)
     await expect(promise).resolves.toEqual('abc')

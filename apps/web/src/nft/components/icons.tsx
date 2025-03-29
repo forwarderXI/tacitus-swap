@@ -16,7 +16,11 @@ export const ChevronUpIcon = ({
   secondaryWidth,
   secondaryHeight,
   ...props
-}: SVGProps & { secondaryWidth?: string; secondaryHeight?: string; secondaryColor?: string }) => (
+}: SVGProps & {
+  secondaryWidth?: string
+  secondaryHeight?: string
+  secondaryColor?: string
+}) => (
   <svg
     width={secondaryWidth || '29'}
     height={secondaryHeight || '28'}

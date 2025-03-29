@@ -10,7 +10,10 @@ import { useGetQuickRouteQuery, useGetQuickRouteQueryState } from './quickRouteS
 import { GetQuickQuoteArgs, PreviewTrade, QuoteState, TradeState } from './types'
 import { currencyAddressForSwapQuote } from './utils'
 
-const TRADE_NOT_FOUND = { state: TradeState.NO_ROUTE_FOUND, trade: undefined } as const
+const TRADE_NOT_FOUND = {
+  state: TradeState.NO_ROUTE_FOUND,
+  trade: undefined,
+} as const
 const TRADE_LOADING = { state: TradeState.LOADING, trade: undefined } as const
 
 function useQuickRouteArguments({

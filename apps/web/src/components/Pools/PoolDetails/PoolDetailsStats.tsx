@@ -99,7 +99,11 @@ const rightBarChartStyles = css`
   border-left: 1px solid ${({ theme }) => theme.surface2};
 `
 
-const BalanceChartSide = styled.div<{ percent: number; $color: string; isLeft: boolean }>`
+const BalanceChartSide = styled.div<{
+  percent: number
+  $color: string
+  isLeft: boolean
+}>`
   height: 8px;
   width: ${({ percent }) => percent * 100}%;
   background: ${({ $color }) => $color};

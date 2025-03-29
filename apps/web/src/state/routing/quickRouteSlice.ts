@@ -50,7 +50,10 @@ export const quickRouteApi = createApi({
 
           if (response.error) {
             // cast as any here because we do a runtime check on it being an object before indexing into .errorCode
-            const errorData = response.error.data as { errorCode?: string; detail?: string }
+            const errorData = response.error.data as {
+              errorCode?: string
+              detail?: string
+            }
             // NO_ROUTE should be treated as a valid response to prevent retries.
             if (
               typeof errorData === 'object' &&

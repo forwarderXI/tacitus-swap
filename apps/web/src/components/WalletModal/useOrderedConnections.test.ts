@@ -105,7 +105,14 @@ describe('Ordered Connections', () => {
       result: { current: dispatch },
     } = renderHook(() => useAppDispatch())
 
-    act(() => dispatch(updateRecentConnectionMeta({ type: ConnectionType.EIP_6963_INJECTED, rdns: 'MetaMask' })))
+    act(() =>
+      dispatch(
+        updateRecentConnectionMeta({
+          type: ConnectionType.EIP_6963_INJECTED,
+          rdns: 'MetaMask',
+        })
+      )
+    )
 
     const test = renderHook(() => useOrderedConnections())
     expect(test.result.current.orderedConnections.length).toEqual(5)

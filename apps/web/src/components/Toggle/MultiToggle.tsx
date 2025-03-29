@@ -12,7 +12,10 @@ export const ToggleWrapper = styled.button<{ width?: string }>`
   outline: none;
 `
 
-export const ToggleElement = styled.span<{ isActive?: boolean; fontSize?: string }>`
+export const ToggleElement = styled.span<{
+  isActive?: boolean
+  fontSize?: string
+}>`
   display: flex;
   align-items: center;
   width: 100%;

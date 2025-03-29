@@ -40,7 +40,9 @@ export const useWalletCollections = create<WalletCollectionState>()(
         set(({ collectionFilters }) => {
           if (collectionFilters.length === 0) return { collectionFilters: [address] }
           else if (collectionFilters.some((x) => x === address))
-            return { collectionFilters: collectionFilters.filter((n) => n !== address) }
+            return {
+              collectionFilters: collectionFilters.filter((n) => n !== address),
+            }
           else return { collectionFilters: [...collectionFilters, address] }
         }),
       clearCollectionFilters: () =>
@@ -53,7 +55,9 @@ export const useWalletCollections = create<WalletCollectionState>()(
         }),
       setDisplayAssets: (walletAssets, listFilter) =>
         set(() => {
-          return { displayAssets: filterWalletAssets(walletAssets, listFilter) }
+          return {
+            displayAssets: filterWalletAssets(walletAssets, listFilter),
+          }
         }),
     }),
     { name: 'useWalletCollections' }

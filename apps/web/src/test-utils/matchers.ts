@@ -1,5 +1,9 @@
 // This type is not exported from Jest, so we need to infer it from the expect.extend function.
-type MatcherFunction = Parameters<typeof expect.extend>[0] extends { [key: string]: infer I } ? I : never
+type MatcherFunction = Parameters<typeof expect.extend>[0] extends {
+  [key: string]: infer I
+}
+  ? I
+  : never
 
 const isElementVisible = (element: HTMLElement): boolean => {
   return element.style.height !== '0px' && (!element.parentElement || isElementVisible(element.parentElement))

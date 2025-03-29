@@ -117,7 +117,10 @@ export const routingApi = createApi({
               if (response.error) {
                 try {
                   // cast as any here because we do a runtime check on it being an object before indexing into .errorCode
-                  const errorData = response.error.data as { errorCode?: string; detail?: string }
+                  const errorData = response.error.data as {
+                    errorCode?: string
+                    detail?: string
+                  }
                   // NO_ROUTE should be treated as a valid response to prevent retries.
                   if (
                     typeof errorData === 'object' &&
@@ -131,7 +134,10 @@ export const routingApi = createApi({
                       routerPreference: args.routerPreference,
                     })
                     return {
-                      data: { state: QuoteState.NOT_FOUND, latencyMs: trace.now() },
+                      data: {
+                        state: QuoteState.NOT_FOUND,
+                        latencyMs: trace.now(),
+                      },
                     }
                   }
                 } catch {
@@ -171,7 +177,10 @@ export const routingApi = createApi({
             console.warn(`GetQuote failed on client: ${error}`)
             trace.setError(error)
             return {
-              error: { status: 'CUSTOM_ERROR', error: error?.detail ?? error?.message ?? error },
+              error: {
+                status: 'CUSTOM_ERROR',
+                error: error?.detail ?? error?.message ?? error,
+              },
             }
           }
         })

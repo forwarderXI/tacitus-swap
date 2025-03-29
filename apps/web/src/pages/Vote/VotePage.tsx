@@ -117,7 +117,10 @@ const ProgressWrapper = styled.div`
   position: relative;
 `
 
-const Progress = styled.div<{ status: 'for' | 'against'; percentageString?: string }>`
+const Progress = styled.div<{
+  status: 'for' | 'against'
+  percentageString?: string
+}>`
   height: 4px;
   border-radius: 4px;
   background-color: ${({ theme, status }) => (status === 'for' ? theme.success : theme.critical)};
@@ -164,7 +167,10 @@ function getDateFromBlock(
 
 export default function VotePage() {
   // see https://github.com/remix-run/react-router/issues/8200#issuecomment-962520661
-  const { governorIndex, id } = useParams() as { governorIndex: string; id: string }
+  const { governorIndex, id } = useParams() as {
+    governorIndex: string
+    id: string
+  }
   const parsedGovernorIndex = Number.parseInt(governorIndex)
 
   const { chainId, account } = useWeb3React()
@@ -408,7 +414,9 @@ export default function VotePage() {
                       </ThemedText.DeprecatedBlack>
                       {proposalData && (
                         <ThemedText.DeprecatedBlack fontWeight={535}>
-                          {proposalData.forCount.toFixed(0, { groupSeparator: ',' })}
+                          {proposalData.forCount.toFixed(0, {
+                            groupSeparator: ',',
+                          })}
                           {quorumAmount && (
                             <span style={{ fontWeight: 485 }}>{` / ${quorumAmount.toExact({
                               groupSeparator: ',',
@@ -437,7 +445,9 @@ export default function VotePage() {
                       </ThemedText.DeprecatedBlack>
                       {proposalData && (
                         <ThemedText.DeprecatedBlack fontWeight={535}>
-                          {proposalData.againstCount.toFixed(0, { groupSeparator: ',' })}
+                          {proposalData.againstCount.toFixed(0, {
+                            groupSeparator: ',',
+                          })}
                         </ThemedText.DeprecatedBlack>
                       )}
                     </WrapSmall>

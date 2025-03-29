@@ -41,7 +41,10 @@ export class CustomVolumeChartModel<TDataType extends CustomHistogramData> exten
       localization: {
         locale: params.locale,
         priceFormatter: (price: BarPrice) =>
-          params.format.formatFiatPrice({ price, type: NumberType.ChartVolumePriceScale }),
+          params.format.formatFiatPrice({
+            price,
+            type: NumberType.ChartVolumePriceScale,
+          }),
       },
       rightPriceScale: {
         visible: false,

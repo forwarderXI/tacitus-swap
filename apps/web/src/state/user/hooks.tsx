@@ -68,7 +68,11 @@ export function useRouterPreference(): [RouterPreference, (routerPreference: Rou
 
   const setRouterPreference = useCallback(
     (newRouterPreference: RouterPreference) => {
-      dispatch(updateUserRouterPreference({ userRouterPreference: newRouterPreference }))
+      dispatch(
+        updateUserRouterPreference({
+          userRouterPreference: newRouterPreference,
+        })
+      )
     },
     [dispatch]
   )
@@ -136,7 +140,11 @@ export function useUserHideClosedPositions(): [boolean, (newHideClosedPositions:
 
   const setHideClosedPositions = useCallback(
     (newHideClosedPositions: boolean) => {
-      dispatch(updateHideClosedPositions({ userHideClosedPositions: newHideClosedPositions }))
+      dispatch(
+        updateHideClosedPositions({
+          userHideClosedPositions: newHideClosedPositions,
+        })
+      )
     },
     [dispatch]
   )
@@ -217,7 +225,11 @@ export function toV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
 
   return new Token(
     tokenA.chainId,
-    computePairAddress({ factoryAddress: V2_FACTORY_ADDRESSES[tokenA.chainId], tokenA, tokenB }),
+    computePairAddress({
+      factoryAddress: V2_FACTORY_ADDRESSES[tokenA.chainId],
+      tokenA,
+      tokenB,
+    }),
     18,
     'UNI-V2',
     'Uniswap V2'

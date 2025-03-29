@@ -103,7 +103,10 @@ const ActionButton = ({
   )
 }
 
-const StyledCardContainer = styled.div<{ selected: boolean; isDisabled: boolean }>`
+const StyledCardContainer = styled.div<{
+  selected: boolean
+  isDisabled: boolean
+}>`
   position: relative;
   border-radius: ${BORDER_RADIUS}px;
   background-color: ${({ theme }) => theme.surface1};

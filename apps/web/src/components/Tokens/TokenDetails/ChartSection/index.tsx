@@ -90,7 +90,11 @@ export function useCreateTDPChartState(tokenDBAddress: string | undefined, curre
   const [chartType, setChartType] = useState<TokenDetailsChartType>(ChartType.PRICE)
   const [priceChartType, setPriceChartType] = useState<PriceChartType>(PriceChartType.LINE)
 
-  const variables = { address: tokenDBAddress, chain: currencyChainName, duration: toHistoryDuration(timePeriod) }
+  const variables = {
+    address: tokenDBAddress,
+    chain: currencyChainName,
+    duration: toHistoryDuration(timePeriod),
+  }
 
   const priceQuery = useTDPPriceChartData(variables, chartType !== ChartType.PRICE, priceChartType)
   const volumeQuery = useTDPVolumeChartData(variables, chartType !== ChartType.VOLUME)

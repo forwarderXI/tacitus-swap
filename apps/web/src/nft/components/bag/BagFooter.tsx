@@ -99,7 +99,10 @@ const CurrencyInput = styled(Row)`
   cursor: pointer;
 `
 
-const ActionButton = styled.button<{ $backgroundColor: string; $color: string }>`
+const ActionButton = styled.button<{
+  $backgroundColor: string
+  $color: string
+}>`
   display: flex;
   background: ${({ $backgroundColor }) => $backgroundColor};
   color: ${({ $color }) => $color};
@@ -199,7 +202,10 @@ const InputCurrencyValue = ({
   if (!usingPayWithAnyToken) {
     return (
       <ThemedText.BodyPrimary lineHeight="20px" fontWeight="535">
-        {formatEther({ input: totalEthPrice.toString(), type: NumberType.NFTToken })}
+        {formatEther({
+          input: totalEthPrice.toString(),
+          type: NumberType.NFTToken,
+        })}
         &nbsp;{activeCurrency?.symbol ?? 'ETH'}
       </ThemedText.BodyPrimary>
     )
@@ -215,7 +221,10 @@ const InputCurrencyValue = ({
 
   return (
     <ValueText color={tradeState === TradeState.LOADING ? 'neutral3' : 'neutral1'}>
-      {formatNumberOrString({ input: trade?.inputAmount.toExact(), type: NumberType.NFTToken })}
+      {formatNumberOrString({
+        input: trade?.inputAmount.toExact(),
+        type: NumberType.NFTToken,
+      })}
     </ValueText>
   )
 }
@@ -256,7 +265,10 @@ const FiatValue = ({
         </>
       )}
       <ThemedText.BodySmall color="neutral3" lineHeight="20px">
-        {`${formatNumberOrString({ input: usdcValue?.toExact(), type: NumberType.FiatNFTToken })}`}
+        {`${formatNumberOrString({
+          input: usdcValue?.toExact(),
+          type: NumberType.FiatNFTToken,
+        })}`}
       </ThemedText.BodySmall>
     </PriceImpactContainer>
   )
@@ -280,7 +292,9 @@ export const BagFooter = ({ setModalIsOpen, eventProperties }: BagFooterProps) =
   const { account, chainId, connector } = useWeb3React()
   const connected = Boolean(account && chainId)
   const totalEthPrice = useBagTotalEthPrice()
-  const { inputCurrency } = useTokenInput(({ inputCurrency }) => ({ inputCurrency }))
+  const { inputCurrency } = useTokenInput(({ inputCurrency }) => ({
+    inputCurrency,
+  }))
   const setInputCurrency = useTokenInput((state) => state.setInputCurrency)
   const defaultCurrency = useCurrency('ETH')
   const inputCurrencyBalance = useTokenBalance(

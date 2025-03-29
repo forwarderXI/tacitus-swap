@@ -232,7 +232,9 @@ export const ListPage = () => {
 
   const startListingFlow = async () => {
     if (!signer) return
-    sendAnalyticsEvent(NFTEventName.NFT_SELL_START_LISTING, { ...startListingEventProperties })
+    sendAnalyticsEvent(NFTEventName.NFT_SELL_START_LISTING, {
+      ...startListingEventProperties,
+    })
 
     // for all unique collection, marketplace combos -> approve collections
     for (const collectionRow of collectionsRequiringApproval) {
@@ -291,7 +293,10 @@ export const ListPage = () => {
           <ProceedsWrapper>
             <EthValueWrapper totalEthListingValue={!!totalEthListingValue}>
               {totalEthListingValue > 0
-                ? formatNumberOrString({ input: totalEthListingValue, type: NumberType.NFTToken })
+                ? formatNumberOrString({
+                    input: totalEthListingValue,
+                    type: NumberType.NFTToken,
+                  })
                 : '-'}{' '}
               ETH
             </EthValueWrapper>

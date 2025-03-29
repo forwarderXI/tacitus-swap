@@ -54,8 +54,14 @@ export class TVLChartModel extends ChartModel<StackedLineData> {
     const gridSettings = isSingleLineChart
       ? {
           grid: {
-            vertLines: { style: LineStyle.CustomDotGrid, color: params.theme.neutral3 },
-            horzLines: { style: LineStyle.CustomDotGrid, color: params.theme.neutral3 },
+            vertLines: {
+              style: LineStyle.CustomDotGrid,
+              color: params.theme.neutral3,
+            },
+            horzLines: {
+              style: LineStyle.CustomDotGrid,
+              color: params.theme.neutral3,
+            },
           },
         }
       : {}
@@ -114,7 +120,10 @@ export function LineChart({ height, data, sources, stale }: LineChartProps) {
         <ChartHeader
           value={(crosshairData ?? lastEntry)?.values.reduce((v, sum) => (sum += v), 0)}
           time={crosshairData?.time}
-          protocolData={sources?.map((source, index) => ({ protocol: source, value: crosshairData?.values[index] }))}
+          protocolData={sources?.map((source, index) => ({
+            protocol: source,
+            value: crosshairData?.values[index],
+          }))}
         />
       )}
     </Chart>

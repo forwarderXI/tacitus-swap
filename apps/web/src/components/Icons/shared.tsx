@@ -13,7 +13,11 @@ const RotationStyle = css`
   animation: 2s ${rotateAnimation} linear infinite;
 `
 
-export const StyledSVG = styled.svg<{ size: string; stroke?: string; fill?: string }>`
+export const StyledSVG = styled.svg<{
+  size: string
+  stroke?: string
+  fill?: string
+}>`
   height: ${({ size }) => size};
   width: ${({ size }) => size};
   path {

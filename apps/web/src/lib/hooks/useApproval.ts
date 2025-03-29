@@ -50,7 +50,12 @@ export function useApproval(
 ): [
   ApprovalState,
   () => Promise<
-    | { response: TransactionResponse; tokenAddress: string; spenderAddress: string; amount: CurrencyAmount<Currency> }
+    | {
+        response: TransactionResponse
+        tokenAddress: string
+        spenderAddress: string
+        amount: CurrencyAmount<Currency>
+      }
     | undefined
   >
 ] {

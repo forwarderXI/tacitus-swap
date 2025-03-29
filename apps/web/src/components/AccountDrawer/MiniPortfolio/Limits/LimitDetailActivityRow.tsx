@@ -61,7 +61,10 @@ export function LimitDetailActivityRow({ order, onToggleSelect, selected }: Limi
 
   const displayPrice = useMemo(() => {
     if (!amountsDefined) return undefined
-    const tradePrice = new Price({ baseAmount: amounts?.inputAmount, quoteAmount: amounts?.outputAmount })
+    const tradePrice = new Price({
+      baseAmount: amounts?.inputAmount,
+      quoteAmount: amounts?.outputAmount,
+    })
     return tradePrice.quote(
       CurrencyAmount.fromRawAmount(
         amounts.inputAmount.currency,

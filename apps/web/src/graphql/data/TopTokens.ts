@@ -209,7 +209,13 @@ export function useTopTokens(chain: Chain): UseTopTokensReturnValue {
   )
   const filteredTokens = useFilteredTokens(sortedTokens)
   return useMemo(
-    () => ({ tokens: filteredTokens, tokenSortRank, loadingTokens, sparklines, error }),
+    () => ({
+      tokens: filteredTokens,
+      tokenSortRank,
+      loadingTokens,
+      sparklines,
+      error,
+    }),
     [filteredTokens, tokenSortRank, loadingTokens, sparklines, error]
   )
 }

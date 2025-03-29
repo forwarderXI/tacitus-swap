@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro'
 import { useWeb3React } from '@web3-react/core'
-import { UniIcon } from 'components/Logo/UniIcon'
+import { TacitusIcon } from 'components/Logo/TacitusIcon'
 import Web3Status from 'components/Web3Status'
 import { chainIdToBackendName } from 'graphql/data/util'
 import { useDisableNFTRoutes } from 'hooks/useDisableNFTRoutes'
@@ -11,7 +11,6 @@ import { Box } from 'nft/components/Box'
 import { Row } from 'nft/components/Flex'
 import { useProfilePageState } from 'nft/hooks'
 import { ProfilePageStateType } from 'nft/types'
-import { GetTheAppButton } from 'pages/Landing/components/DownloadApp/GetTheAppButton'
 import { ReactNode, useCallback } from 'react'
 import { NavLink, NavLinkProps, useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
@@ -23,7 +22,6 @@ import { useIsNavSearchInputVisible } from '../../nft/hooks/useIsNavSearchInputV
 import { Bag } from './Bag'
 import Blur from './Blur'
 import { ChainSelector } from './ChainSelector'
-import { More } from './More'
 import { SearchBar } from './SearchBar'
 import * as styles from './style.css'
 
@@ -87,7 +85,6 @@ export const PageTabs = () => {
           <Trans>Pool</Trans>
         </MenuItem>
       </Box>
-      <More />
     </>
   )
 }
@@ -101,7 +98,7 @@ const Navbar = ({ blur }: { blur: boolean }) => {
 
   const { account } = useWeb3React()
   const [accountDrawerOpen, toggleAccountDrawer] = useAccountDrawer()
-  const handleUniIconClick = useCallback(() => {
+  const handleTacitusIconClick = useCallback(() => {
     if (account) {
       return
     }
@@ -120,14 +117,14 @@ const Navbar = ({ blur }: { blur: boolean }) => {
       <Nav>
         <Box display="flex" height="full" flexWrap="nowrap">
           <Box className={styles.leftSideContainer}>
-            <Box className={styles.logoContainer}>
-              <UniIcon
-                width="48"
-                height="48"
-                data-testid="uniswap-logo"
+            <Box className={styles.logoContainer} style={{ marginTop: '5px' }}>
+              <TacitusIcon
+                width="200"
+                height="200"
+                data-testid="tacitus-logo"
                 className={styles.logo}
                 clickable={!account}
-                onClick={handleUniIconClick}
+                onClick={handleTacitusIconClick}
               />
             </Box>
             {!isNftPage && (
@@ -158,7 +155,6 @@ const Navbar = ({ blur }: { blur: boolean }) => {
                   <ChainSelector />
                 </Box>
               )}
-              {isLandingPage && <GetTheAppButton />}
               <Web3Status />
             </Row>
           </Box>

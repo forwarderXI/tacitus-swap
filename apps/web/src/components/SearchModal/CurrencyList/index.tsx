@@ -165,7 +165,11 @@ export function CurrencyRow({
     <TraceEvent
       events={[BrowserEvent.onClick, BrowserEvent.onKeyPress]}
       name={InterfaceEventName.TOKEN_SELECTED}
-      properties={{ is_imported_by_user: customAdded, ...eventProperties, total_balances_usd: portfolioBalanceUsd }}
+      properties={{
+        is_imported_by_user: customAdded,
+        ...eventProperties,
+        total_balances_usd: portfolioBalanceUsd,
+      }}
       element={InterfaceElementName.TOKEN_SELECTOR_ROW}
     >
       <Wrapper

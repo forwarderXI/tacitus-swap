@@ -77,7 +77,10 @@ export function usePoolPriceMap(positions: PositionInfo[] | undefined) {
     return Object.values(contractMap)
   }, [positions])
 
-  const { data, loading } = useUniswapPricesQuery({ variables: { contracts }, skip: !contracts.length })
+  const { data, loading } = useUniswapPricesQuery({
+    variables: { contracts },
+    skip: !contracts.length,
+  })
 
   const priceMap = useMemo(
     () =>

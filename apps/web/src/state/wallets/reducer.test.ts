@@ -3,7 +3,10 @@ import { Wallet } from './types'
 
 const WALLET: Wallet = { account: '0x123', walletType: 'test' }
 
-const INITIAL_STATE = { connectedWallets: [] as Wallet[], switchingChain: false as const }
+const INITIAL_STATE = {
+  connectedWallets: [] as Wallet[],
+  switchingChain: false as const,
+}
 
 describe('wallets reducer', () => {
   describe('connectedWallets', () => {
@@ -12,7 +15,10 @@ describe('wallets reducer', () => {
         type: 'wallets/addConnectedWallet',
         payload: WALLET,
       }
-      const expectedState = { connectedWallets: [WALLET], switchingChain: false }
+      const expectedState = {
+        connectedWallets: [WALLET],
+        switchingChain: false,
+      }
       expect(walletsReducer(INITIAL_STATE, action)).toEqual(expectedState)
     })
 
@@ -21,7 +27,10 @@ describe('wallets reducer', () => {
         type: 'wallets/addConnectedWallet',
         payload: WALLET,
       }
-      const expectedState = { connectedWallets: [WALLET], switchingChain: false }
+      const expectedState = {
+        connectedWallets: [WALLET],
+        switchingChain: false,
+      }
       expect(walletsReducer({ ...INITIAL_STATE, connectedWallets: [WALLET] }, action)).toEqual(expectedState)
     })
   })

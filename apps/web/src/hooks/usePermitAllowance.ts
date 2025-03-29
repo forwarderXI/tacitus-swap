@@ -38,7 +38,11 @@ export function usePermitAllowance(token?: Token, owner?: string, spender?: stri
   useEffect(() => setBlocksPerFetch(allowance?.equalTo(0) ? 1 : undefined), [allowance])
 
   return useMemo(
-    () => ({ permitAllowance: allowance, expiration: result?.expiration, nonce: result?.nonce }),
+    () => ({
+      permitAllowance: allowance,
+      expiration: result?.expiration,
+      nonce: result?.nonce,
+    }),
     [allowance, result?.expiration, result?.nonce]
   )
 }

@@ -103,7 +103,9 @@ function callsPositionManagerContract(assetActivity: TransactionActivity) {
 }
 
 // Gets counts for number of NFTs in each collection present
-function getCollectionCounts(nftTransfers: NftTransferPartsFragment[]): { [key: string]: number | undefined } {
+function getCollectionCounts(nftTransfers: NftTransferPartsFragment[]): {
+  [key: string]: number | undefined
+} {
   return nftTransfers.reduce((acc, NFTChange) => {
     const key = NFTChange.asset.collection?.name ?? NFTChange.asset.name
     if (key) {
@@ -202,7 +204,10 @@ export function parseSwapAmounts(
     input: formatUnits(adjustedInput, sent.asset.decimals),
     type: NumberType.TokenNonTx,
   })
-  const outputAmount = formatNumberOrString({ input: received.quantity, type: NumberType.TokenNonTx })
+  const outputAmount = formatNumberOrString({
+    input: received.quantity,
+    type: NumberType.TokenNonTx,
+  })
   return {
     sent,
     received,
@@ -234,7 +239,12 @@ function parseSwap(changes: TransactionChanges, formatNumberOrString: FormatNumb
       const { sent, received, inputAmount, outputAmount } = swapAmounts
       return {
         title: getSwapTitle(sent, received),
-        descriptor: getSwapDescriptor({ tokenIn: sent.asset, inputAmount, tokenOut: received.asset, outputAmount }),
+        descriptor: getSwapDescriptor({
+          tokenIn: sent.asset,
+          inputAmount,
+          tokenOut: received.asset,
+          outputAmount,
+        }),
         currencies: [gqlToCurrency(sent.asset), gqlToCurrency(received.asset)],
       }
     }
@@ -273,7 +283,9 @@ function parseSwapOrder(
 }
 
 export function offchainOrderDetailsFromGraphQLTransactionActivity(
-  activity: AssetActivityPartsFragment & { details: TransactionDetailsPartsFragment },
+  activity: AssetActivityPartsFragment & {
+    details: TransactionDetailsPartsFragment
+  },
   changes: TransactionChanges,
   formatNumberOrString: FormatNumberOrStringFunctionType
 ): UniswapXOrderDetails | undefined {
@@ -324,8 +336,14 @@ function parseLPTransfers(changes: TransactionChanges, formatNumberOrString: For
   const poolTokenA = changes.TokenTransfer[0]
   const poolTokenB = changes.TokenTransfer[1]
 
-  const tokenAQuanitity = formatNumberOrString({ input: poolTokenA.quantity, type: NumberType.TokenNonTx })
-  const tokenBQuantity = formatNumberOrString({ input: poolTokenB.quantity, type: NumberType.TokenNonTx })
+  const tokenAQuanitity = formatNumberOrString({
+    input: poolTokenA.quantity,
+    type: NumberType.TokenNonTx,
+  })
+  const tokenBQuantity = formatNumberOrString({
+    input: poolTokenB.quantity,
+    type: NumberType.TokenNonTx,
+  })
 
   return {
     descriptor: `${tokenAQuanitity} ${poolTokenA.asset.symbol} and ${tokenBQuantity} ${poolTokenB.asset.symbol}`,
@@ -334,8 +352,12 @@ function parseLPTransfers(changes: TransactionChanges, formatNumberOrString: For
   }
 }
 
-type TransactionActivity = AssetActivityPartsFragment & { details: TransactionDetailsPartsFragment }
-type OrderActivity = AssetActivityPartsFragment & { details: SwapOrderDetailsPartsFragment }
+type TransactionActivity = AssetActivityPartsFragment & {
+  details: TransactionDetailsPartsFragment
+}
+type OrderActivity = AssetActivityPartsFragment & {
+  details: SwapOrderDetailsPartsFragment
+}
 
 function parseSendReceive(
   changes: TransactionChanges,
@@ -345,7 +367,10 @@ function parseSendReceive(
   // TODO(cartcrom): remove edge cases after backend implements
   // Edge case: Receiving two token transfers in interaction w/ V3 manager === removing liquidity. These edge cases should potentially be moved to backend
   if (changes.TokenTransfer.length === 2 && callsPositionManagerContract(assetActivity)) {
-    return { title: t`Removed Liquidity`, ...parseLPTransfers(changes, formatNumberOrString) }
+    return {
+      title: t`Removed Liquidity`,
+      ...parseLPTransfers(changes, formatNumberOrString),
+    }
   }
 
   let transfer: NftTransferPartsFragment | TokenTransferPartsFragment | undefined
@@ -359,7 +384,10 @@ function parseSendReceive(
   } else if (changes.TokenTransfer.length === 1) {
     transfer = changes.TokenTransfer[0]
     assetName = transfer.asset.symbol
-    amount = formatNumberOrString({ input: transfer.quantity, type: NumberType.TokenNonTx })
+    amount = formatNumberOrString({
+      input: transfer.quantity,
+      type: NumberType.TokenNonTx,
+    })
     currencies = [gqlToCurrency(transfer.asset)]
   }
 
@@ -406,9 +434,15 @@ function parseMint(
 
     // Edge case: Minting a v3 positon represents adding liquidity
     if (changes.TokenTransfer.length === 2 && callsPositionManagerContract(assetActivity)) {
-      return { title: t`Added Liquidity`, ...parseLPTransfers(changes, formatNumberOrString) }
+      return {
+        title: t`Added Liquidity`,
+        ...parseLPTransfers(changes, formatNumberOrString),
+      }
     }
-    return { title: t`Minted`, descriptor: `${collectionMap[collectionName]} ${collectionName}` }
+    return {
+      title: t`Minted`,
+      descriptor: `${collectionMap[collectionName]} ${collectionName}`,
+    }
   }
   return { title: t`Unknown Mint` }
 }
@@ -418,7 +452,10 @@ function parseUnknown(
   _formatNumberOrString: FormatNumberOrStringFunctionType,
   assetActivity: TransactionActivity
 ) {
-  return { title: t`Contract Interaction`, ...COMMON_CONTRACTS[assetActivity.details.to.toLowerCase()] }
+  return {
+    title: t`Contract Interaction`,
+    ...COMMON_CONTRACTS[assetActivity.details.to.toLowerCase()],
+  }
 }
 
 type TransactionTypeParser = (
@@ -426,7 +463,9 @@ type TransactionTypeParser = (
   formatNumberOrString: FormatNumberOrStringFunctionType,
   assetActivity: TransactionActivity
 ) => Partial<Activity>
-const ActivityParserByType: { [key: string]: TransactionTypeParser | undefined } = {
+const ActivityParserByType: {
+  [key: string]: TransactionTypeParser | undefined
+} = {
   [TransactionType.Swap]: parseSwap,
   [TransactionType.Lend]: parseLend,
   [TransactionType.SwapOrder]: parseSwapOrder,
@@ -578,7 +617,13 @@ function parseRemoteActivity(
 
         return acc
       },
-      { NftTransfer: [], TokenTransfer: [], TokenApproval: [], NftApproval: [], NftApproveForAll: [] }
+      {
+        NftTransfer: [],
+        TokenTransfer: [],
+        TokenApproval: [],
+        NftApproval: [],
+        NftApproveForAll: [],
+      }
     )
 
     const supportedChain = supportedChainIdFromGQLChain(assetActivity.chain)

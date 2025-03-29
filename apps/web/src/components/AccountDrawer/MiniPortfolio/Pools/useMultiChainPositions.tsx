@@ -50,7 +50,10 @@ const DEFAULT_CHAINS = [
   ChainId.BASE,
 ]
 
-type UseMultiChainPositionsData = { positions?: PositionInfo[]; loading: boolean }
+type UseMultiChainPositionsData = {
+  positions?: PositionInfo[]
+  loading: boolean
+}
 
 /**
  * Returns all positions for a given account on multiple chains.
@@ -81,7 +84,12 @@ export default function useMultiChainPositions(account: string, chains = DEFAULT
     async (pm: NonfungiblePositionManager, positionIds: BigNumber[], chainId: number) => {
       const callData = positionIds.map((id) =>
         pm.interface.encodeFunctionData('collect', [
-          { tokenId: id, recipient: account, amount0Max: MAX_UINT128, amount1Max: MAX_UINT128 },
+          {
+            tokenId: id,
+            recipient: account,
+            amount0Max: MAX_UINT128,
+            amount1Max: MAX_UINT128,
+          },
         ])
       )
       const fees = (await pm.callStatic.multicall(callData)).reduce((acc, feeBytes, index) => {
@@ -134,7 +142,12 @@ export default function useMultiChainPositions(account: string, chains = DEFAULT
         let poolAddress = poolAddressCache.get(details, chainId)
         if (!poolAddress) {
           const factoryAddress = V3_CORE_FACTORY_ADDRESSES[chainId]
-          poolAddress = computePoolAddress({ factoryAddress, tokenA, tokenB, fee: details.fee })
+          poolAddress = computePoolAddress({
+            factoryAddress,
+            tokenA,
+            tokenB,
+            fee: details.fee,
+          })
           poolAddressCache.set(details, chainId, poolAddress)
         }
         poolPairs.push([tokenA, tokenB])
@@ -226,5 +239,8 @@ export default function useMultiChainPositions(account: string, chains = DEFAULT
     [feeMap, positions, priceMap]
   )
 
-  return { positions: positionsWithFeesAndPrices, loading: pricesLoading || positionsLoading }
+  return {
+    positions: positionsWithFeesAndPrices,
+    loading: pricesLoading || positionsLoading,
+  }
 }

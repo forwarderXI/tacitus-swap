@@ -14,14 +14,21 @@ describe('createGroups', () => {
 
   it('should hide spam if requested', () => {
     const mockActivities = [
-      { timestamp: Date.now() / 1000 - 300, status: TransactionStatus.Confirmed, isSpam: true },
+      {
+        timestamp: Date.now() / 1000 - 300,
+        status: TransactionStatus.Confirmed,
+        isSpam: true,
+      },
     ] as Activity[]
 
     expect(createGroups(mockActivities, false)).toContainEqual(
       expect.objectContaining({
         title: 'Today',
         transactions: expect.arrayContaining([
-          expect.objectContaining({ timestamp: expect.any(Number), status: TransactionStatus.Confirmed }),
+          expect.objectContaining({
+            timestamp: expect.any(Number),
+            status: TransactionStatus.Confirmed,
+          }),
         ]),
       })
     )
@@ -32,7 +39,10 @@ describe('createGroups', () => {
     const mockActivities = [
       { timestamp: 1700000000, status: TransactionStatus.Pending },
       { timestamp: 1650000000, status: TransactionStatus.Confirmed },
-      { timestamp: Date.now() / 1000 - 300, status: TransactionStatus.Confirmed },
+      {
+        timestamp: Date.now() / 1000 - 300,
+        status: TransactionStatus.Confirmed,
+      },
     ] as Activity[]
 
     const result = createGroups(mockActivities)
@@ -41,7 +51,10 @@ describe('createGroups', () => {
       expect.objectContaining({
         title: 'Pending',
         transactions: expect.arrayContaining([
-          expect.objectContaining({ timestamp: 1700000000, status: TransactionStatus.Pending }),
+          expect.objectContaining({
+            timestamp: 1700000000,
+            status: TransactionStatus.Pending,
+          }),
         ]),
       })
     )
@@ -50,7 +63,10 @@ describe('createGroups', () => {
       expect.objectContaining({
         title: 'Today',
         transactions: expect.arrayContaining([
-          expect.objectContaining({ timestamp: expect.any(Number), status: TransactionStatus.Confirmed }),
+          expect.objectContaining({
+            timestamp: expect.any(Number),
+            status: TransactionStatus.Confirmed,
+          }),
         ]),
       })
     )

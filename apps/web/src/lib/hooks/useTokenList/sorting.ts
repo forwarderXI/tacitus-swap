@@ -17,7 +17,9 @@ function balanceComparator(a?: number, b?: number) {
   return 0
 }
 
-export type TokenBalances = { [tokenAddress: string]: { usdValue: number; balance: number } }
+export type TokenBalances = {
+  [tokenAddress: string]: { usdValue: number; balance: number }
+}
 
 /** Sorts tokens by currency amount (descending), then safety, then symbol (ascending). */
 function tokenComparator(balances: TokenBalances, a: Token, b: Token) {

@@ -187,7 +187,10 @@ export const Sweep = ({ contractAddress, minPrice, maxPrice }: SweepProps) => {
 
   const { sortedAssets, sortedAssetsTotalEth } = useMemo(() => {
     if (!collectionAssets && !sudoSwapAssets && !nftxAssets && !nft20Assets) {
-      return { sortedAssets: undefined, sortedAssetsTotalEth: BigNumber.from(0) }
+      return {
+        sortedAssets: undefined,
+        sortedAssetsTotalEth: BigNumber.from(0),
+      }
     }
 
     let counterNFTX = 0

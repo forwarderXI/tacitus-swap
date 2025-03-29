@@ -197,7 +197,10 @@ export function OrderContent({
   const details: Array<OffchainOrderLineItemProps> = useMemo(() => {
     const details = []
     if (amountsDefined) {
-      details.push({ type: OffchainOrderLineItemType.EXCHANGE_RATE, amounts } as OffchainOrderLineItemProps)
+      details.push({
+        type: OffchainOrderLineItemType.EXCHANGE_RATE,
+        amounts,
+      } as OffchainOrderLineItemProps)
     }
     if (order.status === UniswapXOrderStatus.OPEN) {
       details.push({

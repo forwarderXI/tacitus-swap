@@ -8,7 +8,11 @@ export function useExploreParams(): {
   chainName?: string
   tokenAddress?: string
 } {
-  const { tab, chainName, tokenAddress } = useParams<{ tab: string; chainName: string; tokenAddress: string }>()
+  const { tab, chainName, tokenAddress } = useParams<{
+    tab: string
+    chainName: string
+    tokenAddress: string
+  }>()
   const isLegacyUrl = !useLocation().pathname.includes('explore')
 
   const exploreTabs = Object.values(ExploreTab)

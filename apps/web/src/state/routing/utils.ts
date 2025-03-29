@@ -242,7 +242,13 @@ export async function transformQuoteToTrade(
   const classicTrade = new ClassicTrade({
     v2Routes:
       routes
-        ?.filter((r): r is RouteResult & { routev2: NonNullable<RouteResult['routev2']> } => r.routev2 !== null)
+        ?.filter(
+          (
+            r
+          ): r is RouteResult & {
+            routev2: NonNullable<RouteResult['routev2']>
+          } => r.routev2 !== null
+        )
         .map(({ routev2, inputAmount, outputAmount }) => ({
           routev2,
           inputAmount,
@@ -250,7 +256,13 @@ export async function transformQuoteToTrade(
         })) ?? [],
     v3Routes:
       routes
-        ?.filter((r): r is RouteResult & { routev3: NonNullable<RouteResult['routev3']> } => r.routev3 !== null)
+        ?.filter(
+          (
+            r
+          ): r is RouteResult & {
+            routev3: NonNullable<RouteResult['routev3']>
+          } => r.routev3 !== null
+        )
         .map(({ routev3, inputAmount, outputAmount }) => ({
           routev3,
           inputAmount,
@@ -259,7 +271,11 @@ export async function transformQuoteToTrade(
     mixedRoutes:
       routes
         ?.filter(
-          (r): r is RouteResult & { mixedRoute: NonNullable<RouteResult['mixedRoute']> } => r.mixedRoute !== null
+          (
+            r
+          ): r is RouteResult & {
+            mixedRoute: NonNullable<RouteResult['mixedRoute']>
+          } => r.mixedRoute !== null
         )
         .map(({ mixedRoute, inputAmount, outputAmount }) => ({
           mixedRoute,

@@ -35,7 +35,10 @@ export function MaxSlippageTooltip({ trade, allowedSlippage }: { trade: Interfac
   const isExactIn = trade.tradeType === TradeType.EXACT_INPUT
   const amount = isExactIn ? trade.minimumAmountOut(allowedSlippage) : trade.maximumAmountIn(allowedSlippage)
 
-  const formattedAmount = useFormatter().formatCurrencyAmount({ amount, type: NumberType.SwapDetailsAmount })
+  const formattedAmount = useFormatter().formatCurrencyAmount({
+    amount,
+    type: NumberType.SwapDetailsAmount,
+  })
   const displayAmount = `${formattedAmount} ${amount.currency.symbol}`
 
   return (

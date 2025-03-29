@@ -441,7 +441,13 @@ function V2PairMigration({
 
           <FeeSelector feeAmount={feeAmount} handleFeePoolSelect={setFeeAmount} />
           {noLiquidity && (
-            <BlueCard style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <BlueCard
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
               <AlertCircle color={theme.neutral1} style={{ marginBottom: '12px', opacity: 0.8 }} />
               <ThemedText.DeprecatedBody
                 fontSize={14}

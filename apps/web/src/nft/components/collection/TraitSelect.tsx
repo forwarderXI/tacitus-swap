@@ -61,7 +61,9 @@ const TraitItem = ({
       removeTrait(trait)
       setCheckboxSelected(false)
     }
-    sendAnalyticsEvent(NFTEventName.NFT_FILTER_SELECTED, { filter_type: NFTFilterTypes.TRAIT })
+    sendAnalyticsEvent(NFTEventName.NFT_FILTER_SELECTED, {
+      filter_type: NFTFilterTypes.TRAIT,
+    })
   }
 
   const showFullTraitName = shouldShow && trait_type === trait.trait_type && trait_value === trait.trait_value
@@ -97,7 +99,13 @@ const TraitItem = ({
         style={{ minHeight: 15 }}
         maxWidth={!showFullTraitName ? '160' : 'full'}
         onMouseOver={(e) => isEllipsisActive(e)}
-        onMouseLeave={() => toggleShowFullTraitName({ shouldShow: false, trait_type: '', trait_value: '' })}
+        onMouseLeave={() =>
+          toggleShowFullTraitName({
+            shouldShow: false,
+            trait_type: '',
+            trait_value: '',
+          })
+        }
       >
         {trait.trait_type === 'Number of traits'
           ? `${trait.trait_value} trait${pluralize(Number(trait.trait_value))}`
@@ -162,7 +170,9 @@ export const TraitSelect = ({ traits, type, index }: { traits: Trait[]; type: st
       />
       <Column
         className={styles.filterDropDowns}
-        style={{ height: `${Math.min(TRAIT_ROW_HEIGHT * searchedTraits.length, styles.MAX_FILTER_DROPDOWN_HEIGHT)}px` }}
+        style={{
+          height: `${Math.min(TRAIT_ROW_HEIGHT * searchedTraits.length, styles.MAX_FILTER_DROPDOWN_HEIGHT)}px`,
+        }}
       >
         <AutoSizer disableWidth>
           {({ height }: { height: number }) => (

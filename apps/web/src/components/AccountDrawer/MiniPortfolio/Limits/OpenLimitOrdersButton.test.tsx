@@ -20,7 +20,11 @@ const mockLimitActivity = {
 
 describe('OpenLimitOrdersButton', () => {
   it('should not render if there are no open limit orders', () => {
-    mocked(useOpenLimitOrders).mockReturnValue({ openLimitOrders: [], loading: false, refetch: jest.fn() })
+    mocked(useOpenLimitOrders).mockReturnValue({
+      openLimitOrders: [],
+      loading: false,
+      refetch: jest.fn(),
+    })
     const { container } = render(<OpenLimitOrdersButton account="0x123" openLimitsMenu={jest.fn()} />)
     expect(container.firstChild?.firstChild?.firstChild).toBeNull()
   })

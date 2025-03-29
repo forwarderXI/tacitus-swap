@@ -16,7 +16,10 @@ export function isDevelopment() {
   )
 }
 
-type GroupedEntries = { onDemandEntries: (string | PrecacheEntry)[]; precacheEntries: PrecacheEntry[] }
+type GroupedEntries = {
+  onDemandEntries: (string | PrecacheEntry)[]
+  precacheEntries: PrecacheEntry[]
+}
 
 /**
  * Splits entries into on-demand and precachable entries.
@@ -26,12 +29,21 @@ export function groupEntries(entries: (string | PrecacheEntry)[]): GroupedEntrie
   return entries.reduce<GroupedEntries>(
     ({ onDemandEntries, precacheEntries }, entry) => {
       if (typeof entry === 'string' || entry.url.includes('/media/')) {
-        return { precacheEntries, onDemandEntries: [...onDemandEntries, entry] }
+        return {
+          precacheEntries,
+          onDemandEntries: [...onDemandEntries, entry],
+        }
       } else if (entry.revision) {
         // index.html should be the only non-media entry with a revision, as code chunks have a hashed URL.
-        return { precacheEntries: [...precacheEntries, entry], onDemandEntries }
+        return {
+          precacheEntries: [...precacheEntries, entry],
+          onDemandEntries,
+        }
       } else {
-        return { precacheEntries, onDemandEntries: [...onDemandEntries, entry] }
+        return {
+          precacheEntries,
+          onDemandEntries: [...onDemandEntries, entry],
+        }
       }
     },
     { onDemandEntries: [], precacheEntries: [] }

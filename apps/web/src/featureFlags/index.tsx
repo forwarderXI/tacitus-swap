@@ -37,7 +37,11 @@ interface FeatureFlagsContextType {
   configs: Record<string, any>
 }
 
-const FeatureFlagContext = createContext<FeatureFlagsContextType>({ isLoaded: false, flags: {}, configs: {} })
+const FeatureFlagContext = createContext<FeatureFlagsContextType>({
+  isLoaded: false,
+  flags: {},
+  configs: {},
+})
 
 export function useFeatureFlagsContext(): FeatureFlagsContextType {
   const context = useContext(FeatureFlagContext)

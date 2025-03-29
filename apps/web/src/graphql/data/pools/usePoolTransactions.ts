@@ -75,8 +75,18 @@ export function usePoolTransactions(
   const loadingMore = useRef(false)
   const { transactions, loading, fetchMore, error } =
     protocolVersion === ProtocolVersion.V3
-      ? { transactions: dataV3?.v3Pool?.transactions, loading: loadingV3, fetchMore: fetchMoreV3, error: errorV3 }
-      : { transactions: dataV2?.v2Pair?.transactions, loading: loadingV2, fetchMore: fetchMoreV2, error: errorV2 }
+      ? {
+          transactions: dataV3?.v3Pool?.transactions,
+          loading: loadingV3,
+          fetchMore: fetchMoreV3,
+          error: errorV3,
+        }
+      : {
+          transactions: dataV2?.v2Pair?.transactions,
+          loading: loadingV2,
+          fetchMore: fetchMoreV2,
+          error: errorV2,
+        }
 
   const loadMore = useCallback(
     ({ onComplete }: { onComplete?: () => void }) => {

@@ -162,8 +162,14 @@ export class PriceChartModel extends ChartModel<PriceChartData> {
       axisLabelColor: theme.neutral3,
       axisLabelTextColor: theme.neutral2,
     }
-    this.minPriceLine?.applyOptions({ price: this.min, ...this.priceLineOptions })
-    this.maxPriceLine?.applyOptions({ price: this.max, ...this.priceLineOptions })
+    this.minPriceLine?.applyOptions({
+      price: this.min,
+      ...this.priceLineOptions,
+    })
+    this.maxPriceLine?.applyOptions({
+      price: this.max,
+      ...this.priceLineOptions,
+    })
   }
 
   override onSeriesHover(hoverData?: ChartHoverData<CandlestickData>) {
@@ -185,8 +191,14 @@ export class PriceChartModel extends ChartModel<PriceChartData> {
         this.maxPriceLine = undefined
       }
     } else if (!this.minPriceLine && !this.maxPriceLine && this.min && this.max) {
-      this.minPriceLine = this.series.createPriceLine({ price: this.min, ...this.priceLineOptions })
-      this.maxPriceLine = this.series.createPriceLine({ price: this.max, ...this.priceLineOptions })
+      this.minPriceLine = this.series.createPriceLine({
+        price: this.min,
+        ...this.priceLineOptions,
+      })
+      this.maxPriceLine = this.series.createPriceLine({
+        price: this.max,
+        ...this.priceLineOptions,
+      })
     }
   }
 }

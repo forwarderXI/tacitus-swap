@@ -140,7 +140,9 @@ export function LimitPriceInputPanel({ onCurrencySelect }: LimitPriceInputPanelP
         })
       )
       setLimitState((prev) => ({ ...prev, limitPriceEdited: true }))
-      sendAnalyticsEvent('Limit Preset Rate Selected', { value: adjustmentPercentage })
+      sendAnalyticsEvent('Limit Preset Rate Selected', {
+        value: adjustmentPercentage,
+      })
     },
     [formatCurrencyAmount, baseCurrency, limitPrice, setLimitPrice, setLimitState]
   )
@@ -179,7 +181,11 @@ export function LimitPriceInputPanel({ onCurrencySelect }: LimitPriceInputPanelP
                 })
               )
             }
-            setLimitState((prev) => ({ ...prev, limitPriceInverted: !prev.limitPriceInverted, limitPriceEdited: true }))
+            setLimitState((prev) => ({
+              ...prev,
+              limitPriceInverted: !prev.limitPriceInverted,
+              limitPriceEdited: true,
+            }))
             sendAnalyticsEvent('Limit Price Reversed')
           }}
         >

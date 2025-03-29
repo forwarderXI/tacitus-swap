@@ -17,8 +17,16 @@ import {
   TradeState,
 } from './types'
 
-const TRADE_NOT_FOUND = { state: TradeState.NO_ROUTE_FOUND, trade: undefined, currentData: undefined } as const
-const TRADE_LOADING = { state: TradeState.LOADING, trade: undefined, currentData: undefined } as const
+const TRADE_NOT_FOUND = {
+  state: TradeState.NO_ROUTE_FOUND,
+  trade: undefined,
+  currentData: undefined,
+} as const
+const TRADE_LOADING = {
+  state: TradeState.LOADING,
+  trade: undefined,
+  currentData: undefined,
+} as const
 
 export function useRoutingAPITrade<TTradeType extends TradeType>(
   skipFetch: boolean,

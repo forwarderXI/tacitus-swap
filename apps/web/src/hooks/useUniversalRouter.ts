@@ -64,7 +64,11 @@ export function useUniversalRouterSwapCallback(
   const portfolioBalanceUsd = data?.portfolios?.[0]?.tokensTotalDenominatedValue?.value
 
   return useCallback(
-    (): Promise<{ type: TradeFillType.Classic; response: TransactionResponse; deadline?: BigNumber }> =>
+    (): Promise<{
+      type: TradeFillType.Classic
+      response: TransactionResponse
+      deadline?: BigNumber
+    }> =>
       trace({ name: 'Swap (Classic)', op: 'swap.classic' }, async (trace) => {
         try {
           if (!account) throw new Error('missing account')

@@ -155,7 +155,9 @@ export default function AuthenticatedHeader({ account, openSettings }: { account
     error || (!fiatOnrampAvailable && fiatOnrampAvailabilityChecked) || fiatOnrampAvailabilityLoading
   )
 
-  const { data: portfolioBalances } = useCachedPortfolioBalancesQuery({ account })
+  const { data: portfolioBalances } = useCachedPortfolioBalancesQuery({
+    account,
+  })
   const portfolio = portfolioBalances?.portfolios?.[0]
   const totalBalance = portfolio?.tokensTotalDenominatedValue?.value
   const absoluteChange = portfolio?.tokensTotalDenominatedValueChange?.absolute?.value

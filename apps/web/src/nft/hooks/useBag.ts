@@ -55,7 +55,10 @@ export const useBag = createWithEqualityFn<BagState>()(
           didOpenUnavailableAssets: didOpen,
         })),
       setBagExpanded: ({ bagExpanded, manualClose }) =>
-        set(({ bagManuallyClosed }) => ({ bagExpanded, bagManuallyClosed: manualClose || bagManuallyClosed })),
+        set(({ bagManuallyClosed }) => ({
+          bagExpanded,
+          bagManuallyClosed: manualClose || bagManuallyClosed,
+        })),
       toggleBag: () => set(({ bagExpanded }) => ({ bagExpanded: !bagExpanded })),
       usedSweep: false,
       isLocked: false,

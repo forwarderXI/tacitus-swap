@@ -102,7 +102,11 @@ export function getTraceContext(url: URL, init?: RequestInit, force = false): Tr
     } catch {
       // ignore the error
     }
-    return { name: `${url.host} ${method}`, op: 'http.json_rpc', tags: { host: url.host, method, chain } }
+    return {
+      name: `${url.host} ${method}`,
+      op: 'http.json_rpc',
+      tags: { host: url.host, method, chain },
+    }
   } else if (force) {
     return {
       name: `${url.host} ${url.pathname}`,

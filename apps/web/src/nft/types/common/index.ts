@@ -21,7 +21,12 @@ export interface PriceInfo {
 
 export interface Rarity {
   primaryProvider: string
-  providers?: { provider: string; rank?: number; url?: string; score?: number }[]
+  providers?: {
+    provider: string
+    rank?: number
+    url?: string
+    score?: number
+  }[]
 }
 
 export interface Trait {
@@ -81,7 +86,11 @@ export interface GenieCollection {
     total_volume?: number
   }
   traits?: Record<string, Trait[]>
-  marketplaceCount?: { marketplace: string; count: number; floorPrice: number }[]
+  marketplaceCount?: {
+    marketplace: string
+    count: number
+    floorPrice: number
+  }[]
   imageUrl: string
   twitterUrl?: string
   instagram?: string

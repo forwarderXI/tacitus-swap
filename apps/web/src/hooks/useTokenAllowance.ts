@@ -44,7 +44,10 @@ export function useTokenAllowance(
 export function useUpdateTokenAllowance(
   amount: CurrencyAmount<Token> | undefined,
   spender: string
-): () => Promise<{ response: ContractTransaction; info: ApproveTransactionInfo }> {
+): () => Promise<{
+  response: ContractTransaction
+  info: ApproveTransactionInfo
+}> {
   const contract = useTokenContract(amount?.currency.address)
   const analyticsTrace = useAnalyticsTrace()
 
@@ -102,7 +105,10 @@ export function useUpdateTokenAllowance(
 export function useRevokeTokenAllowance(
   token: Token | undefined,
   spender: string
-): () => Promise<{ response: ContractTransaction; info: ApproveTransactionInfo }> {
+): () => Promise<{
+  response: ContractTransaction
+  info: ApproveTransactionInfo
+}> {
   const amount = useMemo(() => (token ? CurrencyAmount.fromRawAmount(token, 0) : undefined), [token])
 
   return useUpdateTokenAllowance(amount, spender)

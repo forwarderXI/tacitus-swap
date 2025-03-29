@@ -273,7 +273,10 @@ export default function SendCurrencyInputForm({
 
   const handleSelectCurrency = useCallback(
     (currency: Currency) => {
-      onCurrencyChange?.({ inputCurrency: currency, outputCurrency: undefined })
+      onCurrencyChange?.({
+        inputCurrency: currency,
+        outputCurrency: undefined,
+      })
 
       if (fiatCurrency.equals(currency)) {
         setSendState((prev) => ({

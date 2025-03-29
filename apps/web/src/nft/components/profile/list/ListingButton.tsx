@@ -8,7 +8,10 @@ import { BREAKPOINTS } from 'theme'
 
 import { findListingIssues } from './utils'
 
-const StyledListingButton = styled(BaseButton)<{ showResolveIssues: boolean; missingPrices: boolean }>`
+const StyledListingButton = styled(BaseButton)<{
+  showResolveIssues: boolean
+  missingPrices: boolean
+}>`
   background: ${({ showResolveIssues, theme }) => (showResolveIssues ? theme.critical : theme.accent1)};
   color: ${({ theme }) => theme.deprecated_accentTextLightPrimary};
   font-weight: 535;

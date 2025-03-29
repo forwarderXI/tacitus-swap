@@ -153,7 +153,10 @@ export async function signListing(
         )
 
         const order = await executeAllActions()
-        const seaportV15Order = { ...order, protocol_address: OPENSEA_SEAPORT_V1_5_CONTRACT }
+        const seaportV15Order = {
+          ...order,
+          protocol_address: OPENSEA_SEAPORT_V1_5_CONTRACT,
+        }
         setStatus(ListingStatus.PENDING)
         const res = await PostOpenSeaSellOrder(seaportV15Order)
         res ? setStatus(ListingStatus.APPROVED) : setStatus(ListingStatus.FAILED)

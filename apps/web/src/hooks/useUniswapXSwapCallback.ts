@@ -97,7 +97,10 @@ export function useUniswapXSwapCallback({
           // TODO(limits): WEB-3434 - add error state for missing nonce
           if (!updatedNonce) throw new Error('missing nonce')
 
-          const order = trade.asDutchOrderTrade({ nonce: updatedNonce, swapper: account }).order
+          const order = trade.asDutchOrderTrade({
+            nonce: updatedNonce,
+            swapper: account,
+          }).order
           const startTime = Math.floor(Date.now() / 1000) + trade.startTimeBufferSecs
           const endTime = startTime + trade.auctionPeriodSecs
           const deadline = endTime + trade.deadlineBufferSecs
@@ -187,7 +190,11 @@ export function useUniswapXSwapCallback({
 
           return {
             type: TradeFillType.UniswapX as const,
-            response: { orderHash: body.hash, deadline: updatedOrder.info.deadline, encodedOrder },
+            response: {
+              orderHash: body.hash,
+              deadline: updatedOrder.info.deadline,
+              encodedOrder,
+            },
           }
         } catch (error) {
           if (error instanceof UserRejectedRequestError) {

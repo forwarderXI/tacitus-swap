@@ -155,7 +155,12 @@ function parseCollectFees(
     expectedCurrencyOwed1: expectedAmountQuoteRaw,
   } = collect
   return parseLP(
-    { baseCurrencyId, quoteCurrencyId, expectedAmountBaseRaw, expectedAmountQuoteRaw },
+    {
+      baseCurrencyId,
+      quoteCurrencyId,
+      expectedAmountBaseRaw,
+      expectedAmountQuoteRaw,
+    },
     chainId,
     tokens,
     formatNumber

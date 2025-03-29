@@ -432,7 +432,11 @@ const unresponsiveProperties = defineProperties({
     overflow,
     overflowX: overflow,
     overflowY: overflow,
-    boxShadow: { ...themeVars.shadows, none: 'none', dropShadow: vars.color.dropShadow },
+    boxShadow: {
+      ...themeVars.shadows,
+      none: 'none',
+      dropShadow: vars.color.dropShadow,
+    },
     transition: vars.time,
     transitionDuration: vars.time,
     animationDuration: vars.time,

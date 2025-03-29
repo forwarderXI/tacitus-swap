@@ -214,12 +214,26 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
               {showMore ? (
                 <>
                   <Trans>Manage</Trans>
-                  <ChevronUp size="20" style={{ marginLeft: '8px', height: '20px', minWidth: '20px' }} />
+                  <ChevronUp
+                    size="20"
+                    style={{
+                      marginLeft: '8px',
+                      height: '20px',
+                      minWidth: '20px',
+                    }}
+                  />
                 </>
               ) : (
                 <>
                   <Trans>Manage</Trans>
-                  <ChevronDown size="20" style={{ marginLeft: '8px', height: '20px', minWidth: '20px' }} />
+                  <ChevronDown
+                    size="20"
+                    style={{
+                      marginLeft: '8px',
+                      height: '20px',
+                      minWidth: '20px',
+                    }}
+                  />
                 </>
               )}
             </ButtonEmpty>
@@ -303,7 +317,8 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
                 href={`https://v2.info.uniswap.org/account/${account}`}
               >
                 <Trans>
-                  View accrued fees and analytics<span style={{ fontSize: '11px' }}>↗</span>
+                  View accrued fees and analytics
+                  <span style={{ fontSize: '11px' }}>↗</span>
                 </Trans>
               </ExternalLink>
             </ButtonSecondary>

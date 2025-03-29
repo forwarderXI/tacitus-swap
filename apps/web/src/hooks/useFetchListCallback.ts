@@ -29,7 +29,13 @@ export function useFetchListCallback(): (listUrl: string, skipValidation?: boole
         })
         .catch((error) => {
           console.debug(`Failed to get list at url ${listUrl}`, error)
-          dispatch(fetchTokenList.rejected({ url: listUrl, requestId, errorMessage: error.message }))
+          dispatch(
+            fetchTokenList.rejected({
+              url: listUrl,
+              requestId,
+              errorMessage: error.message,
+            })
+          )
           throw error
         })
     },

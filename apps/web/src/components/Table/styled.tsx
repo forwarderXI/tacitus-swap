@@ -21,7 +21,10 @@ import { Z_INDEX } from 'theme/zIndex'
 export const SHOW_RETURN_TO_TOP_OFFSET = 500
 export const LOAD_MORE_BOTTOM_OFFSET = 50
 
-export const TableContainer = styled(Column)<{ $maxWidth?: number; $maxHeight?: number }>`
+export const TableContainer = styled(Column)<{
+  $maxWidth?: number
+  $maxHeight?: number
+}>`
   max-width: ${({ $maxWidth }) => $maxWidth}px;
   max-height: ${({ $maxHeight }) => $maxHeight}px;
   // Center layout
@@ -163,13 +166,17 @@ export const ClickableHeaderRow = styled(Row)<{ $justify?: string }>`
   gap: 4px;
   ${ClickableStyle}
 `
-export const HeaderArrow = styled(ArrowDown)<{ direction: OrderDirection | TheGraphOrderDirection }>`
+export const HeaderArrow = styled(ArrowDown)<{
+  direction: OrderDirection | TheGraphOrderDirection
+}>`
   height: 16px;
   width: 16px;
   color: ${({ theme }) => theme.neutral1};
   transform: ${({ direction }) => (direction === 'asc' ? 'rotate(180deg)' : 'rotate(0deg)')};
 `
-export const HeaderSortText = styled(ThemedText.BodySecondary)<{ $active?: boolean }>`
+export const HeaderSortText = styled(ThemedText.BodySecondary)<{
+  $active?: boolean
+}>`
   ${({ $active, theme }) => $active && `color: ${theme.neutral1};`}
 `
 

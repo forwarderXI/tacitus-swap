@@ -86,7 +86,9 @@ const MarketplaceItem = ({
       removeMarket(value)
       setCheckboxSelected(false)
     }
-    sendAnalyticsEvent(NFTEventName.NFT_FILTER_SELECTED, { filter_type: NFTFilterTypes.MARKETPLACE })
+    sendAnalyticsEvent(NFTEventName.NFT_FILTER_SELECTED, {
+      filter_type: NFTFilterTypes.MARKETPLACE,
+    })
   }
 
   const checkbox = (
@@ -190,7 +192,11 @@ export const MarketplaceSelect = () => {
           title={title}
           value={value}
           count={marketCount?.[value] || 0}
-          {...{ addMarket, removeMarket, isMarketSelected: selectedMarkets.includes(value) }}
+          {...{
+            addMarket,
+            removeMarket,
+            isMarketSelected: selectedMarkets.includes(value),
+          }}
         />
       )),
     [addMarket, marketCount, removeMarket, selectedMarkets]

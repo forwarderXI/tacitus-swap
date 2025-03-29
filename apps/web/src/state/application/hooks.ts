@@ -56,7 +56,9 @@ export function useFiatOnrampAvailability(shouldCheck: boolean, callback?: () =>
       setLoading(true)
       try {
         const result = await getMoonpayAvailability()
-        sendAnalyticsEvent(MoonpayEventName.MOONPAY_GEOCHECK_COMPLETED, { success: result })
+        sendAnalyticsEvent(MoonpayEventName.MOONPAY_GEOCHECK_COMPLETED, {
+          success: result,
+        })
         if (stale) return
         dispatch(setFiatOnrampAvailability(result))
         if (result && callback) {
@@ -158,7 +160,13 @@ export function useAddPopup(): (content: PopupContent, key?: string, removeAfter
   const dispatch = useAppDispatch()
   return useCallback(
     (content: PopupContent, key?: string, removeAfterMs?: number) => {
-      dispatch(addPopup({ content, key, removeAfterMs: removeAfterMs ?? DEFAULT_TXN_DISMISS_MS }))
+      dispatch(
+        addPopup({
+          content,
+          key,
+          removeAfterMs: removeAfterMs ?? DEFAULT_TXN_DISMISS_MS,
+        })
+      )
     },
     [dispatch]
   )

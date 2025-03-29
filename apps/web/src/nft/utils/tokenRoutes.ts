@@ -103,7 +103,10 @@ function buildPools(pools: (Pair | Pool)[]): TradePoolInput[] {
 
 function buildTradeRouteInput(swap: Swap): TokenTradeRouteInput {
   return {
-    ...buildTradeRouteInputAmounts({ inputAmount: swap.inputAmount, outputAmount: swap.outputAmount }),
+    ...buildTradeRouteInputAmounts({
+      inputAmount: swap.inputAmount,
+      outputAmount: swap.outputAmount,
+    }),
     pools: buildPools(swap.route.pools),
   }
 }

@@ -79,7 +79,10 @@ export const CollectionAsset = ({
       primaryInfoRight: asset.rarity && provider ? <RankingContainer provider={provider} /> : null,
       secondaryInfo: notForSale
         ? ''
-        : `${formatEther({ input: asset.priceInfo.ETHPrice, type: NumberType.NFTToken })} ETH`,
+        : `${formatEther({
+            input: asset.priceInfo.ETHPrice,
+            type: NumberType.NFTToken,
+          })} ETH`,
       selectedInfo: <Trans>Remove from bag</Trans>,
       notSelectedInfo: <Trans>Add to bag</Trans>,
       disabledInfo: <Trans>Not listed</Trans>,

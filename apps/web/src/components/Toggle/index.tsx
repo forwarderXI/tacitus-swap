@@ -46,7 +46,11 @@ const ToggleElementHoverStyle = (hasBgColor: boolean, theme: any, isActive?: boo
         color: isActive ? theme.white : theme.neutral3,
       }
 
-const ToggleElement = styled.span<{ isActive?: boolean; bgColor?: string; isInitialToggleLoad?: boolean }>`
+const ToggleElement = styled.span<{
+  isActive?: boolean
+  bgColor?: string
+  isInitialToggleLoad?: boolean
+}>`
   animation: 0.1s
     ${({ isActive, isInitialToggleLoad }) => (isInitialToggleLoad ? 'none' : isActive ? turnOnToggle : turnOffToggle)}
     ease-in;

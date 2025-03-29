@@ -151,8 +151,14 @@ function LimitForm({ onCurrencyChange }: LimitFormProps) {
   )
 
   const switchTokens = useCallback(() => {
-    onSwitchTokens({ newOutputHasTax: false, previouslyEstimatedOutput: limitState.outputAmount })
-    setLimitState((prev) => ({ ...prev, limitPriceInverted: getDefaultPriceInverted(outputCurrency, inputCurrency) }))
+    onSwitchTokens({
+      newOutputHasTax: false,
+      previouslyEstimatedOutput: limitState.outputAmount,
+    })
+    setLimitState((prev) => ({
+      ...prev,
+      limitPriceInverted: getDefaultPriceInverted(outputCurrency, inputCurrency),
+    }))
   }, [inputCurrency, limitState.outputAmount, onSwitchTokens, outputCurrency, setLimitState])
 
   const onSelectCurrency = useCallback(
@@ -266,7 +272,10 @@ function LimitForm({ onCurrencyChange }: LimitFormProps) {
   ])
 
   const fiatValues = useMemo(() => {
-    return { amountIn: fiatValueTradeInput.data, amountOut: fiatValueTradeOutput.data }
+    return {
+      amountIn: fiatValueTradeInput.data,
+      amountOut: fiatValueTradeOutput.data,
+    }
   }, [fiatValueTradeInput.data, fiatValueTradeOutput.data])
 
   const swapCallback = useSwapCallback(

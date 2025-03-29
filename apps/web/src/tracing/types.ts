@@ -45,7 +45,21 @@ export type TraceContext = {
 } & (
   | { tags?: never }
   | { op: 'http.client'; tags: { host: string } }
-  | { op: 'http.graphql.query'; tags: { host: string; chain?: Chain; operation?: string; address?: string } }
-  | { op: 'http.json_rpc'; tags: { host: string; chain?: Chain; method?: string } }
-  | { op: 'wallet.connect' | 'wallet.connect.eager'; tags: { type: ConnectionType; wallet?: string } }
+  | {
+      op: 'http.graphql.query'
+      tags: {
+        host: string
+        chain?: Chain
+        operation?: string
+        address?: string
+      }
+    }
+  | {
+      op: 'http.json_rpc'
+      tags: { host: string; chain?: Chain; method?: string }
+    }
+  | {
+      op: 'wallet.connect' | 'wallet.connect.eager'
+      tags: { type: ConnectionType; wallet?: string }
+    }
 )

@@ -26,7 +26,11 @@ export type AssetLogoBaseProps = {
   style?: React.CSSProperties
   currency?: Currency | null
 }
-type AssetLogoProps = AssetLogoBaseProps & { isNative?: boolean; address?: string | null; chainId?: number }
+type AssetLogoProps = AssetLogoBaseProps & {
+  isNative?: boolean
+  address?: string | null
+  chainId?: number
+}
 
 const LogoContainer = styled.div`
   position: relative;

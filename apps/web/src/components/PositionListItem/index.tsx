@@ -186,7 +186,12 @@ export default function PositionListItem({
 
   const position = useMemo(() => {
     if (pool) {
-      return new Position({ pool, liquidity: liquidity.toString(), tickLower, tickUpper })
+      return new Position({
+        pool,
+        liquidity: liquidity.toString(),
+        tickLower,
+        tickUpper,
+      })
     }
     return undefined
   }, [liquidity, pool, tickLower, tickUpper])

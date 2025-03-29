@@ -63,7 +63,11 @@ export const Hover = (props: RiseInProps) => {
 export function Wiggle({ ...props }) {
   const variants = {
     initial: { rotate: 0, scale: 1 },
-    animate: { rotate: [20, 0], scale: 1.2, transition: { type: 'spring', stiffness: 200 } },
+    animate: {
+      rotate: [20, 0],
+      scale: 1.2,
+      transition: { type: 'spring', stiffness: 200 },
+    },
   }
   return <motion.div {...props} whileHover="animate" initial="initial" variants={variants} />
 }

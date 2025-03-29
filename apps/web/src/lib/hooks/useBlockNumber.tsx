@@ -67,7 +67,10 @@ export function BlockNumberProvider({ children }: { children: ReactNode }) {
     if (provider && activeChainId && windowVisible) {
       setChainBlock((chainBlock) => {
         if (chainBlock.chainId !== activeChainId) {
-          return { chainId: activeChainId, mainnetBlock: chainBlock.mainnetBlock }
+          return {
+            chainId: activeChainId,
+            mainnetBlock: chainBlock.mainnetBlock,
+          }
         }
         // If chainId hasn't changed, don't invalidate the reference, as it will trigger re-fetching of still-valid data.
         return chainBlock

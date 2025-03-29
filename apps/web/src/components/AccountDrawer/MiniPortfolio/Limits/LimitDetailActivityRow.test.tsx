@@ -79,7 +79,13 @@ describe('LimitDetailActivityRow', () => {
       <LimitDetailActivityRow
         onToggleSelect={jest.fn()}
         selected={false}
-        order={{ ...mockOrder, offchainOrderDetails: { ...mockOrderDetails, swapInfo: undefined as any } }}
+        order={{
+          ...mockOrder,
+          offchainOrderDetails: {
+            ...mockOrderDetails,
+            swapInfo: undefined as any,
+          },
+        }}
       />
     )
     expect(container.firstChild?.firstChild?.firstChild).toBeNull()

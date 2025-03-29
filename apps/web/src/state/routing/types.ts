@@ -195,7 +195,11 @@ export enum TradeFillType {
 export type ApproveInfo = { needsApprove: true; approveGasEstimateUSD: number } | { needsApprove: false }
 export type WrapInfo = { needsWrap: true; wrapGasEstimateUSD: number } | { needsWrap: false }
 
-export type SwapFeeInfo = { recipient: string; percent: Percent; amount: string /* raw amount of output token */ }
+export type SwapFeeInfo = {
+  recipient: string
+  percent: Percent
+  amount: string /* raw amount of output token */
+}
 
 export class ClassicTrade extends Trade<Currency, Currency, TradeType> {
   public readonly fillType = TradeFillType.Classic
@@ -256,7 +260,10 @@ export class ClassicTrade extends Trade<Currency, Currency, TradeType> {
     if (this.tradeType === TradeType.EXACT_INPUT || !this.swapFee) return super.executionPrice
 
     // Fix inaccurate price calculation for exact output trades
-    return new Price({ baseAmount: this.inputAmount, quoteAmount: this.postSwapFeeOutputAmount })
+    return new Price({
+      baseAmount: this.inputAmount,
+      quoteAmount: this.postSwapFeeOutputAmount,
+    })
   }
 
   public get postSwapFeeOutputAmount(): CurrencyAmount<Currency> {

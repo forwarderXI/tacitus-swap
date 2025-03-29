@@ -30,7 +30,11 @@ function PathMask({
   )
 }
 
-type UniconMaskProps = { maskId: string; attributeData: UniconAttributeData; size: number }
+type UniconMaskProps = {
+  maskId: string
+  attributeData: UniconAttributeData
+  size: number
+}
 function UniconMask({ maskId, attributeData, size }: UniconMaskProps) {
   const shapeMaskId = `shape-${maskId}`
   const containerMaskId = `container-${maskId}`
@@ -73,7 +77,10 @@ function UniconMask({ maskId, attributeData, size }: UniconMaskProps) {
   )
 }
 
-type UniconGradientProps = { gradientId: string; attributeData: UniconAttributeData }
+type UniconGradientProps = {
+  gradientId: string
+  attributeData: UniconAttributeData
+}
 function UniconGradient({ gradientId, attributeData }: UniconGradientProps) {
   return (
     <linearGradient id={gradientId}>
@@ -152,7 +159,14 @@ function _Unicon({ address, size = 24, randomSeed = 0, mobile }: Props) {
 
   return (
     <div style={{ height: size, width: size, position: 'relative' }}>
-      <div style={{ height: size, width: size, overflow: 'visible', position: 'absolute' }}>
+      <div
+        style={{
+          height: size,
+          width: size,
+          overflow: 'visible',
+          position: 'absolute',
+        }}
+      >
         <UniconSvg attributeIndices={attributeIndices} size={size} address={address} mobile={mobile} />
       </div>
     </div>

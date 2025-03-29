@@ -106,7 +106,11 @@ function VolumeChartSection({ chainId }: { chainId: number }) {
     isSmallScreen ? HistoryDuration.Month : timeGranularityToHistoryDuration(timePeriod)
   )
 
-  const params = useMemo<{ data: StackedHistogramData[]; colors: [string, string]; headerHeight: number }>(
+  const params = useMemo<{
+    data: StackedHistogramData[]
+    colors: [string, string]
+    headerHeight: number
+  }>(
     () => ({
       data: entries,
       colors: [theme.accent1, theme.accent3],

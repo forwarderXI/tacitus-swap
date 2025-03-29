@@ -120,7 +120,9 @@ const tokens: TokenBalance[] = [
 
 describe('splitHiddenTokens', () => {
   it('splits spam tokens into hidden but keeps small balances if hideSmallBalances = false', () => {
-    const { visibleTokens, hiddenTokens } = splitHiddenTokens(tokens, { hideSmallBalances: false })
+    const { visibleTokens, hiddenTokens } = splitHiddenTokens(tokens, {
+      hideSmallBalances: false,
+    })
 
     expect(hiddenTokens.length).toBe(1)
     expect(hiddenTokens[0].id).toBe('spam')
@@ -133,7 +135,9 @@ describe('splitHiddenTokens', () => {
   })
 
   it('splits small balance tokens into hidden but keeps small balances if hideSpam = false', () => {
-    const { visibleTokens, hiddenTokens } = splitHiddenTokens(tokens, { hideSpam: false })
+    const { visibleTokens, hiddenTokens } = splitHiddenTokens(tokens, {
+      hideSpam: false,
+    })
 
     expect(hiddenTokens.length).toBe(1)
     expect(hiddenTokens[0].id).toBe('low-balance-nonnative')

@@ -104,7 +104,11 @@ const Section = styled(ColumnCenter)`
 `
 export default function Error({ errorType, trade, swapResult, onRetry }: ErrorModalContentProps) {
   const theme = useTheme()
-  const { title, message, supportArticleURL } = getErrorContent({ errorType, swapResult, trade })
+  const { title, message, supportArticleURL } = getErrorContent({
+    errorType,
+    swapResult,
+    trade,
+  })
 
   return (
     <Container gap="md">

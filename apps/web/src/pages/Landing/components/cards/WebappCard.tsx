@@ -2,7 +2,7 @@ import { t } from '@lingui/macro'
 import { ChainId } from '@uniswap/sdk-core'
 import { PortfolioLogo } from 'components/AccountDrawer/MiniPortfolio/PortfolioLogo'
 import { DeltaArrow } from 'components/Tokens/TokenDetails/Delta'
-import { LDO, NATIVE_CHAIN_ID, UNI, USDC_BASE } from 'constants/tokens'
+import { LDO, NATIVE_CHAIN_ID, WBTC, USDT as USDT_MAINNET } from 'constants/tokens'
 import { useTokenPromoQuery } from 'graphql/data/__generated__/types-and-hooks'
 import { chainIdToBackendName, getTokenDetailsURL } from 'graphql/data/util'
 import { useCurrency } from 'hooks/Tokens'
@@ -49,6 +49,23 @@ const TokenRow = styled.div`
   gap: 16px;
   border-radius: 20px;
   background-color: ${({ theme }) => theme.surface1};
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+  border: 1px solid rgba(0, 243, 255, 0.1);
+  position: relative;
+  z-index: 1;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(0, 243, 255, 0.03), transparent);
+    z-index: -1;
+    border-radius: inherit;
+  }
+  
   @media (max-width: 1024px) {
     height: 64px;
     padding-right: 16px;
@@ -62,10 +79,13 @@ const TokenRow = styled.div`
     padding: 12px;
     border-radius: 16px;
   }
-  transition: background-color 125ms ease-in, transform 125ms ease-in;
+  transition: all 200ms ease-in-out;
+  
   &:hover {
     background-color: ${({ theme }) => theme.surface2};
-    transform: scale(1.03);
+    transform: scale(1.03) translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 243, 255, 0.2);
+    border: 1px solid rgba(0, 243, 255, 0.2);
   }
 `
 const TokenName = styled.h3`
@@ -176,12 +196,12 @@ const tokens = [
     address: 'ETH',
   },
   {
-    chainId: ChainId.BASE,
-    address: USDC_BASE.address,
+    chainId: ChainId.MAINNET,
+    address: WBTC.address,
   },
   {
     chainId: ChainId.MAINNET,
-    address: UNI[ChainId.MAINNET].address,
+    address: USDT_MAINNET.address,
   },
   {
     chainId: ChainId.MAINNET,
@@ -248,12 +268,14 @@ export function WebappCard(props: WebappCardProps) {
       textColor={primary}
       backgroundColor={{ dark: 'rgba(0, 102, 255, 0.12)', light: 'rgba(0, 102, 255, 0.04)' }}
       button={<PillButton color={primary} label={t`Web app`} icon={<Computer size="24px" fill={primary} />} />}
-      titleText={t`Swapping made simple. Access thousands of tokens on 8+ chains.`}
+      titleText={t`Access tokens, trading, and Tacitus Swap protocol features through our streamlined web interface.`}
     >
       <Contents>
-        {tokens.map((token) => (
-          <Token key={`tokenRow-${token.address}`} chainId={token.chainId} address={token.address} />
-        ))}
+        <Box direction="column" gap="8px" width="100%">
+          {tokens.map((token) => (
+            <Token key={`${token.chainId}-${token.address}`} chainId={token.chainId} address={token.address} />
+          ))}
+        </Box>
       </Contents>
     </ValuePropCard>
   )

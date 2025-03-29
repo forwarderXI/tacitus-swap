@@ -37,7 +37,10 @@ export default function TradePrice({ price }: TradePriceProps) {
 
   const formattedPrice = useMemo(() => {
     try {
-      return formatPrice({ price: showInverted ? price : price.invert(), type: NumberType.TokenTx })
+      return formatPrice({
+        price: showInverted ? price : price.invert(),
+        type: NumberType.TokenTx,
+      })
     } catch {
       return '0'
     }

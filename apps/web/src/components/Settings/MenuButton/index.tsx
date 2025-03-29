@@ -38,7 +38,9 @@ const IconContainer = styled(Row)`
   border-radius: 16px;
 `
 
-const IconContainerWithSlippage = styled(IconContainer)<{ displayWarning?: boolean }>`
+const IconContainerWithSlippage = styled(IconContainer)<{
+  displayWarning?: boolean
+}>`
   div {
     color: ${({ theme, displayWarning }) => (displayWarning ? theme.deprecated_accentWarning : theme.neutral2)};
   }

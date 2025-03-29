@@ -46,7 +46,10 @@ const mockRevocationTransactionInfo: TransactionInfo = {
 
 describe('Transactions hooks', () => {
   beforeEach(() => {
-    mocked(useWeb3React).mockReturnValue({ chainId: 1, account: '0x123' } as ReturnType<typeof useWeb3React>)
+    mocked(useWeb3React).mockReturnValue({
+      chainId: 1,
+      account: '0x123',
+    } as ReturnType<typeof useWeb3React>)
 
     jest.useFakeTimers()
     store.dispatch(clearAllTransactions({ chainId: ChainId.MAINNET }))

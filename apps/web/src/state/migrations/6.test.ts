@@ -77,6 +77,8 @@ describe('migration to v6', () => {
     )
     const result: any = await migrator(previousStateSelected, 6)
     expect(Object.keys(result)).not.toContain('selectedWallet')
-    expect(result?.user?.recentConnectionMeta).toMatchObject({ type: ConnectionType.INJECTED })
+    expect(result?.user?.recentConnectionMeta).toMatchObject({
+      type: ConnectionType.INJECTED,
+    })
   })
 })

@@ -15,7 +15,11 @@ import { UTCTimestamp } from 'lightweight-charts'
 import { useMemo, useReducer } from 'react'
 import { ChartQueryResult, DataQuality, checkDataQuality, withUTCTimestamp } from './util'
 
-type TDPChartQueryVariables = { chain: Chain; address?: string; duration: HistoryDuration }
+type TDPChartQueryVariables = {
+  chain: Chain
+  address?: string
+  duration: HistoryDuration
+}
 
 function fallbackToPriceChartData(priceHistoryEntry: PriceHistoryFallbackFragment): PriceChartData {
   const { value, timestamp } = priceHistoryEntry
@@ -26,7 +30,14 @@ function fallbackToPriceChartData(priceHistoryEntry: PriceHistoryFallbackFragmen
 function toPriceChartData(ohlc: CandlestickOhlcFragment): PriceChartData {
   const { open, high, low, close } = ohlc
   const time = ohlc.timestamp as UTCTimestamp
-  return { time, value: close.value, open: open.value, high: high.value, low: low.value, close: close.value }
+  return {
+    time,
+    value: close.value,
+    open: open.value,
+    high: high.value,
+    low: low.value,
+    close: close.value,
+  }
 }
 
 const currentTimeSeconds = () => (Date.now() / 1000) as UTCTimestamp
@@ -36,9 +47,14 @@ export function useTDPPriceChartData(
   variables: TDPChartQueryVariables,
   skip: boolean,
   priceChartType: PriceChartType
-): ChartQueryResult<PriceChartData, ChartType.PRICE> & { disableCandlestickUI: boolean } {
+): ChartQueryResult<PriceChartData, ChartType.PRICE> & {
+  disableCandlestickUI: boolean
+} {
   const [fallback, enablePriceHistoryFallback] = useReducer(() => true, false)
-  const { data, loading } = useTokenPriceQuery({ variables: { ...variables, fallback }, skip })
+  const { data, loading } = useTokenPriceQuery({
+    variables: { ...variables, fallback },
+    skip,
+  })
 
   return useMemo(() => {
     const { ohlc, priceHistory, price } = data?.token?.market ?? {}
@@ -129,7 +145,13 @@ export function useTDPPriceChartData(
     }
 
     const dataQuality = checkDataQuality(entries, ChartType.PRICE, variables.duration)
-    return { chartType: ChartType.PRICE, entries, loading, dataQuality, disableCandlestickUI: fallback }
+    return {
+      chartType: ChartType.PRICE,
+      entries,
+      loading,
+      dataQuality,
+      disableCandlestickUI: fallback,
+    }
   }, [data?.token?.market, fallback, loading, priceChartType, variables.duration])
 }
 

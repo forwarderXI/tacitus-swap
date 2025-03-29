@@ -22,7 +22,10 @@ export class WalletConnectV2 extends WalletConnect {
     defaultChainId,
     qrcode = true,
     onError,
-  }: Omit<WalletConnectConstructorArgs, 'options'> & { defaultChainId: number; qrcode?: boolean }) {
+  }: Omit<WalletConnectConstructorArgs, 'options'> & {
+    defaultChainId: number
+    qrcode?: boolean
+  }) {
     const darkmode = Boolean(window.matchMedia('(prefers-color-scheme: dark)'))
     super({
       actions,

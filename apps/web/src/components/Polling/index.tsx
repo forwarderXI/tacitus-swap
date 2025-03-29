@@ -115,7 +115,12 @@ export default function Polling() {
   )
   const machineTime = useMachineTimeMs(AVERAGE_L1_BLOCK_TIME)
   const blockTime = useCurrentBlockTimestamp(
-    useMemo(() => ({ blocksPerFetch: /* 5m / 12s = */ 25 * getBlocksPerMainnetEpochForChainId(chainId) }), [chainId])
+    useMemo(
+      () => ({
+        blocksPerFetch: /* 5m / 12s = */ 25 * getBlocksPerMainnetEpochForChainId(chainId),
+      }),
+      [chainId]
+    )
   )
   const warning = Boolean(!!blockTime && machineTime - blockTime.mul(1000).toNumber() > waitMsBeforeWarning)
 

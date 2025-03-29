@@ -36,7 +36,11 @@ describe('PoolDetailsPositionsTable', () => {
   })
 
   it('renders with PositionStatus Closed', () => {
-    const closedMockPositionInfo = { ...mockPositionInfo, closed: true, inRange: false }
+    const closedMockPositionInfo = {
+      ...mockPositionInfo,
+      closed: true,
+      inRange: false,
+    }
     const { asFragment } = render(<PoolDetailsPositionsTable positions={[closedMockPositionInfo]} />)
     expect(screen.getByText('Closed')).not.toBeNull()
     expect(asFragment()).toMatchSnapshot()

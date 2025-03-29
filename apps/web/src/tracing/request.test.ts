@@ -110,7 +110,10 @@ describe('request', () => {
       const init = {
         body: JSON.stringify({
           operationName: 'TestOperation',
-          variables: { chain: Chain.Ethereum, address: '0x0000000000000000000000000000000000000000' },
+          variables: {
+            chain: Chain.Ethereum,
+            address: '0x0000000000000000000000000000000000000000',
+          },
           query: 'query TestOperation {\n  testOperation {\n    id\n    __typename\n  }\n}',
         }),
       }
@@ -128,12 +131,23 @@ describe('request', () => {
 
     it('populates JSON-RPC context', () => {
       const init = {
-        body: Buffer.from(JSON.stringify({ method: 'eth_testMethod', params: [], id: 42, jsonrpc: '2.0' })),
+        body: Buffer.from(
+          JSON.stringify({
+            method: 'eth_testMethod',
+            params: [],
+            id: 42,
+            jsonrpc: '2.0',
+          })
+        ),
       }
       expect(getTraceContext(JSON_RPC_URL, init)).toEqual({
         name: `${JSON_RPC_URL.host} eth_testMethod`,
         op: 'http.json_rpc',
-        tags: { host: JSON_RPC_URL.host, method: 'eth_testMethod', chain: Chain.Ethereum },
+        tags: {
+          host: JSON_RPC_URL.host,
+          method: 'eth_testMethod',
+          chain: Chain.Ethereum,
+        },
       })
     })
 

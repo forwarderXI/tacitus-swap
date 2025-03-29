@@ -11,7 +11,11 @@ const CheckboxLabel = styled.label`
   cursor: pointer;
   line-height: 1;
 `
-const CheckContainer = styled.span<{ checked?: boolean; hovered?: boolean; size?: number }>`
+const CheckContainer = styled.span<{
+  checked?: boolean
+  hovered?: boolean
+  size?: number
+}>`
   border-color: ${({ checked, hovered, theme }) => (checked || hovered ? theme.accent1 : theme.surface3)};
   background: ${({ checked, theme }) => (checked ? theme.accent1 : undefined)};
   display: inline-block;
@@ -35,7 +39,10 @@ const Input = styled.input`
   white-space: nowrap;
   width: 1px;
 `
-const StyledCheck = styled(ApprovedCheckmarkIcon)<{ checked?: boolean; size?: number }>`
+const StyledCheck = styled(ApprovedCheckmarkIcon)<{
+  checked?: boolean
+  size?: number
+}>`
   display: ${({ checked }) => (checked ? 'inline-block' : 'none')};
   height: ${({ size }) => (size ? `${size}px` : '24px')};
   width: ${({ size }) => (size ? `${size}px` : '24px')};

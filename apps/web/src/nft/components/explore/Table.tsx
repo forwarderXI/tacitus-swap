@@ -190,7 +190,10 @@ export function Table<D extends Record<string, unknown>>({
             <TraceEvent
               events={[BrowserEvent.onClick]}
               name={NFTEventName.NFT_TRENDING_ROW_SELECTED}
-              properties={{ collection_address: row.original.collection.address, chain_id: chainId }}
+              properties={{
+                collection_address: row.original.collection.address,
+                chain_id: chainId,
+              }}
               element={InterfaceElementName.NFT_TRENDING_ROW}
               key={i}
             >

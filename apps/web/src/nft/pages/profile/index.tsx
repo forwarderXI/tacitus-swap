@@ -29,7 +29,10 @@ const ProfilePageWrapper = styled.div`
   }
 `
 
-const LoadedAccountPage = styled.div<{ cartExpanded: boolean; isListingNfts: boolean }>`
+const LoadedAccountPage = styled.div<{
+  cartExpanded: boolean
+  isListingNfts: boolean
+}>`
   width: calc(
     100% -
       ${({ cartExpanded, isListingNfts }) =>

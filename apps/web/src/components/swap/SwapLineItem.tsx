@@ -103,7 +103,10 @@ function ColoredPercentRow({ percent, estimate }: { percent: Percent; estimate?:
 
 function CurrencyAmountRow({ amount }: { amount: CurrencyAmount<Currency> }) {
   const { formatCurrencyAmount } = useFormatter()
-  const formattedAmount = formatCurrencyAmount({ amount, type: NumberType.SwapDetailsAmount })
+  const formattedAmount = formatCurrencyAmount({
+    amount,
+    type: NumberType.SwapDetailsAmount,
+  })
   return <>{`${formattedAmount} ${amount.currency.symbol}`}</>
 }
 
@@ -116,7 +119,14 @@ function FeeRow({ trade: { swapFee, outputAmount } }: { trade: SubmittableTrade 
   // Fallback to displaying token amount if fiat value is not available
   if (outputFeeFiatValue === undefined) return <CurrencyAmountRow amount={feeCurrencyAmount} />
 
-  return <>{formatNumber({ input: outputFeeFiatValue, type: NumberType.FiatGasPrice })}</>
+  return (
+    <>
+      {formatNumber({
+        input: outputFeeFiatValue,
+        type: NumberType.FiatGasPrice,
+      })}
+    </>
+  )
 }
 
 function useLineItem(props: SwapLineItemProps): LineItemData | undefined {
@@ -209,7 +219,11 @@ function useLineItem(props: SwapLineItemProps): LineItemData | undefined {
         loaderWidth: 70,
       }
     case SwapLineItemType.ROUTING_INFO:
-      if (isPreview || syncing) return { Label: () => <Trans>Order routing</Trans>, Value: () => <Loading /> }
+      if (isPreview || syncing)
+        return {
+          Label: () => <Trans>Order routing</Trans>,
+          Value: () => <Loading />,
+        }
       return {
         Label: () => <Trans>Order routing</Trans>,
         TooltipBody: () => {

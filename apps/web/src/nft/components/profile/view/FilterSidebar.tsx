@@ -115,7 +115,9 @@ export const FilterSidebar = ({
       height={{ sm: 'full', md: 'auto' }}
       zIndex={{ sm: 'modal', md: 'auto' }}
       display={isFiltersExpanded ? 'flex' : 'none'}
-      style={{ transform: isMobile ? undefined : sidebarX.to((x) => `translateX(${x}px)`) }}
+      style={{
+        transform: isMobile ? undefined : sidebarX.to((x) => `translateX(${x}px)`),
+      }}
       background="surface2"
     >
       <Box

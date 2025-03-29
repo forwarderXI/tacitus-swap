@@ -135,7 +135,10 @@ export const BuyCell = ({
             e.preventDefault()
             isSelected ? removeAsset([asset]) : selectAsset([asset])
             !isSelected && !cartExpanded && !isMobile && toggleCart()
-            !isSelected && sendAnalyticsEvent(NFTEventName.NFT_BUY_ADDED, { eventProperties })
+            !isSelected &&
+              sendAnalyticsEvent(NFTEventName.NFT_BUY_ADDED, {
+                eventProperties,
+              })
           }}
           disabled={!orderIsPurchasable}
         >
@@ -157,7 +160,11 @@ interface AddressCellProps {
 export const AddressCell = ({ address, desktopLBreakpoint, chainId }: AddressCellProps) => {
   return (
     <Column
-      display={{ sm: 'none', xl: desktopLBreakpoint ? 'none' : 'flex', xxl: 'flex' }}
+      display={{
+        sm: 'none',
+        xl: desktopLBreakpoint ? 'none' : 'flex',
+        xxl: 'flex',
+      }}
       className={styles.addressCell}
     >
       <AddressLink
@@ -186,7 +193,13 @@ const PriceTooltip = ({ price }: { price: string }) => (
 export const PriceCell = ({ marketplace, price }: { marketplace?: Markets | string; price?: string | number }) => {
   const { formatNumberOrString } = useFormatter()
   const formattedPrice = useMemo(
-    () => (price ? formatNumberOrString({ input: parseFloat(price?.toString()), type: NumberType.NFTToken }) : null),
+    () =>
+      price
+        ? formatNumberOrString({
+            input: parseFloat(price?.toString()),
+            type: NumberType.NFTToken,
+          })
+        : null,
     [formatNumberOrString, price]
   )
 
@@ -262,7 +275,13 @@ export const EventCell = ({
 }: EventCellProps) => {
   const { formatNumberOrString } = useFormatter()
   const formattedPrice = useMemo(
-    () => (price ? formatNumberOrString({ input: parseFloat(price?.toString()), type: NumberType.NFTToken }) : null),
+    () =>
+      price
+        ? formatNumberOrString({
+            input: parseFloat(price?.toString()),
+            type: NumberType.NFTToken,
+          })
+        : null,
     [formatNumberOrString, price]
   )
   return (

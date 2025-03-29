@@ -45,7 +45,11 @@ interface State {
   buyNow: boolean
   search: string
   sortBy: SortBy
-  showFullTraitName: { shouldShow: boolean; trait_value?: string; trait_type: string }
+  showFullTraitName: {
+    shouldShow: boolean
+    trait_value?: string
+    trait_type: string
+  }
 }
 
 type Actions = {
@@ -93,19 +97,32 @@ export const useCollectionFilters = create<CollectionFilters>()(
       setBuyNow: (buyNow) => set({ buyNow }),
       setMarketCount: (marketCount) => set({ marketCount }),
       addMarket: (market) => set(({ markets }) => ({ markets: [...markets, market] })),
-      removeMarket: (market) => set(({ markets }) => ({ markets: markets.filter((_market) => market !== _market) })),
+      removeMarket: (market) =>
+        set(({ markets }) => ({
+          markets: markets.filter((_market) => market !== _market),
+        })),
       addTrait: (trait) => set(({ traits }) => ({ traits: [...traits, trait] })),
       removeTrait: (trait) =>
         set(({ traits }) => ({
           traits: traits.filter((x) => JSON.stringify(x) !== JSON.stringify(trait)),
         })),
-      reset: () => set(() => ({ traits: [], minRarity: '', maxRarity: '', markets: [], minPrice: '', maxPrice: '' })),
+      reset: () =>
+        set(() => ({
+          traits: [],
+          minRarity: '',
+          maxRarity: '',
+          markets: [],
+          minPrice: '',
+          maxPrice: '',
+        })),
       setMinPrice: (price) => set(() => ({ minPrice: price })),
       setMaxPrice: (price) => set(() => ({ maxPrice: price })),
       setMinRarity: (range) => set(() => ({ minRarity: range })),
       setMaxRarity: (range) => set(() => ({ maxRarity: range })),
       toggleShowFullTraitName: ({ shouldShow, trait_value, trait_type }) =>
-        set(() => ({ showFullTraitName: { shouldShow, trait_value, trait_type } })),
+        set(() => ({
+          showFullTraitName: { shouldShow, trait_value, trait_type },
+        })),
     }),
     { name: 'useCollectionTraits' }
   )

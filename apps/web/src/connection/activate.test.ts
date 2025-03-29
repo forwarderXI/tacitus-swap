@@ -49,7 +49,9 @@ beforeEach(() => {
 it('Should initialize with proper IDLE state', async () => {
   const result = renderHook(useActivationState).result
 
-  expect(result.current.activationState).toEqual({ status: ActivationStatus.IDLE })
+  expect(result.current.activationState).toEqual({
+    status: ActivationStatus.IDLE,
+  })
 })
 
 it('Should call activate function on a connection', async () => {
@@ -64,7 +66,10 @@ it('Should call activate function on a connection', async () => {
     activationCall = result.current.tryActivation(mockConnection, onSuccess, ChainId.OPTIMISM)
   })
 
-  expect(result.current.activationState).toEqual({ status: ActivationStatus.PENDING, connection: mockConnection })
+  expect(result.current.activationState).toEqual({
+    status: ActivationStatus.PENDING,
+    connection: mockConnection,
+  })
   expect(mockConnection.overrideActivate).toHaveBeenCalledWith(ChainId.OPTIMISM)
   expect(mockConnection.connector.activate).toHaveBeenCalledTimes(1)
   expect(console.debug).toHaveBeenLastCalledWith(`Connection activating: ${mockConnection.getProviderInfo().name}`)
@@ -75,7 +80,9 @@ it('Should call activate function on a connection', async () => {
   })
   await activationCall
 
-  expect(result.current.activationState).toEqual({ status: ActivationStatus.IDLE })
+  expect(result.current.activationState).toEqual({
+    status: ActivationStatus.IDLE,
+  })
   expect(mockConnection.connector.activate).toHaveBeenCalledTimes(1)
   expect(console.debug).toHaveBeenLastCalledWith(`Connection activated: ${mockConnection.getProviderInfo().name}`)
   expect(console.debug).toHaveBeenCalledTimes(2)
@@ -95,12 +102,17 @@ it('Should properly deactivate pending connection attempts', async () => {
     result.current.tryActivation(mockConnection, onSuccess)
   })
 
-  expect(result.current.activationState).toEqual({ status: ActivationStatus.PENDING, connection: mockConnection })
+  expect(result.current.activationState).toEqual({
+    status: ActivationStatus.PENDING,
+    connection: mockConnection,
+  })
   expect(mockConnection.connector.activate).toHaveBeenCalledTimes(1)
 
   await act(() => result.current.cancelActivation())
 
-  expect(result.current.activationState).toEqual({ status: ActivationStatus.IDLE })
+  expect(result.current.activationState).toEqual({
+    status: ActivationStatus.IDLE,
+  })
   expect(mockConnection.connector.deactivate).toHaveBeenCalledTimes(1)
   expect(console.debug).not.toHaveBeenLastCalledWith(`Connection activated: ${mockConnection.getProviderInfo().name}`)
   expect(onSuccess).toHaveBeenCalledTimes(0)
@@ -120,7 +132,10 @@ it('Should properly display error state', async () => {
     result.current.tryActivation(mockConnection, onSuccess)
   })
 
-  expect(result.current.activationState).toEqual({ status: ActivationStatus.PENDING, connection: mockConnection })
+  expect(result.current.activationState).toEqual({
+    status: ActivationStatus.PENDING,
+    connection: mockConnection,
+  })
   expect(mockConnection.connector.activate).toHaveBeenCalledTimes(1)
 
   await act(async () => {
@@ -162,7 +177,9 @@ it('Should successfully retry a failed activation', async () => {
 
   await act(() => result.current.tryActivation(mockConnection, onSuccess))
 
-  expect(result.current.activationState).toEqual({ status: ActivationStatus.IDLE })
+  expect(result.current.activationState).toEqual({
+    status: ActivationStatus.IDLE,
+  })
   expect(mockConnection.connector.activate).toHaveBeenCalledTimes(2)
   expect(console.debug).toHaveBeenLastCalledWith(`Connection activated: ${mockConnection.getProviderInfo().name}`)
   expect(console.debug).toHaveBeenCalledTimes(4)
@@ -186,13 +203,17 @@ describe('Should gracefully handle intentional user-rejection errors', () => {
 
     await act(() => result.current.tryActivation(injectedConection, onSuccess))
 
-    expect(result.current.activationState).toEqual({ status: ActivationStatus.IDLE })
+    expect(result.current.activationState).toEqual({
+      status: ActivationStatus.IDLE,
+    })
     expect(injectedConection.connector.activate).toHaveBeenCalledTimes(1)
     expect(onSuccess).toHaveBeenCalledTimes(0)
 
     await act(() => result.current.tryActivation(injectedConection, onSuccess))
 
-    expect(result.current.activationState).toEqual({ status: ActivationStatus.IDLE })
+    expect(result.current.activationState).toEqual({
+      status: ActivationStatus.IDLE,
+    })
     expect(injectedConection.connector.activate).toHaveBeenCalledTimes(2)
     expect(onSuccess).toHaveBeenCalledTimes(1)
   })
@@ -213,13 +234,17 @@ describe('Should gracefully handle intentional user-rejection errors', () => {
 
     await act(() => result.current.tryActivation(coinbaseConnection, onSuccess))
 
-    expect(result.current.activationState).toEqual({ status: ActivationStatus.IDLE })
+    expect(result.current.activationState).toEqual({
+      status: ActivationStatus.IDLE,
+    })
     expect(coinbaseConnection.connector.activate).toHaveBeenCalledTimes(1)
     expect(onSuccess).toHaveBeenCalledTimes(0)
 
     await act(() => result.current.tryActivation(coinbaseConnection, onSuccess))
 
-    expect(result.current.activationState).toEqual({ status: ActivationStatus.IDLE })
+    expect(result.current.activationState).toEqual({
+      status: ActivationStatus.IDLE,
+    })
     expect(coinbaseConnection.connector.activate).toHaveBeenCalledTimes(2)
     expect(onSuccess).toHaveBeenCalledTimes(1)
   })
@@ -240,13 +265,17 @@ describe('Should gracefully handle intentional user-rejection errors', () => {
 
     await act(() => result.current.tryActivation(wcConnection, onSuccess))
 
-    expect(result.current.activationState).toEqual({ status: ActivationStatus.IDLE })
+    expect(result.current.activationState).toEqual({
+      status: ActivationStatus.IDLE,
+    })
     expect(wcConnection.connector.activate).toHaveBeenCalledTimes(1)
     expect(onSuccess).toHaveBeenCalledTimes(0)
 
     await act(() => result.current.tryActivation(wcConnection, onSuccess))
 
-    expect(result.current.activationState).toEqual({ status: ActivationStatus.IDLE })
+    expect(result.current.activationState).toEqual({
+      status: ActivationStatus.IDLE,
+    })
     expect(wcConnection.connector.activate).toHaveBeenCalledTimes(2)
     expect(onSuccess).toHaveBeenCalledTimes(1)
   })

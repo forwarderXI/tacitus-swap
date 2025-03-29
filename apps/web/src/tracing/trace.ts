@@ -94,7 +94,13 @@ async function sentryAdaptor<T>(context: TraceContext, callback: TraceCallback<T
 /** Traces the callback. */
 export async function trace<T>(context: TraceContext, callback: TraceCallback<T>): Promise<T> {
   const { name, op, tags, data } = context
-  const sentryContext: TransactionContext = { name, description: name, op, tags, data }
+  const sentryContext: TransactionContext = {
+    name,
+    description: name,
+    op,
+    tags,
+    data,
+  }
   // We use inactive spans so that we can measure two distinct flows at once, without mingling them.
   const span = Sentry.startInactiveSpan(sentryContext)
   return sentryAdaptor(context, callback, span)

@@ -213,7 +213,10 @@ const MarketplaceRow = ({ marketplace, floorInEth, listings }: MarketplaceRowPro
       <TableElement>
         <ThemedText.BodySmall color="neutral2">
           {Number(floorInEth) > 0
-            ? `${formatNumberOrString({ input: floorInEth, type: NumberType.NFTTokenFloorPriceTrailingZeros })} ETH`
+            ? `${formatNumberOrString({
+                input: floorInEth,
+                type: NumberType.NFTTokenFloorPriceTrailingZeros,
+              })} ETH`
             : '-'}
         </ThemedText.BodySmall>
       </TableElement>
@@ -257,7 +260,11 @@ export const CarouselCard = ({ collection, onClick }: CarouselCardProps) => {
             <TableElement>
               {collection.floor && (
                 <ThemedText.SubHeaderSmall color="userThemeColor">
-                  {formatNumber({ input: collection.floor, type: NumberType.NFTToken })} ETH Floor
+                  {formatNumber({
+                    input: collection.floor,
+                    type: NumberType.NFTToken,
+                  })}{' '}
+                  ETH Floor
                 </ThemedText.SubHeaderSmall>
               )}
             </TableElement>

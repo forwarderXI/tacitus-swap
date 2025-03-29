@@ -22,7 +22,11 @@ const DRAWER_MARGIN = '8px'
 const DRAWER_OFFSET = '10px'
 const DRAWER_TOP_MARGIN_MOBILE_WEB = '24px'
 
-const ScrimBackground = styled.div<{ $open: boolean; $maxWidth?: number; $zIndex?: number }>`
+const ScrimBackground = styled.div<{
+  $open: boolean
+  $maxWidth?: number
+  $zIndex?: number
+}>`
   z-index: ${({ $zIndex }) => $zIndex ?? Z_INDEX.modalBackdrop};
   overflow: hidden;
   top: 0;

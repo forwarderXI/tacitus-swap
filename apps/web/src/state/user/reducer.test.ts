@@ -42,8 +42,12 @@ describe('swap reducer', () => {
   describe('updateRecentConnectionMeta', () => {
     it('updates the recentConnectionMeta wallet', () => {
       store.dispatch(updateRecentConnectionMeta({ type: ConnectionType.INJECTED }))
-      expect(store.getState().recentConnectionMeta).toEqual({ type: ConnectionType.INJECTED })
-      expect(getRecentConnectionMeta()).toEqual({ type: ConnectionType.INJECTED })
+      expect(store.getState().recentConnectionMeta).toEqual({
+        type: ConnectionType.INJECTED,
+      })
+      expect(getRecentConnectionMeta()).toEqual({
+        type: ConnectionType.INJECTED,
+      })
     })
   })
 
@@ -51,8 +55,14 @@ describe('swap reducer', () => {
     it('sets the recentConnectionMeta as disconnected', () => {
       store.dispatch(updateRecentConnectionMeta({ type: ConnectionType.INJECTED }))
       store.dispatch(setRecentConnectionDisconnected())
-      expect(store.getState().recentConnectionMeta).toEqual({ type: ConnectionType.INJECTED, disconnected: true })
-      expect(getRecentConnectionMeta()).toEqual({ type: ConnectionType.INJECTED, disconnected: true })
+      expect(store.getState().recentConnectionMeta).toEqual({
+        type: ConnectionType.INJECTED,
+        disconnected: true,
+      })
+      expect(getRecentConnectionMeta()).toEqual({
+        type: ConnectionType.INJECTED,
+        disconnected: true,
+      })
     })
   })
 
@@ -88,7 +98,11 @@ describe('swap reducer', () => {
 
   describe('updateRouterPreference', () => {
     it('updates the routerPreference', () => {
-      store.dispatch(updateUserRouterPreference({ userRouterPreference: RouterPreference.API }))
+      store.dispatch(
+        updateUserRouterPreference({
+          userRouterPreference: RouterPreference.API,
+        })
+      )
       expect(store.getState().userRouterPreference).toEqual(RouterPreference.API)
     })
   })
@@ -121,17 +135,37 @@ describe('swap reducer', () => {
           },
         })
       )
-      expect(store.getState().tokens).toEqual({ 1: { '0x123': { address: '0x123', chainId: 1 } } })
+      expect(store.getState().tokens).toEqual({
+        1: { '0x123': { address: '0x123', chainId: 1 } },
+      })
     })
     it('adds a token to the initialized list, no duplicates', () => {
-      store.dispatch(addSerializedToken({ serializedToken: { chainId: 1, address: '0x123' } }))
-      store.dispatch(addSerializedToken({ serializedToken: { chainId: 1, address: '0x123' } }))
-      expect(store.getState().tokens).toEqual({ 1: { '0x123': { address: '0x123', chainId: 1 } } })
+      store.dispatch(
+        addSerializedToken({
+          serializedToken: { chainId: 1, address: '0x123' },
+        })
+      )
+      store.dispatch(
+        addSerializedToken({
+          serializedToken: { chainId: 1, address: '0x123' },
+        })
+      )
+      expect(store.getState().tokens).toEqual({
+        1: { '0x123': { address: '0x123', chainId: 1 } },
+      })
     })
 
     it('adds a new token to the initialized list', () => {
-      store.dispatch(addSerializedToken({ serializedToken: { chainId: 1, address: '0x123' } }))
-      store.dispatch(addSerializedToken({ serializedToken: { chainId: 1, address: '0x456' } }))
+      store.dispatch(
+        addSerializedToken({
+          serializedToken: { chainId: 1, address: '0x123' },
+        })
+      )
+      store.dispatch(
+        addSerializedToken({
+          serializedToken: { chainId: 1, address: '0x456' },
+        })
+      )
       expect(store.getState().tokens).toEqual({
         1: {
           '0x123': { address: '0x123', chainId: 1 },

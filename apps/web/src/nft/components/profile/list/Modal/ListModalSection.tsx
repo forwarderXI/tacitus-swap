@@ -19,7 +19,10 @@ const SectionHeader = styled(Row)`
   justify-content: space-between;
 `
 
-const SectionTitle = styled(ThemedText.SubHeader)<{ active: boolean; approved: boolean }>`
+const SectionTitle = styled(ThemedText.SubHeader)<{
+  active: boolean
+  approved: boolean
+}>`
   line-height: 24px;
   color: ${({ theme, active, approved }) => (approved ? theme.success : active ? theme.neutral1 : theme.neutral2)};
 `

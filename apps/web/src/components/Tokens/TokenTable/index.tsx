@@ -255,7 +255,10 @@ function TokenTable({
               {/* A simple 0 price indicates the price is not currently available from the api */}
               {price.getValue?.() === 0
                 ? '-'
-                : formatFiatPrice({ price: price.getValue?.(), type: NumberType.FiatTokenPrice })}
+                : formatFiatPrice({
+                    price: price.getValue?.(),
+                    type: NumberType.FiatTokenPrice,
+                  })}
             </ThemedText.BodyPrimary>
           </Cell>
         ),
@@ -307,7 +310,12 @@ function TokenTable({
         ),
         cell: (fdv) => (
           <Cell loading={showLoadingSkeleton} width={133} grow testId="fdv-cell">
-            <ValueText>{formatNumber({ input: fdv.getValue?.(), type: NumberType.FiatTokenStats })}</ValueText>
+            <ValueText>
+              {formatNumber({
+                input: fdv.getValue?.(),
+                type: NumberType.FiatTokenStats,
+              })}
+            </ValueText>
           </Cell>
         ),
       }),
@@ -324,7 +332,12 @@ function TokenTable({
         ),
         cell: (volume) => (
           <Cell width={133} loading={showLoadingSkeleton} grow testId="volume-cell">
-            <ValueText>{formatNumber({ input: volume.getValue?.(), type: NumberType.FiatTokenStats })}</ValueText>
+            <ValueText>
+              {formatNumber({
+                input: volume.getValue?.(),
+                type: NumberType.FiatTokenStats,
+              })}
+            </ValueText>
           </Cell>
         ),
       }),

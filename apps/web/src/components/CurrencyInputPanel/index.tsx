@@ -168,7 +168,9 @@ const StyledNumericalInput = styled(NumericalInput)<{ $loading: boolean }>`
   text-align: left;
 `
 
-const StyledPrefetchBalancesWrapper = styled(PrefetchBalancesWrapper)<{ $fullWidth: boolean }>`
+const StyledPrefetchBalancesWrapper = styled(PrefetchBalancesWrapper)<{
+  $fullWidth: boolean
+}>`
   width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
 `
 

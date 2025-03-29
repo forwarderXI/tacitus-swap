@@ -29,11 +29,21 @@ type OpenDownloadAppOptions = {
  */
 export function openDownloadApp({ element }: OpenDownloadAppOptions) {
   if (isIOS) {
-    openDownloadStore({ element, appPlatform: AppDownloadPlatform.IOS, linkTarget: 'uniswap_wallet_appstore' })
+    openDownloadStore({
+      element,
+      appPlatform: AppDownloadPlatform.IOS,
+      linkTarget: 'uniswap_wallet_appstore',
+    })
   } else if (isAndroid) {
-    openDownloadStore({ element, appPlatform: AppDownloadPlatform.ANDROID, linkTarget: 'uniswap_wallet_playstore' })
+    openDownloadStore({
+      element,
+      appPlatform: AppDownloadPlatform.ANDROID,
+      linkTarget: 'uniswap_wallet_playstore',
+    })
   } else {
-    sendAnalyticsEvent(InterfaceEventName.UNISWAP_WALLET_MICROSITE_OPENED, { element })
+    sendAnalyticsEvent(InterfaceEventName.UNISWAP_WALLET_MICROSITE_OPENED, {
+      element,
+    })
     window.open(APP_DOWNLOAD_LINKS[element], /* target = */ 'uniswap_wallet_microsite')
   }
 }

@@ -13,7 +13,10 @@ export function applyOverrideIcon(providerDetail: EIP6963ProviderDetail) {
   const overrideIcon = ICON_OVERRIDE_MAP[providerDetail.info.rdns]
   if (!overrideIcon) return providerDetail
 
-  return { ...providerDetail, info: { ...providerDetail.info, icon: overrideIcon } }
+  return {
+    ...providerDetail,
+    info: { ...providerDetail.info, icon: overrideIcon },
+  }
 }
 
 function isEip1193Provider(value: any): value is Provider {

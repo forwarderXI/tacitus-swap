@@ -52,7 +52,10 @@ export async function getApproveInfo(
     approveGasUseEstimate = APPROVE_FALLBACK_GAS_LIMIT
   }
 
-  return { needsApprove: true, approveGasEstimateUSD: approveGasUseEstimate * usdCostPerGas }
+  return {
+    needsApprove: true,
+    approveGasEstimateUSD: approveGasUseEstimate * usdCostPerGas,
+  }
 }
 
 export async function getWrapInfo(
@@ -72,7 +75,9 @@ export async function getWrapInfo(
   let wrapGasUseEstimate
   try {
     const wethContract = getContract(wethAddress, WETH_ABI, provider, account) as Weth
-    const wethTx = await wethContract.populateTransaction.deposit({ value: amount })
+    const wethTx = await wethContract.populateTransaction.deposit({
+      value: amount,
+    })
 
     // estimateGas will error if the account doesn't have sufficient ETH balance, but we should show an estimated cost anyway
     wrapGasUseEstimate = (await provider.estimateGas({ from: account, ...wethTx })).toNumber()
@@ -80,5 +85,8 @@ export async function getWrapInfo(
     wrapGasUseEstimate = WRAP_FALLBACK_GAS_LIMIT
   }
 
-  return { needsWrap: true, wrapGasEstimateUSD: wrapGasUseEstimate * usdCostPerGas }
+  return {
+    needsWrap: true,
+    wrapGasEstimateUSD: wrapGasUseEstimate * usdCostPerGas,
+  }
 }

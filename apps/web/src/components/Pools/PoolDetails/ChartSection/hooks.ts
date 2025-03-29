@@ -19,7 +19,12 @@ import { PoolData } from 'graphql/data/pools/usePoolData'
 import { UTCTimestamp } from 'lightweight-charts'
 import { useMemo } from 'react'
 
-type PDPChartQueryVars = { address: string; chain: Chain; duration: HistoryDuration; isV3: boolean }
+type PDPChartQueryVars = {
+  address: string
+  chain: Chain
+  duration: HistoryDuration
+  isV3: boolean
+}
 export function usePDPPriceChartData(
   variables: PDPChartQueryVars,
   poolData: PoolData | undefined,

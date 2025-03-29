@@ -153,7 +153,10 @@ export abstract class ChartModel<TDataType extends SeriesDataItemType> {
         priceFormatter: (price: BarPrice) => format.formatFiatPrice({ price }),
       },
       autoSize: true,
-      layout: { textColor: theme.neutral2, background: { color: 'transparent' } },
+      layout: {
+        textColor: theme.neutral2,
+        background: { color: 'transparent' },
+      },
       timeScale: {
         tickMarkFormatter: formatTickMarks,
         borderVisible: false,
@@ -247,7 +250,14 @@ export function Chart<TParamType extends ChartDataParams<TDataType>, TDataType e
   const locale = useActiveLocale()
   const { md: isLargeScreen } = useScreenSize()
   const modelParams = useMemo(
-    () => ({ ...params, format, theme, locale, isLargeScreen, onCrosshairMove: setCrosshairData }),
+    () => ({
+      ...params,
+      format,
+      theme,
+      locale,
+      isLargeScreen,
+      onCrosshairMove: setCrosshairData,
+    }),
     [format, isLargeScreen, locale, params, theme]
   )
 

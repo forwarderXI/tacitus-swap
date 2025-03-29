@@ -12,20 +12,32 @@ jest.mock('@web3-react/core', () => ({
 }))
 
 jest.mock('components/PrefetchBalancesWrapper/PrefetchBalancesWrapper', () => ({
-  useCachedPortfolioBalancesQuery: jest.fn(() => ({ data: {}, loading: false })),
+  useCachedPortfolioBalancesQuery: jest.fn(() => ({
+    data: {},
+    loading: false,
+  })),
 }))
 
 describe('useTokenBalances', () => {
   it('should return empty balances when loading', () => {
-    mocked(useCachedPortfolioBalancesQuery).mockReturnValueOnce({ data: undefined, loading: true } as any)
+    mocked(useCachedPortfolioBalancesQuery).mockReturnValueOnce({
+      data: undefined,
+      loading: true,
+    } as any)
     const { loading, balanceList, balanceMap } = renderHook(() => useTokenBalances()).result.current
     expect(balanceMap).toEqual({})
     expect(loading).toEqual(true)
     expect(balanceList).toEqual([])
   })
   it('should return empty balances when user is not connected', () => {
-    mocked(useWeb3React).mockReturnValueOnce({ account: undefined, chainId: undefined } as any)
-    mocked(useCachedPortfolioBalancesQuery).mockReturnValueOnce({ data: undefined, loading: false } as any)
+    mocked(useWeb3React).mockReturnValueOnce({
+      account: undefined,
+      chainId: undefined,
+    } as any)
+    mocked(useCachedPortfolioBalancesQuery).mockReturnValueOnce({
+      data: undefined,
+      loading: false,
+    } as any)
     const { loading, balanceList, balanceMap } = renderHook(() => useTokenBalances()).result.current
     expect(balanceMap).toEqual({})
     expect(loading).toEqual(false)

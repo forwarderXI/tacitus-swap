@@ -61,7 +61,11 @@ export default function useWrapCallback(
   inputCurrency: Currency | undefined | null,
   outputCurrency: Currency | undefined | null,
   typedValue: string | undefined
-): { wrapType: WrapType; execute?: () => Promise<string | undefined>; inputError?: WrapInputError } {
+): {
+  wrapType: WrapType
+  execute?: () => Promise<string | undefined>
+  inputError?: WrapInputError
+} {
   const { chainId, account } = useWeb3React()
   const wethContract = useWETHContract()
   const balance = useCurrencyBalance(account ?? undefined, inputCurrency ?? undefined)
@@ -119,7 +123,9 @@ Please file a bug detailing how this happened - https://github.com/Uniswap/inter
                     throw error
                   }
                   const txReceipt = await trace.child({ name: 'Deposit', op: 'wallet.send_transaction' }, () =>
-                    wethContract.deposit({ value: `0x${inputAmount.quotient.toString(16)}` })
+                    wethContract.deposit({
+                      value: `0x${inputAmount.quotient.toString(16)}`,
+                    })
                   )
                   addTransaction(txReceipt, {
                     type: TransactionType.WRAP,

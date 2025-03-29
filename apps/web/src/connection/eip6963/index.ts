@@ -16,7 +16,9 @@ class EIP6963Provider implements Provider {
   currentProviderDetail?: EIP6963ProviderDetail
 
   // Stores stable references to proxy listeners to prevent memory leaks
-  private readonly proxyListeners: { [eventName: string | symbol]: Listener[] } = {}
+  private readonly proxyListeners: {
+    [eventName: string | symbol]: Listener[]
+  } = {}
 
   async request(args: any): Promise<unknown> {
     return this.currentProviderDetail?.provider.request(args)
@@ -114,9 +116,13 @@ export class EIP6963 extends Connector {
 
       // Wallets may resolve eth_chainId and hang on eth_accounts pending user interaction, which may include changing
       // chains; they should be requested serially, with accounts first, so that the chainId can settle.
-      const accounts = (await this.provider.request({ method: 'eth_accounts' })) as string[]
+      const accounts = (await this.provider.request({
+        method: 'eth_accounts',
+      })) as string[]
       if (!accounts.length) throw new Error('No accounts returned')
-      const chainId = (await this.provider.request({ method: 'eth_chainId' })) as string
+      const chainId = (await this.provider.request({
+        method: 'eth_chainId',
+      })) as string
       this.actions.update({ chainId: parseChainId(chainId), accounts })
     } catch (error) {
       console.debug('Could not connect eagerly', error)
@@ -131,8 +137,12 @@ export class EIP6963 extends Connector {
     try {
       // Wallets may resolve eth_chainId and hang on eth_accounts pending user interaction, which may include changing
       // chains; they should be requested serially, with accounts first, so that the chainId can settle.
-      const accounts = (await this.provider.request({ method: 'eth_requestAccounts' })) as string[]
-      const chainId = (await this.provider.request({ method: 'eth_chainId' })) as string
+      const accounts = (await this.provider.request({
+        method: 'eth_requestAccounts',
+      })) as string[]
+      const chainId = (await this.provider.request({
+        method: 'eth_chainId',
+      })) as string
       const receivedChainId = parseChainId(chainId)
       const desiredChainId =
         typeof desiredChainIdOrChainParameters === 'number'
@@ -162,7 +172,12 @@ export class EIP6963 extends Connector {
             // if we're here, we can try to add a new network
             return this.provider.request({
               method: 'wallet_addEthereumChain',
-              params: [{ ...desiredChainIdOrChainParameters, chainId: desiredChainIdHex }],
+              params: [
+                {
+                  ...desiredChainIdOrChainParameters,
+                  chainId: desiredChainIdHex,
+                },
+              ],
             })
           }
           throw error

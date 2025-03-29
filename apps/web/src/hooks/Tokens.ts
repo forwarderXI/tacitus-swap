@@ -22,7 +22,9 @@ function useTokensFromMap(tokenMap: TokenAddressMap, chainId: Maybe<ChainId>): {
     if (!chainId) return {}
 
     // reduce to just tokens
-    return Object.keys(tokenMap[chainId] ?? {}).reduce<{ [address: string]: Token }>((newMap, address) => {
+    return Object.keys(tokenMap[chainId] ?? {}).reduce<{
+      [address: string]: Token
+    }>((newMap, address) => {
       newMap[address] = tokenMap[chainId][address].token
       return newMap
     }, {})
@@ -30,7 +32,9 @@ function useTokensFromMap(tokenMap: TokenAddressMap, chainId: Maybe<ChainId>): {
 }
 
 // TODO(WEB-2347): after disallowing unchecked index access, refactor ChainTokenMap to not use ?'s
-export type ChainTokenMap = { [chainId in number]?: { [address in string]?: Token } }
+export type ChainTokenMap = {
+  [chainId in number]?: { [address in string]?: Token }
+}
 /** Returns tokens from all token lists on all chains, combined with user added tokens */
 export function useAllTokensMultichain(): ChainTokenMap {
   const allTokensFromLists = useCombinedTokenMapFromUrls(DEFAULT_LIST_OF_LISTS)
@@ -64,7 +68,9 @@ export function useAllTokensMultichain(): ChainTokenMap {
 }
 
 /** Returns all tokens from the default list + user added tokens */
-export function useDefaultActiveTokens(chainId: Maybe<ChainId>): { [address: string]: Token } {
+export function useDefaultActiveTokens(chainId: Maybe<ChainId>): {
+  [address: string]: Token
+} {
   const defaultListTokens = useCombinedActiveList()
   const tokensFromMap = useTokensFromMap(defaultListTokens, chainId)
   const userAddedTokens = useUserAddedTokens()
@@ -129,7 +135,10 @@ export function useUnsupportedTokens(): { [address: string]: Token } {
       ) {
         const address = bridgeInfo[ChainId.MAINNET].tokenAddress
         // don't rely on decimals--it's possible that a token could be bridged w/ different decimals on the L2
-        return { ...acc, [address]: new Token(ChainId.MAINNET, address, tokenInfo.decimals) }
+        return {
+          ...acc,
+          [address]: new Token(ChainId.MAINNET, address, tokenInfo.decimals),
+        }
       }
       return acc
     }, {})

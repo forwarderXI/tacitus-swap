@@ -16,7 +16,11 @@ const singleRoute: RoutingDiagramEntry = {
 }
 
 const multiRoute: RoutingDiagramEntry[] = [
-  { percent: percent`75`, path: [[USDC_MAINNET, DAI, FeeAmount.LOWEST]], protocol: Protocol.V2 },
+  {
+    percent: percent`75`,
+    path: [[USDC_MAINNET, DAI, FeeAmount.LOWEST]],
+    protocol: Protocol.V2,
+  },
   {
     percent: percent`25`,
     path: [

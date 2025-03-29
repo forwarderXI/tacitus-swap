@@ -37,8 +37,15 @@ export function formatTickMarks(time: UTCTimestamp, tickMarkType: TickMarkType, 
     case TickMarkType.DayOfMonth:
       return date.toLocaleString(locale, { month: 'short', day: 'numeric' })
     case TickMarkType.Time:
-      return date.toLocaleString(locale, { hour: 'numeric', minute: 'numeric' })
+      return date.toLocaleString(locale, {
+        hour: 'numeric',
+        minute: 'numeric',
+      })
     case TickMarkType.TimeWithSeconds:
-      return date.toLocaleString(locale, { hour: 'numeric', minute: 'numeric', second: '2-digit' })
+      return date.toLocaleString(locale, {
+        hour: 'numeric',
+        minute: 'numeric',
+        second: '2-digit',
+      })
   }
 }

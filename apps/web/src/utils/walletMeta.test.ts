@@ -13,7 +13,12 @@ class MockJsonRpcProvider extends JsonRpcProvider {
   }
 }
 
-const WC_META = { name: 'name', description: 'description', url: 'url', icons: [] }
+const WC_META = {
+  name: 'name',
+  description: 'description',
+  url: 'url',
+  icons: [],
+}
 
 class MockWalletConnectProviderV2 extends MockJsonRpcProvider {
   name = WalletType.WALLET_CONNECT
@@ -21,7 +26,10 @@ class MockWalletConnectProviderV2 extends MockJsonRpcProvider {
 
   constructor(metadata: typeof WC_META | null) {
     super(metadata)
-    this.provider = { isWalletConnect: true, session: { peer: { metadata } } } as unknown as WalletConnectProvider
+    this.provider = {
+      isWalletConnect: true,
+      session: { peer: { metadata } },
+    } as unknown as WalletConnectProvider
   }
 }
 
@@ -45,7 +53,11 @@ const testCases: [MockJsonRpcProvider, WalletMeta | undefined][] = [
   [new MockWalletConnectProviderV2(null), { type: WalletType.WALLET_CONNECT, agent: '(WalletConnect)' }],
   [
     new MockWalletConnectProviderV2(WC_META),
-    { type: WalletType.WALLET_CONNECT, agent: 'name (WalletConnect)', ...WC_META },
+    {
+      type: WalletType.WALLET_CONNECT,
+      agent: 'name (WalletConnect)',
+      ...WC_META,
+    },
   ],
   [new MockInjectedProvider({}), { type: WalletType.INJECTED, agent: '(Injected)', name: undefined }],
   [
@@ -54,19 +66,35 @@ const testCases: [MockJsonRpcProvider, WalletMeta | undefined][] = [
   ],
   [
     new MockInjectedProvider({ isMetaMask: true }),
-    { type: WalletType.INJECTED, agent: 'MetaMask (Injected)', name: 'MetaMask' },
+    {
+      type: WalletType.INJECTED,
+      agent: 'MetaMask (Injected)',
+      name: 'MetaMask',
+    },
   ],
   [
     new MockInjectedProvider({ isTest: true, isMetaMask: true }),
-    { type: WalletType.INJECTED, agent: 'Test MetaMask (Injected)', name: 'Test' },
+    {
+      type: WalletType.INJECTED,
+      agent: 'Test MetaMask (Injected)',
+      name: 'Test',
+    },
   ],
   [
     new MockInjectedProvider({ isCoinbaseWallet: true, qrUrl: undefined }),
-    { type: WalletType.INJECTED, agent: 'CoinbaseWallet (Injected)', name: 'CoinbaseWallet' },
+    {
+      type: WalletType.INJECTED,
+      agent: 'CoinbaseWallet (Injected)',
+      name: 'CoinbaseWallet',
+    },
   ],
   [
     new MockInjectedProvider({ isCoinbaseWallet: true, qrUrl: true }),
-    { type: WalletType.INJECTED, agent: 'CoinbaseWallet qrUrl (Injected)', name: 'CoinbaseWallet' },
+    {
+      type: WalletType.INJECTED,
+      agent: 'CoinbaseWallet qrUrl (Injected)',
+      name: 'CoinbaseWallet',
+    },
   ],
   [
     new MockInjectedProvider({ isA: true, isB: false }),

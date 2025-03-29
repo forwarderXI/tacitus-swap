@@ -36,7 +36,7 @@ const FloatContainer = styled.div<{ duration?: number }>`
   animation-name: ${floatAnimation};
   animation-duration: ${(props) => 1000 * (props.duration ?? 0)}ms;
   animation-iteration-count: infinite;
-  animation-timing-function: linear;
+  animation-timing-function: ease-in-out;
 `
 
 const rotateAnimation = keyframes`
@@ -45,6 +45,21 @@ const rotateAnimation = keyframes`
   }
   100% {
     transform: rotate(22deg);
+  }
+`
+
+const pulseAnimation = keyframes`
+  0% {
+    box-shadow: 0 0 8px rgba(0, 243, 255, 0.5), 0 0 12px rgba(0, 243, 255, 0.3);
+    border: 1px solid rgba(0, 243, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.8), 0 0 25px rgba(0, 243, 255, 0.4);
+    border: 1px solid rgba(0, 243, 255, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 8px rgba(0, 243, 255, 0.5), 0 0 12px rgba(0, 243, 255, 0.3);
+    border: 1px solid rgba(0, 243, 255, 0.2);
   }
 `
 
@@ -68,8 +83,8 @@ const TokenIconRing = styled(motion.div)<{
   width: ${(props) => `${props.size}px`};
   height: ${(props) => `${props.size}px`};
   background-color: rgba(0,0,0,0);
-  border: 1px solid ${(props) => `${props.color}`};
-  
+  border: 1px solid rgba(0, 243, 255, 0.6);
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
   transform-origin: center center;
   position: absolute;
   pointer-events: all;
@@ -84,20 +99,60 @@ const TokenIcon = styled(motion.div)<{
   $borderRadius: number
   $logoUrl: string
 }>`
-    border-radius: ${(props) => (props.standard === TokenStandard.ERC20 ? '50%' : `${props.$borderRadius}px`)}};
+    border-radius: ${(props) => (props.standard === TokenStandard.ERC20 ? '50%' : `${props.$borderRadius}px`)};
     width: ${(props) => `${props.size}px`};
     height: ${(props) => `${props.size}px`};
-    background-color:${(props) => `${props.color}`};
-    filter: blur(${(props) => `${props.blur}px`});
-    background-image: url(${(props) => props.$logoUrl});
-    background-size: cover;
-    background-position: center center;
-    transition: filter 0.15s ease-in-out;
-    transform-origin: center center;
     position: relative;
+    transform-origin: center center;
+
+    /* Default state - just a blue blob */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: ${(props) => (props.standard === TokenStandard.ERC20 ? '50%' : `${props.$borderRadius}px`)};
+      background-color: rgba(0, 243, 255, 0.3);
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
+      border: 1px solid rgba(0, 243, 255, 0.5);
+      filter: blur(${(props) => `${props.blur}px`});
+      z-index: 1;
+      transition: opacity 0.3s ease-in-out;
+    }
+    
+    /* Original image layer (hidden by default) */
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: ${(props) => (props.standard === TokenStandard.ERC20 ? '50%' : `${props.$borderRadius}px`)};
+      background-image: url(${(props) => props.$logoUrl});
+      background-size: cover;
+      background-position: center center;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 2;
+    }
+    
     &:hover {
-        filter: blur(0);
-        cursor: pointer;
+      cursor: pointer;
+      transform: scale(1.05);
+      
+      /* Hide blue blob on hover */
+      &::before {
+        opacity: 0.2;
+      }
+      
+      /* Show original image on hover */
+      &::after {
+        opacity: 1;
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.7);
+      }
     }
 `
 export function Token(props: {

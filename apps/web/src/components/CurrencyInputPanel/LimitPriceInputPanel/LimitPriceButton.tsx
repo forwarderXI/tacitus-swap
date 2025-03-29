@@ -26,7 +26,11 @@ const highlightedBorderCss = css`
   border-right: 0px;
 `
 
-const Container = styled.button<{ $selected?: boolean; $disabled?: boolean; $highlighted: boolean }>`
+const Container = styled.button<{
+  $selected?: boolean
+  $disabled?: boolean
+  $highlighted: boolean
+}>`
   color: ${({ theme, $selected, $disabled, $highlighted }) => {
     if ($highlighted) {
       return theme.neutral1

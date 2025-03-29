@@ -142,7 +142,11 @@ export const ProfilePage = () => {
           borderStyle="solid"
           borderColor="surface3"
           borderWidth="1px"
-          style={{ bottom: '68px', width: 'calc(100% - 32px)', lineHeight: '24px' }}
+          style={{
+            bottom: '68px',
+            width: 'calc(100% - 32px)',
+            lineHeight: '24px',
+          }}
           className={subhead}
         >
           {sellAssets.length} NFT{sellAssets.length === 1 ? '' : 's'}

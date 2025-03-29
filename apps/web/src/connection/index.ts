@@ -228,7 +228,6 @@ const coinbaseWalletConnection: Connection = {
 
 export const connections = [
   gnosisSafeConnection,
-  uniwalletWCV2ConnectConnection,
   deprecatedInjectedConnection,
   walletConnectV2Connection,
   coinbaseWalletConnection,
@@ -253,8 +252,6 @@ export function getConnection(c: Connector | ConnectionType) {
         return coinbaseWalletConnection
       case ConnectionType.WALLET_CONNECT_V2:
         return walletConnectV2Connection
-      case ConnectionType.UNISWAP_WALLET_V2:
-        return uniwalletWCV2ConnectConnection
       case ConnectionType.NETWORK:
         return networkConnection
       case ConnectionType.DEPRECATED_NETWORK:
@@ -263,6 +260,8 @@ export function getConnection(c: Connector | ConnectionType) {
         return gnosisSafeConnection
       case ConnectionType.EIP_6963_INJECTED:
         return eip6963Connection
+      default:
+        throw Error('unsupported connector')
     }
   }
 }

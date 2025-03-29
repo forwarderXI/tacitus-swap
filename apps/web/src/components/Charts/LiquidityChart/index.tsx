@@ -89,7 +89,9 @@ export class LiquidityBarChartModel extends ChartModel<LiquidityBarData> {
 
   override onSeriesHover(hoverData?: ChartHoverData<LiquidityBarData>) {
     super.onSeriesHover(hoverData)
-    const updatedOptions: Partial<LiquidityBarSeriesOptions> = { hoveredTick: hoverData?.item.tick ?? this.activeTick }
+    const updatedOptions: Partial<LiquidityBarSeriesOptions> = {
+      hoveredTick: hoverData?.item.tick ?? this.activeTick,
+    }
     this.series.applyOptions(updatedOptions)
   }
 
@@ -102,9 +104,10 @@ export class LiquidityBarChartModel extends ChartModel<LiquidityBarData> {
     const activeTickIndex = this.data.findIndex((bar) => bar.tick === this.activeTick)
     const midPoint = activeTickIndex !== -1 ? activeTickIndex : length / 2
 
-    this.api
-      .timeScale()
-      .setVisibleLogicalRange({ from: Math.max(midPoint - 50, 0), to: Math.min(midPoint + 50, this.data.length) })
+    this.api.timeScale().setVisibleLogicalRange({
+      from: Math.max(midPoint - 50, 0),
+      to: Math.min(midPoint + 50, this.data.length),
+    })
   }
 }
 
@@ -270,8 +273,14 @@ export function useLiquidityBarData({
         barData.push({
           tick: t.tick,
           liquidity: parseFloat(t.liquidityActive.toString()),
-          price0: formatPrice({ price: price0, type: NumberType.SwapDetailsAmount }),
-          price1: formatPrice({ price: price1, type: NumberType.SwapDetailsAmount }),
+          price0: formatPrice({
+            price: price0,
+            type: NumberType.SwapDetailsAmount,
+          }),
+          price1: formatPrice({
+            price: price1,
+            type: NumberType.SwapDetailsAmount,
+          }),
           time: fakeTime,
           amount0Locked,
           amount1Locked,
@@ -305,11 +314,19 @@ export function useLiquidityBarData({
       }
 
       // TODO(WEB-3672): investigate why negative/inaccurate liquidity values that are appearing from computeSurroundingTicks
-      setTickData({ barData: barData.filter((t) => t.liquidity > 0), activeRangeData, activeRangePercentage })
+      setTickData({
+        barData: barData.filter((t) => t.liquidity > 0),
+        activeRangeData,
+        activeRangePercentage,
+      })
     }
 
     formatData()
   }, [activePoolData, tokenA, tokenB, formatNumber, formatPrice, isReversed, feeTier])
 
-  return { tickData, activeTick: activePoolData.activeTick, loading: activePoolData.isLoading || !tickData }
+  return {
+    tickData,
+    activeTick: activePoolData.activeTick,
+    loading: activePoolData.isLoading || !tickData,
+  }
 }

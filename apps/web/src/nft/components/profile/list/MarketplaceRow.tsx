@@ -195,7 +195,12 @@ export const MarketplaceRow = ({
       </FloorPriceInfo>
       <LastPriceInfo>
         <ThemedText.BodyPrimary color="neutral2" lineHeight="24px">
-          {asset.lastPrice ? `${formatNumberOrString({ input: asset.lastPrice, type: NumberType.NFTToken })} ETH` : '-'}
+          {asset.lastPrice
+            ? `${formatNumberOrString({
+                input: asset.lastPrice,
+                type: NumberType.NFTToken,
+              })} ETH`
+            : '-'}
         </ThemedText.BodyPrimary>
       </LastPriceInfo>
 
@@ -263,9 +268,18 @@ const EthPriceDisplay = ({ ethPrice = 0 }: { ethPrice?: number }) => {
       <ThemedText.BodyPrimary lineHeight="24px" color={ethPrice ? 'neutral1' : 'neutral2'} textAlign="right">
         {ethPrice !== 0 ? (
           <Column>
-            <span>{formatNumberOrString({ input: ethPrice, type: NumberType.NFTToken })} ETH</span>
+            <span>
+              {formatNumberOrString({
+                input: ethPrice,
+                type: NumberType.NFTToken,
+              })}{' '}
+              ETH
+            </span>
             <ThemedText.BodyPrimary color="neutral2">
-              {formatNumberOrString({ input: ethPrice * ethUsdPrice, type: NumberType.FiatNFTToken })}
+              {formatNumberOrString({
+                input: ethPrice * ethUsdPrice,
+                type: NumberType.FiatNFTToken,
+              })}
             </ThemedText.BodyPrimary>
           </Column>
         ) : (

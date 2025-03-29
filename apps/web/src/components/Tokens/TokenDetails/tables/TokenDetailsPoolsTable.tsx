@@ -11,7 +11,10 @@ export function TokenDetailsPoolsTable({ chainId, referenceToken }: { chainId: C
   const sortMethod = useAtomValue(sortMethodAtom)
   const sortAscending = useAtomValue(sortAscendingAtom)
   const sortState = useMemo(
-    () => ({ sortBy: sortMethod, sortDirection: sortAscending ? OrderDirection.Asc : OrderDirection.Desc }),
+    () => ({
+      sortBy: sortMethod,
+      sortDirection: sortAscending ? OrderDirection.Asc : OrderDirection.Desc,
+    }),
     [sortAscending, sortMethod]
   )
   const { pools, loading, error, loadMore } = usePoolsFromTokenAddress(referenceToken.address, sortState, chainId)

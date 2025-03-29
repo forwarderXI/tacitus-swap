@@ -53,7 +53,9 @@ type EmptyWalletContent = {
   icon: React.ReactNode
 }
 type EmptyWalletContentType = 'nft' | 'token' | 'activity' | 'pool'
-const EMPTY_WALLET_CONTENT: { [key in EmptyWalletContentType]: EmptyWalletContent } = {
+const EMPTY_WALLET_CONTENT: {
+  [key in EmptyWalletContentType]: EmptyWalletContent
+} = {
   nft: {
     title: <Trans>No NFTs yet</Trans>,
     subtitle: <Trans>Buy or transfer NFTs to this wallet to get started.</Trans>,

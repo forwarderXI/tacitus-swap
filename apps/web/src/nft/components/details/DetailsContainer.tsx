@@ -90,7 +90,10 @@ const DetailsContainer = ({ asset, collection }: { asset: GenieAsset; collection
       <GridItem header="Blockchain" body="Ethereum" />
       <GridItem
         header="Total supply"
-        body={`${formatNumber({ input: totalSupply ?? 0, type: NumberType.WholeNumber })}`}
+        body={`${formatNumber({
+          input: totalSupply ?? 0,
+          type: NumberType.WholeNumber,
+        })}`}
       />
       <GridItem
         header="Creator"

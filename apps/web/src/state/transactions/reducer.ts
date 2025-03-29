@@ -35,7 +35,15 @@ const transactionSlice = createSlice({
         throw Error('Attempted to add existing transaction.')
       }
       const txs = transactions[chainId] ?? {}
-      txs[hash] = { hash, info, from, addedTime: Date.now(), nonce, deadline, receipt }
+      txs[hash] = {
+        hash,
+        info,
+        from,
+        addedTime: Date.now(),
+        nonce,
+        deadline,
+        receipt,
+      }
       transactions[chainId] = txs
     },
     clearAllTransactions(transactions, { payload: { chainId } }) {

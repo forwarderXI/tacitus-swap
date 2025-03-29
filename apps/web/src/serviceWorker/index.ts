@@ -37,5 +37,7 @@ precacheAndRoute(precacheEntries) // precache cache
 // We only use the precache and runtime caches, so we delete the rest to avoid taking space.
 // Wait to do so until 'activate' in case activation fails.
 self.addEventListener('activate', () =>
-  deleteUnusedCaches(self.caches, { usedCaches: [cacheNames.precache, onDemandCacheName] })
+  deleteUnusedCaches(self.caches, {
+    usedCaches: [cacheNames.precache, onDemandCacheName],
+  })
 )

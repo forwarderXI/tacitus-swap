@@ -27,6 +27,7 @@ import { getEnvName } from 'utils/env'
 import { MICROSITE_LINK } from 'utils/openDownloadApp'
 import { getCurrentPageFromLocation } from 'utils/urlRoutes'
 import { getCLS, getFCP, getFID, getLCP, Metric } from 'web-vitals'
+import DigitalRain from '../components/DigitalRain'
 
 import { findRouteByPath, RouteDefinition, routes, useRouterConfig } from './RouteDefinitions'
 
@@ -98,6 +99,7 @@ const useRenderUkBanner = () => {
 
 export default function App() {
   const [, setShouldDisableNFTRoutes] = useAtom(shouldDisableNFTRoutesAtom)
+  const routerConfig = useRouterConfig()
 
   const location = useLocation()
   const { pathname } = location
@@ -144,17 +146,11 @@ export default function App() {
     <ErrorBoundary>
       <DarkModeQueryParamReader />
       <Trace page={currentPage}>
-        {/*
-          This is where *static* page titles are injected into the <head> tag. If you
-          want to set a page title based on data that's dynamic or not available on first render,
-          you can set it later in the page component itself, since react-helmet-async prefers the most recently rendered title.
-        */}
         <Helmet>
-          <title>{findRouteByPath(pathname)?.getTitle(pathname) ?? 'Uniswap Interface'}</title>
+          <title>{findRouteByPath(pathname)?.getTitle(pathname) ?? 'Tacitus Swap'}</title>
         </Helmet>
         <StatsigProvider
           user={statsigUser}
-          // TODO: replace with proxy and cycle key
           sdkKey={STATSIG_DUMMY_KEY}
           waitForInitialization={false}
           options={{
@@ -172,6 +168,7 @@ export default function App() {
           <MobileBottomBar>
             <PageTabs />
           </MobileBottomBar>
+          <DigitalRain />
         </StatsigProvider>
       </Trace>
     </ErrorBoundary>
@@ -236,6 +233,7 @@ const ResetPageScrollEffect = memo(function ResetPageScrollEffect() {
 
 const Header = memo(function Header() {
   const [isScrolledDown, setIsScrolledDown] = useState(false)
+  const [scrollY, setScrollY] = useState(0)
   const isBagExpanded = useBag((state) => state.bagExpanded)
   const isHeaderTransparent = !isScrolledDown && !isBagExpanded
   const renderUkBanner = useRenderUkBanner()
@@ -243,6 +241,7 @@ const Header = memo(function Header() {
   useEffect(() => {
     const scrollListener = () => {
       setIsScrolledDown(window.scrollY > 0)
+      setScrollY(window.scrollY)
     }
     window.addEventListener('scroll', scrollListener)
     return () => window.removeEventListener('scroll', scrollListener)

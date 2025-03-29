@@ -56,9 +56,15 @@ export const CollectionRow = ({
   const navigate = useNavigate()
 
   const handleClick = useCallback(() => {
-    addRecentlySearchedAsset({ ...collection, isNft: true, chain: Chain.Ethereum })
+    addRecentlySearchedAsset({
+      ...collection,
+      isNft: true,
+      chain: Chain.Ethereum,
+    })
     toggleOpen()
-    sendAnalyticsEvent(InterfaceEventName.NAVBAR_RESULT_SELECTED, { ...eventProperties })
+    sendAnalyticsEvent(InterfaceEventName.NAVBAR_RESULT_SELECTED, {
+      ...eventProperties,
+    })
   }, [addRecentlySearchedAsset, collection, toggleOpen, eventProperties])
 
   useEffect(() => {
@@ -103,7 +109,11 @@ export const CollectionRow = ({
             {collection.isVerified && <VerifiedIcon className={styles.suggestionIcon} />}
           </Row>
           <Box className={styles.secondaryText}>
-            {formatNumberOrString({ input: collection?.stats?.total_supply, type: NumberType.WholeNumber })} items
+            {formatNumberOrString({
+              input: collection?.stats?.total_supply,
+              type: NumberType.WholeNumber,
+            })}{' '}
+            items
           </Box>
         </Column>
       </Row>
@@ -111,7 +121,11 @@ export const CollectionRow = ({
         <Column className={styles.suggestionSecondaryContainer}>
           <Row gap="4">
             <Box className={styles.primaryText}>
-              {formatNumberOrString({ input: collection.stats?.floor_price, type: NumberType.NFTToken })} ETH
+              {formatNumberOrString({
+                input: collection.stats?.floor_price,
+                type: NumberType.NFTToken,
+              })}{' '}
+              ETH
             </Box>
           </Row>
           <Box className={styles.secondaryText}>Floor</Box>
@@ -140,7 +154,9 @@ export const TokenRow = ({ token, isHovered, setHoveredIndex, toggleOpen, index,
     address && addRecentlySearchedAsset({ address, chain: token.chain })
 
     toggleOpen()
-    sendAnalyticsEvent(InterfaceEventName.NAVBAR_RESULT_SELECTED, { ...eventProperties })
+    sendAnalyticsEvent(InterfaceEventName.NAVBAR_RESULT_SELECTED, {
+      ...eventProperties,
+    })
   }, [addRecentlySearchedAsset, token, toggleOpen, eventProperties])
 
   const tokenDetailsPath = getTokenDetailsURL({ ...token })

@@ -188,7 +188,13 @@ describe('parseRemote', () => {
   describe('offchainOrderDetailsFromGraphQLTransactionActivity', () => {
     it('should return undefined when the activity is not a swap order', () => {
       const result = offchainOrderDetailsFromGraphQLTransactionActivity(
-        { ...MockSwapOrder, details: { ...mockTransactionDetailsPartsFragment, __typename: 'TransactionDetails' } },
+        {
+          ...MockSwapOrder,
+          details: {
+            ...mockTransactionDetailsPartsFragment,
+            __typename: 'TransactionDetails',
+          },
+        },
         {
           ...swapOrderTokenChanges,
           TokenTransfer: [],
@@ -200,7 +206,13 @@ describe('parseRemote', () => {
 
     it('should return the OffchainOrderDetails', () => {
       const result = offchainOrderDetailsFromGraphQLTransactionActivity(
-        { ...MockSwapOrder, details: { ...mockTransactionDetailsPartsFragment, __typename: 'TransactionDetails' } },
+        {
+          ...MockSwapOrder,
+          details: {
+            ...mockTransactionDetailsPartsFragment,
+            __typename: 'TransactionDetails',
+          },
+        },
         swapOrderTokenChanges,
         jest.fn().mockReturnValue('100')
       )

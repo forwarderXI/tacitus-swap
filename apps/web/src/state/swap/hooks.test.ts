@@ -22,7 +22,10 @@ describe('hooks', () => {
     test('does not duplicate eth for invalid output token', () => {
       expect(
         queryParametersToCurrencyState(
-          parse('?outputCurrency=invalid', { parseArrays: false, ignoreQueryPrefix: true })
+          parse('?outputCurrency=invalid', {
+            parseArrays: false,
+            ignoreQueryPrefix: true,
+          })
         )
       ).toEqual({
         inputCurrencyId: 'ETH',
@@ -33,7 +36,10 @@ describe('hooks', () => {
     test('output ETH only', () => {
       expect(
         queryParametersToCurrencyState(
-          parse('?outputCurrency=eth&exactAmount=20.5', { parseArrays: false, ignoreQueryPrefix: true })
+          parse('?outputCurrency=eth&exactAmount=20.5', {
+            parseArrays: false,
+            ignoreQueryPrefix: true,
+          })
         )
       ).toEqual({
         outputCurrencyId: 'ETH',
@@ -44,7 +50,10 @@ describe('hooks', () => {
     test('output ETH only, lowercase', () => {
       expect(
         queryParametersToCurrencyState(
-          parse('?outputcurrency=eth&exactAmount=20.5', { parseArrays: false, ignoreQueryPrefix: true })
+          parse('?outputcurrency=eth&exactAmount=20.5', {
+            parseArrays: false,
+            ignoreQueryPrefix: true,
+          })
         )
       ).toEqual({
         outputCurrencyId: 'ETH',
@@ -57,7 +66,10 @@ describe('hooks', () => {
     test('currency amounts', () => {
       expect(
         queryParametersToSwapState(
-          parse('?exactAmount=20.5&exactField=output', { parseArrays: false, ignoreQueryPrefix: true })
+          parse('?exactAmount=20.5&exactField=output', {
+            parseArrays: false,
+            ignoreQueryPrefix: true,
+          })
         )
       ).toEqual({
         typedValue: '20.5',

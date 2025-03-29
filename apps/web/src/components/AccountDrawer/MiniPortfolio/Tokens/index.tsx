@@ -102,7 +102,11 @@ function TokenRow({
       events={[BrowserEvent.onClick]}
       name={SharedEventName.ELEMENT_CLICKED}
       element={InterfaceElementName.MINI_PORTFOLIO_TOKEN_ROW}
-      properties={{ chain_id: currency.chainId, token_name: token?.name, address: token?.address }}
+      properties={{
+        chain_id: currency.chainId,
+        token_name: token?.name,
+        address: token?.address,
+      }}
     >
       <PortfolioRow
         left={

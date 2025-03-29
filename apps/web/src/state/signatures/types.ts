@@ -20,7 +20,9 @@ export interface UniswapXOrderDetails extends BaseSignatureFields {
   type: SignatureType
   orderHash: string
   status: UniswapXOrderStatus
-  swapInfo: (ExactInputSwapTransactionInfo | ExactOutputSwapTransactionInfo) & { isUniswapXOrder: true }
+  swapInfo: (ExactInputSwapTransactionInfo | ExactOutputSwapTransactionInfo) & {
+    isUniswapXOrder: true
+  }
   txHash?: string
   encodedOrder?: string
 }

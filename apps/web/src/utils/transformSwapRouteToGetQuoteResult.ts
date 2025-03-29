@@ -136,5 +136,8 @@ export function transformSwapRouteToGetQuoteResult(
     routeString: routeAmountsToString(route),
   }
 
-  return { state: QuoteState.SUCCESS, data: { routing: URAQuoteType.CLASSIC, quote: result, allQuotes: [] } }
+  return {
+    state: QuoteState.SUCCESS,
+    data: { routing: URAQuoteType.CLASSIC, quote: result, allQuotes: [] },
+  }
 }

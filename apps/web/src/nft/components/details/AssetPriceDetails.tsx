@@ -254,7 +254,10 @@ const OwnerContainer = ({ asset }: { asset: WalletAsset }) => {
             </ThemedText.MediumHeader>
             {USDPrice && (
               <ThemedText.BodySecondary lineHeight="24px">
-                {formatNumberOrString({ input: USDPrice, type: NumberType.FiatNFTToken })}
+                {formatNumberOrString({
+                  input: USDPrice,
+                  type: NumberType.FiatNFTToken,
+                })}
               </ThemedText.BodySecondary>
             )}
           </>
@@ -378,11 +381,18 @@ export const AssetPriceDetails = ({ asset, collection }: AssetPriceDetailsProps)
           </HeaderRow>
           <PriceRow>
             <ThemedText.MediumHeader fontSize="28px" lineHeight="36px">
-              {formatEther({ input: asset.priceInfo.ETHPrice, type: NumberType.NFTToken })} ETH
+              {formatEther({
+                input: asset.priceInfo.ETHPrice,
+                type: NumberType.NFTToken,
+              })}{' '}
+              ETH
             </ThemedText.MediumHeader>
             {USDPrice && (
               <ThemedText.BodySecondary lineHeight="24px">
-                {formatNumberOrString({ input: USDPrice, type: NumberType.FiatNFTToken })}
+                {formatNumberOrString({
+                  input: USDPrice,
+                  type: NumberType.FiatNFTToken,
+                })}
               </ThemedText.BodySecondary>
             )}
           </PriceRow>

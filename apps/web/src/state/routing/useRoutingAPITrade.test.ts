@@ -112,7 +112,11 @@ describe('#useRoutingAPITrade pricing', () => {
     )
 
     expect(useGetQuoteQuery).toHaveBeenCalledWith(
-      { ...MOCK_ARGS, sendPortionEnabled: false, routerPreference: INTERNAL_ROUTER_PREFERENCE_PRICE },
+      {
+        ...MOCK_ARGS,
+        sendPortionEnabled: false,
+        routerPreference: INTERNAL_ROUTER_PREFERENCE_PRICE,
+      },
       {
         pollingInterval: ms(`1m`),
         refetchOnMountOrArgChange: 2 * 60,

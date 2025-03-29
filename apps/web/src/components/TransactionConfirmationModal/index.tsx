@@ -279,7 +279,13 @@ function L2Content({
             ) : (
               <div>
                 <Trans>Transaction completed in </Trans>
-                <span style={{ fontWeight: 535, marginLeft: '4px', color: theme.neutral1 }}>
+                <span
+                  style={{
+                    fontWeight: 535,
+                    marginLeft: '4px',
+                    color: theme.neutral1,
+                  }}
+                >
                   {secondsToConfirm} seconds 🎉
                 </span>
               </div>

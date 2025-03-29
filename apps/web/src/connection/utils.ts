@@ -55,7 +55,10 @@ export function getDeprecatedInjection(isDarkMode?: boolean): ProviderInfo | und
   if (!window.ethereum || window.ethereum.isCoinbaseWallet) return { name: 'Install MetaMask', icon: METAMASK_ICON }
 
   // Use a generic icon when injection is present but no known non-coinbase wallet is detected
-  return { name: 'Browser Wallet', icon: isDarkMode ? INJECTED_DARK_ICON : INJECTED_LIGHT_ICON }
+  return {
+    name: 'Browser Wallet',
+    icon: isDarkMode ? INJECTED_DARK_ICON : INJECTED_LIGHT_ICON,
+  }
 }
 
 /**

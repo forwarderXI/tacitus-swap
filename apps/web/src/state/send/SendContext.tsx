@@ -76,7 +76,10 @@ export function SendContextProvider({ children }: PropsWithChildren) {
     return inputCurrency ?? outputCurrency
   }, [inputCurrency, outputCurrency])
 
-  const [sendState, setSendState] = useState<SendState>({ ...DEFAULT_SEND_STATE, inputCurrency: initialCurrency })
+  const [sendState, setSendState] = useState<SendState>({
+    ...DEFAULT_SEND_STATE,
+    inputCurrency: initialCurrency,
+  })
   const derivedSendInfo = useDerivedSendInfo(sendState)
 
   useEffect(() => {

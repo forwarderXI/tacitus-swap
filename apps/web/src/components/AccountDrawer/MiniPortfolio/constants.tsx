@@ -6,7 +6,9 @@ import { TransactionType } from 'state/transactions/types'
 // use even number because rows are in groups of 2
 export const DEFAULT_NFT_QUERY_AMOUNT = 26
 
-const TransactionTitleTable: { [key in TransactionType]: { [state in TransactionStatus]: string } } = {
+const TransactionTitleTable: {
+  [key in TransactionType]: { [state in TransactionStatus]: string }
+} = {
   [TransactionType.SWAP]: {
     [TransactionStatus.Pending]: t`Swapping`,
     [TransactionStatus.Confirmed]: t`Swapped`,
@@ -144,7 +146,9 @@ const TransactionTitleTable: { [key in TransactionType]: { [state in Transaction
   },
 }
 
-export const CancelledTransactionTitleTable: { [key in TransactionType]: string } = {
+export const CancelledTransactionTitleTable: {
+  [key in TransactionType]: string
+} = {
   [TransactionType.SWAP]: t`Swap cancelled`,
   [TransactionType.WRAP]: t`Wrap cancelled`,
   [TransactionType.ADD_LIQUIDITY_V3_POOL]: t`Add liquidity cancelled`,
@@ -174,7 +178,9 @@ export const CancelledTransactionTitleTable: { [key in TransactionType]: string 
   [TransactionType.LIMIT]: t`Limit cancelled`,
 }
 
-const AlternateTransactionTitleTable: { [key in TransactionType]?: { [state in TransactionStatus]: string } } = {
+const AlternateTransactionTitleTable: {
+  [key in TransactionType]?: { [state in TransactionStatus]: string }
+} = {
   [TransactionType.WRAP]: {
     [TransactionStatus.Pending]: t`Unwrapping`,
     [TransactionStatus.Confirmed]: t`Unwrapped`,
@@ -197,7 +203,11 @@ export function getActivityTitle(type: TransactionType, status: TransactionStatu
 
 const SwapTitleTable = TransactionTitleTable[TransactionType.SWAP]
 export const OrderTextTable: {
-  [status in UniswapXOrderStatus]: { title: string; status: TransactionStatus; statusMessage?: string }
+  [status in UniswapXOrderStatus]: {
+    title: string
+    status: TransactionStatus
+    statusMessage?: string
+  }
 } = {
   [UniswapXOrderStatus.OPEN]: {
     title: SwapTitleTable.PENDING,
@@ -229,7 +239,11 @@ export const OrderTextTable: {
 
 const LimitTitleTable = TransactionTitleTable[TransactionType.LIMIT]
 export const LimitOrderTextTable: {
-  [status in UniswapXOrderStatus]: { title: string; status: TransactionStatus; statusMessage?: string }
+  [status in UniswapXOrderStatus]: {
+    title: string
+    status: TransactionStatus
+    statusMessage?: string
+  }
 } = {
   [UniswapXOrderStatus.OPEN]: {
     title: LimitTitleTable.PENDING,
@@ -268,7 +282,9 @@ export const MOONPAY_SENDER_ADDRESSES = [
 ]
 
 // Converts GQL backend orderStatus enum to the enum used by the frontend and UniswapX backend
-export const OrderStatusTable: { [key in SwapOrderStatus]: UniswapXOrderStatus } = {
+export const OrderStatusTable: {
+  [key in SwapOrderStatus]: UniswapXOrderStatus
+} = {
   [SwapOrderStatus.Open]: UniswapXOrderStatus.OPEN,
   [SwapOrderStatus.Expired]: UniswapXOrderStatus.EXPIRED,
   [SwapOrderStatus.Error]: UniswapXOrderStatus.ERROR,

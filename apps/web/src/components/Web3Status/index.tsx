@@ -177,7 +177,12 @@ function Web3StatusInner() {
     if (account || ENSName) {
       const { rdns } = connection.getProviderInfo()
       dispatch(
-        updateRecentConnectionMeta({ type: connection.type, address: account, ENSName: ENSName ?? undefined, rdns })
+        updateRecentConnectionMeta({
+          type: connection.type,
+          address: account,
+          ENSName: ENSName ?? undefined,
+          rdns,
+        })
       )
     }
   }, [ENSName, account, connection, dispatch])

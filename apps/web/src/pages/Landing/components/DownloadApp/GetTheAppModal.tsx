@@ -56,39 +56,6 @@ const BadgeLink = styled(ExternalLink)`
   }
 `
 export function GetTheAppModal() {
-  const isOpen = useModalIsOpen(ApplicationModal.GET_THE_APP)
-  const closeModal = useCloseModal()
-  const ref = useRef<HTMLDivElement>(null)
-  useOnClickOutside(ref, () => (isOpen ? closeModal(ApplicationModal.GET_THE_APP) : undefined))
-
-  return (
-    <StyledModal isOpen={isOpen} maxWidth={486} slideIn>
-      <Wrapper ref={ref}>
-        <CloseButton onClick={() => closeModal(ApplicationModal.GET_THE_APP)} data-testid="get-the-app-close-button">
-          <CloseIcon />
-        </CloseButton>
-        <ColumnCenter gap="xl">
-          <ColumnCenter gap="sm">
-            <ThemedText.H1Medium textAlign="center">
-              <Trans>Download the Uniswap app</Trans>
-            </ThemedText.H1Medium>
-            <ThemedText.BodySecondary textAlign="center" maxWidth="400px">
-              <Trans>Scan the QR code with your phone to download the Uniswap app</Trans>
-            </ThemedText.BodySecondary>
-          </ColumnCenter>
-          <BadgeLink href="https://uniswapwallet.onelink.me/8q3y/m4i9qsez?af_qr=true">
-            <StyledQRCode src={walletAppPromoBannerQR} alt="App OneLink QR code" />
-          </BadgeLink>
-          <Row justify="center" gap="16px">
-            <BadgeLink href="https://apps.apple.com/us/app/uniswap-crypto-nft-wallet/id6443944476">
-              <AppStoreBadge />
-            </BadgeLink>
-            <BadgeLink href="https://play.google.com/store/apps/details?id=com.uniswap.mobile&pcampaignid=web_share">
-              <PlayStoreBadge />
-            </BadgeLink>
-          </Row>
-        </ColumnCenter>
-      </Wrapper>
-    </StyledModal>
-  )
+  // Always return null to prevent the modal from showing
+  return null
 }

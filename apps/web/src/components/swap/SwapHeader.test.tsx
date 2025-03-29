@@ -6,7 +6,9 @@ import { act, render, screen } from 'test-utils/render'
 import { Field, SwapTab } from './constants'
 import SwapHeader from './SwapHeader'
 
-jest.mock('../../featureFlags/flags/limits', () => ({ useLimitsEnabled: () => true }))
+jest.mock('../../featureFlags/flags/limits', () => ({
+  useLimitsEnabled: () => true,
+}))
 
 interface WrapperProps {
   setCurrentTab?: Dispatch<SetStateAction<SwapTab>>

@@ -65,9 +65,18 @@ export const useSellAsset = create<SellAssetState>()(
               (listing) => listing.marketplace.name === marketplace.name
             )
             if (asset.newListings && listingIndex != null && listingIndex > -1) {
-              asset.newListings[listingIndex] = { price, marketplace, overrideFloorPrice: false }
+              asset.newListings[listingIndex] = {
+                price,
+                marketplace,
+                overrideFloorPrice: false,
+              }
               if (listingIndex === 0) asset.marketAgnosticPrice = price
-            } else asset.newListings?.push({ price, marketplace, overrideFloorPrice: false })
+            } else
+              asset.newListings?.push({
+                price,
+                marketplace,
+                overrideFloorPrice: false,
+              })
           } else asset.marketAgnosticPrice = price
           const index = sellAssets.findIndex(
             (n) => n.tokenId === asset.tokenId && n.asset_contract.address === asset.asset_contract.address

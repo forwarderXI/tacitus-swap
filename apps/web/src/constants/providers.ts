@@ -6,12 +6,19 @@ import { CHAIN_IDS_TO_NAMES, SupportedInterfaceChain } from './chains'
 import { APP_RPC_URLS } from './networks'
 
 const providerFactory = (chainId: SupportedInterfaceChain, i = 0) =>
-  new ConfiguredJsonRpcProvider(APP_RPC_URLS[chainId][i], { chainId, name: CHAIN_IDS_TO_NAMES[chainId] })
+  new ConfiguredJsonRpcProvider(APP_RPC_URLS[chainId][i], {
+    chainId,
+    name: CHAIN_IDS_TO_NAMES[chainId],
+  })
 
 function getAppProvider(chainId: SupportedInterfaceChain) {
   return new AppJsonRpcProvider(
     APP_RPC_URLS[chainId].map(
-      (url) => new ConfiguredJsonRpcProvider(url, { chainId, name: CHAIN_IDS_TO_NAMES[chainId] })
+      (url) =>
+        new ConfiguredJsonRpcProvider(url, {
+          chainId,
+          name: CHAIN_IDS_TO_NAMES[chainId],
+        })
     )
   )
 }

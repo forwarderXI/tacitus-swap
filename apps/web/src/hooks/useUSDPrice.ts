@@ -82,7 +82,10 @@ export function useUSDPrice(
   const { data: tokenEthPrice, isLoading: isTokenEthPriceLoading } = useETHPrice(currency)
   const isTokenEthPriced = Boolean(tokenEthPrice || isTokenEthPriceLoading)
   const { data, networkStatus } = useTokenSpotPriceQuery({
-    variables: { chain: chain ?? Chain.Ethereum, address: getNativeTokenDBAddress(chain ?? Chain.Ethereum) },
+    variables: {
+      chain: chain ?? Chain.Ethereum,
+      address: getNativeTokenDBAddress(chain ?? Chain.Ethereum),
+    },
     skip: !isTokenEthPriced || !isWindowVisible,
     pollInterval: PollingInterval.Normal,
     notifyOnNetworkStatusChange: true,
@@ -96,14 +99,23 @@ export function useUSDPrice(
     if (!currencyAmount) {
       return { data: undefined, isLoading: false }
     } else if (stablecoinPrice) {
-      return { data: parseFloat(stablecoinPrice.quote(currencyAmount).toSignificant()), isLoading: false }
+      return {
+        data: parseFloat(stablecoinPrice.quote(currencyAmount).toSignificant()),
+        isLoading: false,
+      }
     } else {
       // Otherwise, get the price of the token in ETH, and then multiply by the price of ETH.
       const ethUSDPrice = data?.token?.project?.markets?.[0]?.price?.value
       if (ethUSDPrice && tokenEthPrice) {
-        return { data: parseFloat(tokenEthPrice.quote(currencyAmount).toExact()) * ethUSDPrice, isLoading: false }
+        return {
+          data: parseFloat(tokenEthPrice.quote(currencyAmount).toExact()) * ethUSDPrice,
+          isLoading: false,
+        }
       } else {
-        return { data: undefined, isLoading: isTokenEthPriceLoading || networkStatus === NetworkStatus.loading }
+        return {
+          data: undefined,
+          isLoading: isTokenEthPriceLoading || networkStatus === NetworkStatus.loading,
+        }
       }
     }
   }, [

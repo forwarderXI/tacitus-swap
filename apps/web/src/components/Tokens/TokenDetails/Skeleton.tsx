@@ -249,7 +249,10 @@ function LoadingStats() {
 
 /* Loading State: row component with loading bubbles */
 function TokenDetailsSkeleton() {
-  const { chainName, tokenAddress } = useParams<{ chainName?: string; tokenAddress?: string }>()
+  const { chainName, tokenAddress } = useParams<{
+    chainName?: string
+    tokenAddress?: string
+  }>()
   const chainId = supportedChainIdFromGQLChain(validateUrlChainParam(chainName))
   const token = useCurrency(tokenAddress === NATIVE_CHAIN_ID ? 'ETH' : tokenAddress, chainId)
 

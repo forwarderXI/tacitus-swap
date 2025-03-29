@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { DirectToDefi } from './sections/DirectToDefi'
 import { Footer } from './sections/Footer'
 import { Hero } from './sections/Hero'
-import { NewsletterEtc } from './sections/NewsletterEtc'
 import { Stats } from './sections/Stats'
 
 const Container = styled.div`
@@ -54,7 +53,6 @@ function LandingV2({ transition }: { transition?: boolean }) {
           <DirectToDefi />
         </div>
         <Stats />
-        <NewsletterEtc />
         <Footer />
       </Container>
     </>

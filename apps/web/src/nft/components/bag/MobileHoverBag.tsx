@@ -51,10 +51,17 @@ export const MobileHoverBag = () => {
           </Box>
           <Row gap="8">
             <Box className={body}>
-              {`${formatEther({ input: totalEthPrice.toString(), type: NumberType.NFTToken })}`} ETH
+              {`${formatEther({
+                input: totalEthPrice.toString(),
+                type: NumberType.NFTToken,
+              })}`}{' '}
+              ETH
             </Box>
             <Box color="neutral2" className={bodySmall}>
-              {formatNumberOrString({ input: totalUsdPrice, type: NumberType.FiatNFTToken })}
+              {formatNumberOrString({
+                input: totalUsdPrice,
+                type: NumberType.FiatNFTToken,
+              })}
             </Box>
           </Row>
         </Column>

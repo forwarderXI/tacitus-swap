@@ -95,7 +95,10 @@ function NFTDetails({ asset }: { asset: WalletAsset }) {
       <FloorPrice>
         <ThemedText.BodySmall color="neutral2">
           {asset.floorPrice
-            ? `${formatNumberOrString({ input: asset.floorPrice, type: NumberType.NFTTokenFloorPrice })} ETH`
+            ? `${formatNumberOrString({
+                input: asset.floorPrice,
+                type: NumberType.NFTTokenFloorPrice,
+              })} ETH`
             : ' '}
         </ThemedText.BodySmall>
       </FloorPrice>

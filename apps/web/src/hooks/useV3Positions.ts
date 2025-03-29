@@ -45,7 +45,10 @@ function useV3PositionsFromTokenIds(tokenIds: BigNumber[] | undefined): UseV3Pos
 
   return {
     loading,
-    positions: positions?.map((position, i) => ({ ...position, tokenId: inputs[i][0] })),
+    positions: positions?.map((position, i) => ({
+      ...position,
+      tokenId: inputs[i][0],
+    })),
   }
 }
 

@@ -23,7 +23,11 @@ describe('MaxSlippageSettings', () => {
   describe('input', () => {
     // Restore to default slippage before each unit test
     beforeEach(() => {
-      store.dispatch(updateUserSlippageTolerance({ userSlippageTolerance: SlippageTolerance.Auto }))
+      store.dispatch(
+        updateUserSlippageTolerance({
+          userSlippageTolerance: SlippageTolerance.Auto,
+        })
+      )
     })
     it('is not expanded by default', () => {
       renderSlippageSettings()

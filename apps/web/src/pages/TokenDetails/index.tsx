@@ -86,7 +86,10 @@ function useMultiChainMap(tokenQuery: ReturnType<typeof useTokenQuery>) {
 }
 
 function useCreateTDPContext(): PendingTDPContext | LoadedTDPContext {
-  const { tokenAddress, chainName } = useParams<{ tokenAddress: string; chainName?: string }>()
+  const { tokenAddress, chainName } = useParams<{
+    tokenAddress: string
+    chainName?: string
+  }>()
   if (!tokenAddress) throw new Error('Invalid token details route: token address URL param is undefined')
   const currencyChain = validateUrlChainParam(chainName)
   const currencyChainId = supportedChainIdFromGQLChain(currencyChain)
@@ -95,7 +98,10 @@ function useCreateTDPContext(): PendingTDPContext | LoadedTDPContext {
 
   const tokenDBAddress = isNative ? getNativeTokenDBAddress(currencyChain) : tokenAddress
 
-  const tokenQuery = useTokenQuery({ variables: { address: tokenDBAddress, chain: currencyChain }, errorPolicy: 'all' })
+  const tokenQuery = useTokenQuery({
+    variables: { address: tokenDBAddress, chain: currencyChain },
+    errorPolicy: 'all',
+  })
   const chartState = useCreateTDPChartState(tokenDBAddress, currencyChain)
 
   const multiChainMap = useMultiChainMap(tokenQuery)
@@ -108,7 +114,10 @@ function useCreateTDPContext(): PendingTDPContext | LoadedTDPContext {
   const theme = useTheme()
   const { preloadedLogoSrc } = (useLocation().state as { preloadedLogoSrc?: string }) ?? {}
   const extractedColorSrc = tokenQuery.data?.token?.project?.logoUrl ?? preloadedLogoSrc
-  const extractedAccent1 = useSrcColor(extractedColorSrc, { backgroundColor: theme.surface2, darkMode: theme.darkMode })
+  const extractedAccent1 = useSrcColor(extractedColorSrc, {
+    backgroundColor: theme.surface2,
+    darkMode: theme.darkMode,
+  })
 
   return useMemo(() => {
     return {

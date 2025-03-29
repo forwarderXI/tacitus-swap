@@ -102,7 +102,11 @@ const urlParamsUtils = {
         // For most cases, `traitInStats` is assigned. In case the trait
         // does not exist in our store, e.g "Number of traits", we have to
         // manually create an object for it.
-        const trait = traitInStats ?? { trait_type, trait_value, trait_count: 0 }
+        const trait = traitInStats ?? {
+          trait_type,
+          trait_value,
+          trait_count: 0,
+        }
 
         return trait as Trait
       })
@@ -153,7 +157,9 @@ export const syncLocalFiltersWithURL = (state: CollectionFilters) => {
 
   // Applying local state changes to URL
   const url = window.location.href.split('?')[0]
-  const stringifiedQuery = qs.stringify(modifiedQuery, { arrayFormat: 'comma' })
+  const stringifiedQuery = qs.stringify(modifiedQuery, {
+    arrayFormat: 'comma',
+  })
 
   // Using window.history directly on purpose here. router.push() will trigger re-renders & API calls.
   window.history.replaceState({}, ``, `${url}${stringifiedQuery && `?${stringifiedQuery}`}`)

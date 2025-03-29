@@ -17,9 +17,9 @@ export const MEDIA_WIDTHS = {
 
 const MAX_CONTENT_WIDTH = '1200px'
 
-const deprecated_mediaWidthTemplates: { [width in keyof typeof MEDIA_WIDTHS]: typeof css } = Object.keys(
-  MEDIA_WIDTHS
-).reduce((acc, size) => {
+const deprecated_mediaWidthTemplates: {
+  [width in keyof typeof MEDIA_WIDTHS]: typeof css
+} = Object.keys(MEDIA_WIDTHS).reduce((acc, size) => {
   acc[size] = (a: any, b: any, c: any) => css`
     @media (max-width: ${(MEDIA_WIDTHS as any)[size]}px) {
       ${css(a, b, c)}
@@ -114,7 +114,11 @@ export function getTheme(darkMode: boolean, overriddenColors?: Partial<ThemeColo
   const [colors, deprecatedColors] = darkMode ? [darkTheme, darkDeprecatedTheme] : [lightTheme, lightDeprecatedTheme]
   const colorsWithOverrides = applyOverriddenColors(colors, overriddenColors)
 
-  return { ...colorsWithOverrides, ...deprecatedColors, ...getSettings(darkMode) }
+  return {
+    ...colorsWithOverrides,
+    ...deprecatedColors,
+    ...getSettings(darkMode),
+  }
 }
 
 function applyOverriddenColors(defaultColors: ThemeColors, overriddenColors?: Partial<ThemeColors>) {

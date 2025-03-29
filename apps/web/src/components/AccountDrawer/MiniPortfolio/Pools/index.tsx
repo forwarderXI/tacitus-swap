@@ -33,7 +33,13 @@ function useFilterPossiblyMaliciousPositionInfo(positions: PositionInfo[] | unde
   const tokenIdsToPositionInfo: Record<string, PositionInfo> = useMemo(
     () =>
       positions
-        ? positions.reduce((acc, position) => ({ ...acc, [position.details.tokenId.toString()]: position }), {})
+        ? positions.reduce(
+            (acc, position) => ({
+              ...acc,
+              [position.details.tokenId.toString()]: position,
+            }),
+            {}
+          )
         : {},
     [positions]
   )

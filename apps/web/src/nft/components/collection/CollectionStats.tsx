@@ -349,7 +349,10 @@ const StatsRow = ({ stats, isMobile, ...props }: { stats: GenieCollection; isMob
     ? roundWholePercentage(((stats.stats.num_owners ?? 0) / stats.stats.total_supply) * 100)
     : 0
   const totalSupplyStr = stats.stats
-    ? formatNumberOrString({ input: stats.stats.total_supply ?? 0, type: NumberType.NFTCollectionStats })
+    ? formatNumberOrString({
+        input: stats.stats.total_supply ?? 0,
+        type: NumberType.NFTCollectionStats,
+      })
     : 0
   const listedPercentageStr = stats?.stats?.total_supply
     ? roundWholePercentage(((stats.stats.total_listings ?? 0) / stats.stats.total_supply) * 100)

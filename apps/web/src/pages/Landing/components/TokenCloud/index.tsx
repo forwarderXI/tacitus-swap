@@ -62,16 +62,19 @@ export function TokenCloud({ transition }: { transition?: boolean }) {
       .sort((a, b) => Math.abs(a[0] - w / 2) - Math.abs(b[0] - w / 2))
       .map(([x, y], idx: number) => {
         const token: InteractiveToken = tokenList[idx % tokenList.length]
-        const size = randomInt(50, 96)
+        const size = randomInt(25, 48)
         return {
           x,
           y,
-          blur: (1 / size) * 500 * ((x > leftThreshold && x < rightThreshold) || y < 100 ? 5 : 1), // make blur bigger for smaller icons
+          // Minimal blur for sharper Matrix-style glowing edges
+          blur: (1 / size) * 150 * ((x > leftThreshold && x < rightThreshold) || y < 100 ? 1 : 0.3),
           size,
-          color: token.color,
+          // Use consistent Matrix color scheme
+          color: 'rgba(0, 243, 255, 0.7)',
           logoUrl: token.logoUrl,
-          opacity: randomFloat(0.5, 1.0) * ((x > leftThreshold && x < rightThreshold) || y < 100 ? 0.75 : 1),
-          rotation: randomInt(-20, 20),
+          // Higher consistent opacity for more prominent glow
+          opacity: randomFloat(0.8, 1.0),
+          rotation: randomInt(-12, 12),
           delay: Math.abs(x - w / 2) / 800,
           floatDuration: randomFloat(3, 6),
           ticker: token.symbol,

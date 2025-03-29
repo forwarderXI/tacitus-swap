@@ -4,7 +4,12 @@ import { UserState } from 'state/user/reducer'
 
 export type PersistAppStateV5 = {
   _persist: PersistState
-} & { user?: UserState & { disabledUniswapX?: boolean; optedOutOfUniswapX?: boolean } }
+} & {
+  user?: UserState & {
+    disabledUniswapX?: boolean
+    optedOutOfUniswapX?: boolean
+  }
+}
 
 /**
  * Migration to migrate users to UniswapX by default.
