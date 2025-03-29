@@ -65,15 +65,15 @@ export const CurrencySelect = styled(ButtonGray)<{
   animateShake?: boolean
 }>`
   align-items: center;
-  background-color: ${({ selected, theme }) => (selected ? theme.surface1 : theme.accent1)};
+  background-color: ${({ selected, theme }) => (selected ? theme.surface1 : 'rgba(0, 243, 255, 0.1)')};
   opacity: ${({ disabled }) => (!disabled ? 1 : 0.4)};
-  color: ${({ selected, theme }) => (selected ? theme.neutral1 : theme.neutralContrast)};
+  color: ${({ selected, theme }) => (selected ? theme.neutral1 : 'rgba(0, 243, 255, 0.9)')};
   cursor: pointer;
   height: 36px;
   border-radius: 18px;
   outline: none;
   user-select: none;
-  border: 1px solid ${({ selected, theme }) => (selected ? theme.surface3 : theme.accent1)};
+  border: 1px solid ${({ selected, theme }) => (selected ? theme.surface3 : 'rgba(0, 243, 255, 0.2)')};
   font-size: 24px;
   font-weight: 485;
   width: ${({ hideInput }) => (hideInput ? '100%' : 'initial')};
@@ -81,21 +81,25 @@ export const CurrencySelect = styled(ButtonGray)<{
   gap: 8px;
   justify-content: space-between;
   margin-left: ${({ hideInput }) => (hideInput ? '0' : '12px')};
-  box-shadow: ${({ theme }) => theme.deprecated_shallowShadow};
+  box-shadow: ${({ selected, theme }) => 
+    selected ? theme.deprecated_shallowShadow : '0 0 10px rgba(0, 243, 255, 0.15)'};
+  transition: all 0.2s ease;
 
   &:hover,
   &:active {
-    background-color: ${({ theme, selected }) => (selected ? theme.surface2 : theme.accent1)};
+    background-color: ${({ theme, selected }) => (selected ? theme.surface2 : 'rgba(0, 243, 255, 0.15)')};
+    border-color: ${({ selected }) => 
+      selected ? 'inherit' : 'rgba(0, 243, 255, 0.3)'};
+    box-shadow: ${({ selected }) => 
+      selected ? 'inherit' : '0 0 15px rgba(0, 243, 255, 0.25)'};
   }
 
   &:before {
     background-size: 100%;
     border-radius: inherit;
-
     position: absolute;
     top: 0;
     left: 0;
-
     width: 100%;
     height: 100%;
     content: '';
@@ -178,7 +182,7 @@ const StyledDropDown = styled(DropDown)<{ selected: boolean }>`
   margin-left: 8px;
 
   path {
-    stroke: ${({ selected, theme }) => (selected ? theme.neutral1 : theme.neutralContrast)};
+    stroke: ${({ selected, theme }) => (selected ? theme.neutral1 : 'rgba(0, 243, 255, 0.9)')};
     stroke-width: 2px;
   }
 `
@@ -191,17 +195,23 @@ const StyledTokenName = styled.span<{ active?: boolean }>`
 
 const StyledBalanceMax = styled.button<{ disabled?: boolean }>`
   background-color: transparent;
-  border: none;
-  color: ${({ theme }) => theme.accent1};
+  background-color: rgba(0, 243, 255, 0.05);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  border-radius: 12px;
+  color: rgba(0, 243, 255, 0.9);
   cursor: pointer;
   font-size: 14px;
   font-weight: 535;
   opacity: ${({ disabled }) => (!disabled ? 1 : 0.4)};
   padding: 4px 6px;
   pointer-events: ${({ disabled }) => (!disabled ? 'initial' : 'none')};
+  transition: all 0.2s ease;
+  text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
 
   :hover {
     opacity: ${({ disabled }) => (!disabled ? 0.8 : 0.4)};
+    background-color: rgba(0, 243, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
   }
 
   :focus {
