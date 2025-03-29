@@ -1,5 +1,7 @@
 {
   "rewrites":  [
     {"source": "/(.*)", "destination": "/"}
-  ]
+  ],
+  "buildCommand": "cd apps/web && yarn build:production",
+  "outputDirectory": "apps/web/build"
 }
