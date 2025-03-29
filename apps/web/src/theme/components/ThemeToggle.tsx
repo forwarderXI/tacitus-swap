@@ -25,7 +25,7 @@ const systemThemeAtom = atom<ThemeMode.LIGHT | ThemeMode.DARK>(
 )
 
 // Tracks the user's selected theme mode
-const themeModeAtom = atomWithStorage<ThemeMode>('interface_color_theme', ThemeMode.AUTO)
+const themeModeAtom = atomWithStorage<ThemeMode>('interface_color_theme', ThemeMode.DARK)
 
 export function SystemThemeUpdater() {
   const setSystemTheme = useUpdateAtom(systemThemeAtom)
@@ -67,7 +67,8 @@ export function useIsDarkMode(): boolean {
   const mode = useAtomValue(themeModeAtom)
   const systemTheme = useAtomValue(systemThemeAtom)
 
-  return (mode === ThemeMode.AUTO ? systemTheme : mode) === ThemeMode.DARK
+  // Always return true to force dark mode
+  return true
 }
 
 export function useDarkModeManager(): [boolean, (mode: ThemeMode) => void] {
@@ -80,31 +81,6 @@ export function useDarkModeManager(): [boolean, (mode: ThemeMode) => void] {
 }
 
 export default function ThemeToggle({ disabled }: { disabled?: boolean }) {
-  const [mode, setMode] = useAtom(themeModeAtom)
-  const switchMode = useCallback(
-    (mode: ThemeMode) => {
-      // Switch feels less jittery with short delay
-      !disabled && setTimeout(() => setMode(mode), THEME_UPDATE_DELAY)
-    },
-    [disabled, setMode]
-  )
-
-  return (
-    <Row align="center">
-      <Row width="40%">
-        <ThemedText.SubHeaderSmall color="primary">
-          <Trans>Theme</Trans>
-        </ThemedText.SubHeaderSmall>
-      </Row>
-      <Row style={{ flexGrow: 1 }} justify="flex-end" width="60%">
-        <SegmentedControl selected={mode} onSelect={switchMode}>
-          <Segment value={ThemeMode.AUTO} testId="theme-auto">
-            <Trans>Auto</Trans>
-          </Segment>
-          <Segment value={ThemeMode.LIGHT} Icon={Sun} testId="theme-lightmode" />
-          <Segment value={ThemeMode.DARK} Icon={Moon} testId="theme-darkmode" />
-        </SegmentedControl>
-      </Row>
-    </Row>
-  )
+  // Return null to remove the theme toggle component
+  return null
 }
