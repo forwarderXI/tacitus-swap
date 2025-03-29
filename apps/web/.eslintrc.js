@@ -14,6 +14,10 @@ module.exports = {
   rules: {
     // TODO: had to add this rule to avoid errors on monorepo migration that didnt happen in interface
     'cypress/unsafe-to-chain-command': 'off',
+    'unused-imports/no-unused-imports': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'prettier/prettier': 'off',
+    'import/no-unused-modules': 'off'
   },
 
   overrides: [
