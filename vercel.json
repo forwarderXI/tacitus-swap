@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd apps/web && mkdir -p src/utils/__generated__ && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false npx craco build",
+  "buildCommand": "mkdir -p apps/web/src/utils/__generated__ && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false yarn web build:production",
   "outputDirectory": "apps/web/build",
   "installCommand": "yarn install --ignore-engines --network-timeout 100000",
   "framework": "create-react-app",
