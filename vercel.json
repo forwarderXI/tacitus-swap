@@ -1,9 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "cd apps/web && NODE_OPTIONS=\"--max-old-space-size=4096\" yarn prepare && CI=false yarn build:production",
+  "buildCommand": "cd apps/web && NODE_OPTIONS='--max-old-space-size=4096' yarn build:vercel",
   "outputDirectory": "apps/web/build",
-  "installCommand": "yarn install --frozen-lockfile",
-  "rewrites": [
-    {"source": "/(.*)", "destination": "/"}
-  ]
+  "installCommand": "yarn install --ignore-engines",
+  "framework": "create-react-app"
 }
