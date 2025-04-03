@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "mkdir -p apps/web/src/utils/__generated__ && cd apps/web && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false yarn build:production && mv build/* ../build/ && rmdir build",
+  "buildCommand": "mkdir -p apps/web/src/utils/__generated__ && cd apps/web && yarn add -D env-cmd && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false yarn build:production && mkdir -p ../build && mv build/* ../build/ && rmdir build",
   "outputDirectory": "apps/build",
-  "installCommand": "yarn install --ignore-engines --network-timeout 100000 && cd apps/web && yarn add -D env-cmd",
+  "installCommand": "yarn install --ignore-engines --network-timeout 100000",
   "framework": "create-react-app",
   "env": {
     "SKIP_WORKERD": "true",
