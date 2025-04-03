@@ -77,4 +77,40 @@ try {
   console.log(`Error handling environment file: ${err.message}`);
 }
 
+// Run lingui compile
+try {
+  console.log('Running lingui compile...');
+  // We use require to run it directly without executing a process
+  // This avoids potential issues with workerd
+  const linguiPath = path.join(webRoot, 'node_modules/.bin/lingui');
+  
+  if (fs.existsSync(linguiPath)) {
+    execSync('npx lingui compile', { cwd: webRoot, stdio: 'inherit' });
+    console.log('Lingui compile completed successfully');
+  } else {
+    console.log('Skipping lingui compile - lingui CLI not found');
+  }
+} catch (err) {
+  console.log(`Error during lingui compile: ${err.message}`);
+  // Don't fail the build, continue
+  console.log('Continuing despite lingui error');
+}
+
+// Run AJV Validators
+try {
+  console.log('Compiling AJV validators...');
+  const ajvScriptPath = path.join(webRoot, 'scripts/compile-ajv-validators.js');
+  
+  if (fs.existsSync(ajvScriptPath)) {
+    execSync(`node ${ajvScriptPath}`, { cwd: webRoot, stdio: 'inherit', env: { ...process.env, SKIP_WORKERD: 'true' } });
+    console.log('AJV validators compiled successfully');
+  } else {
+    console.log('Skipping AJV compilation - script not found');
+  }
+} catch (err) {
+  console.log(`Error during AJV compilation: ${err.message}`);
+  // Don't fail the build, continue
+  console.log('Continuing despite AJV error');  
+}
+
 console.log('Pre-build setup complete!'); 
