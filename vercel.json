@@ -1,8 +1,7 @@
 {
   "version": 2,
-  "root": "apps/web",
-  "buildCommand": "mkdir -p src/utils/__generated__ && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false yarn build:production",
-  "outputDirectory": "build",
+  "buildCommand": "mkdir -p apps/web/src/utils/__generated__ && cd apps/web && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false yarn build:production",
+  "outputDirectory": "apps/web/build",
   "installCommand": "yarn install",
   "framework": "create-react-app"
 }
