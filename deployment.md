@@ -2,6 +2,22 @@
 
 This document outlines how to deploy Tacitus Swap to Vercel, both manually and automatically.
 
+## Deployment Workflow
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────────┐     ┌──────────────┐
+│  Git Push   │────>│ Vercel Hook │────>│ build-for-vercel│────>│   Deployed   │
+│  to main    │     │ Triggered   │     │      .sh        │     │ Application  │
+└─────────────┘     └─────────────┘     └─────────────────┘     └──────────────┘
+                                               │
+                                               ▼
+                                        ┌─────────────────┐
+                                        │ Build artifacts │
+                                        │ placed in       │
+                                        │ .vercel/output  │
+                                        └─────────────────┘
+```
+
 ## Manual Deployment
 
 ### Prerequisites
