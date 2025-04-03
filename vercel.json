@@ -1,7 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "mkdir -p apps/web/src/utils/__generated__ && cd apps/web && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false yarn build:production",
-  "outputDirectory": "apps/web/build",
-  "installCommand": "yarn install",
-  "framework": "create-react-app"
+  "framework": null,
+  "outputDirectory": "vercel-output"
 }
