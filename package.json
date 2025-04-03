@@ -119,7 +119,8 @@
     "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary",
     "wallet": "yarn workspace wallet",
     "web": "yarn workspace @uniswap/interface",
-    "utilities": "yarn workspace utilities"
+    "utilities": "yarn workspace utilities",
+    "vercel-build": "mkdir -p apps/web/src/utils/__generated__ && cd apps/web && yarn add -D env-cmd && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false yarn build:production && mkdir -p ../build && mv build/* ../build/ && rmdir build"
   },
   "workspaces": [
     "apps/*",

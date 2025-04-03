@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "bash ./vercel-build.sh",
+  "buildCommand": "yarn vercel-build",
   "outputDirectory": "apps/build",
   "installCommand": "yarn install --ignore-engines --network-timeout 100000",
   "framework": "create-react-app",
