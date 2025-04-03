@@ -1,5 +1,13 @@
 {
   "version": 2,
   "framework": null,
-  "outputDirectory": "vercel-output"
+  "outputDirectory": "vercel-output",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "routes": [
+    { "src": "/static/(.*)", "headers": { "cache-control": "public, max-age=31536000, immutable" }, "dest": "/static/$1" },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
 }
