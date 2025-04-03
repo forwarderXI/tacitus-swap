@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "mkdir -p apps/web/src/utils/__generated__ && cd apps/web && npm install -D env-cmd && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false npm run build:production && mkdir -p ../build && cp -r build/* ../build/",
+  "buildCommand": "mkdir -p apps/web/src/utils/__generated__ && cd apps/web && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false yarn build:production && mkdir -p ../build && cp -r build/* ../build/",
   "outputDirectory": "apps/build",
-  "installCommand": "npm install --no-optional",
+  "installCommand": "npm i -g yarn && yarn install --frozen-lockfile --prefer-offline",
   "framework": "create-react-app",
   "env": {
     "SKIP_WORKERD": "true",
@@ -10,6 +10,7 @@
     "DISABLE_ESLINT_PLUGIN": "true",
     "CI": "false",
     "GENERATE_SOURCEMAP": "false",
-    "NODE_OPTIONS": "--max-old-space-size=4096"
+    "NODE_OPTIONS": "--max-old-space-size=4096",
+    "YARN_ENABLE_IMMUTABLE_INSTALLS": "false"
   }
 }
