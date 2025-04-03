@@ -22072,6 +22072,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"env-cmd@npm:10.1.0":
+  version: 10.1.0
+  resolution: "env-cmd@npm:10.1.0"
+  dependencies:
+    commander: ^4.0.0
+    cross-spawn: ^7.0.0
+  bin:
+    env-cmd: bin/env-cmd.js
+  checksum: efef55074250f14cfc0b80c98dd98f1f056a80e1f3c7db14097ceefdd2d56c766bbb83b54c22932112707f41b36ce2e923f8015d69e62a75c12d98640b972e75
+  languageName: node
+  linkType: hard
+
 "env-editor@npm:^0.4.1":
   version: 0.4.2
   resolution: "env-editor@npm:0.4.2"
@@ -43690,6 +43702,7 @@ __metadata:
     danger: 11.2.6
     depcheck: 1.4.7
     dotenv-cli: ^7.0.0
+    env-cmd: 10.1.0
     husky: ^8.0.3
     i18next: 23.10.0
     i18next-parser: 8.6.0
