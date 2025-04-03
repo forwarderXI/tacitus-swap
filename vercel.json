@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "node vercel-build-setup.js && cd apps/web && yarn build:vercel",
+  "buildCommand": "node ./vercel-build-setup.js && cd apps/web && yarn build:vercel",
   "outputDirectory": "apps/web/build",
   "installCommand": "yarn install --ignore-engines --network-timeout 100000",
   "framework": "create-react-app",
