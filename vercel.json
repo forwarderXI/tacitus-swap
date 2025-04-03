@@ -1,16 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "node vercel-setup.js && cd apps/web && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false yarn build:production && cp -r build/* ../build/",
-  "outputDirectory": "apps/build",
-  "installCommand": "npx corepack@latest enable && npx corepack prepare yarn@3.2.3 --activate && yarn install",
-  "framework": "create-react-app",
-  "env": {
-    "SKIP_WORKERD": "true",
-    "SKIP_PREFLIGHT_CHECK": "true",
-    "DISABLE_ESLINT_PLUGIN": "true",
-    "CI": "false",
-    "GENERATE_SOURCEMAP": "false",
-    "NODE_OPTIONS": "--max-old-space-size=4096",
-    "YARN_ENABLE_IMMUTABLE_INSTALLS": "false"
-  }
+  "root": "apps/web",
+  "buildCommand": "mkdir -p src/utils/__generated__ && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false yarn build:production",
+  "outputDirectory": "build",
+  "installCommand": "yarn install",
+  "framework": "create-react-app"
 }
