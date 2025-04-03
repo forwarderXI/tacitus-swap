@@ -2,7 +2,7 @@
   "version": 2,
   "buildCommand": "bash vercel-patch.sh && cd apps/web && yarn build:vercel",
   "outputDirectory": "apps/web/build",
-  "installCommand": "yarn install --ignore-engines --ignore-scripts --network-timeout 100000",
+  "installCommand": "yarn install --ignore-engines --network-timeout 100000",
   "framework": "create-react-app",
   "env": {
     "SKIP_WORKERD": "true",
