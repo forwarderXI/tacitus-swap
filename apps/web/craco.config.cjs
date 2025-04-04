@@ -9,7 +9,13 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
 const { IgnorePlugin, ProvidePlugin } = require('webpack')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 
-const commitHash = execSync('git rev-parse HEAD').toString().trim()
+let commitHash = 'unknown'
+try {
+  commitHash = execSync('git rev-parse HEAD').toString().trim()
+} catch (error) {
+  console.warn('Failed to get git commit hash:', error.message)
+}
+
 const isProduction = process.env.NODE_ENV === 'production'
 
 process.env.REACT_APP_GIT_COMMIT_HASH = commitHash

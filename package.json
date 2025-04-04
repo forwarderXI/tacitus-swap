@@ -120,7 +120,8 @@
     "wallet": "yarn workspace wallet",
     "web": "yarn workspace @uniswap/interface",
     "utilities": "yarn workspace utilities",
-    "vercel-build": "mkdir -p apps/web/src/utils/__generated__ && cd apps/web && yarn add -D env-cmd && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false yarn build:production && mkdir -p ../build && mv build/* ../build/ && rmdir build"
+    "vercel-build": "mkdir -p apps/web/src/utils/__generated__ && cd apps/web && yarn add -D env-cmd && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false yarn build:production && mkdir -p ../build && mv build/* ../build/ && rmdir build",
+    "fleek:build": "cd apps/web && yarn && yarn build:production"
   },
   "workspaces": [
     "apps/*",
