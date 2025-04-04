@@ -24,6 +24,11 @@ export function isAppUniswapStagingOrg({ hostname }: { hostname: string }): bool
 }
 
 export function isBrowserRouterEnabled(): boolean {
+  // Always use hash router for IPFS compatibility
+  return false;
+
+  // Original logic commented out
+  /*
   if (isProductionEnv()) {
     if (
       isAppUniswapOrg(window.location) ||
@@ -35,6 +40,7 @@ export function isBrowserRouterEnabled(): boolean {
     return false // production builds *not* served through our domains or localhost, eg IPFS
   }
   return true // local dev builds
+  */
 }
 
 function isLocalhost({ hostname }: { hostname: string }): boolean {
