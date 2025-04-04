@@ -121,7 +121,8 @@
     "web": "yarn workspace @uniswap/interface",
     "utilities": "yarn workspace utilities",
     "vercel-build": "mkdir -p apps/web/src/utils/__generated__ && cd apps/web && yarn add -D env-cmd && SKIP_WORKERD=true NODE_OPTIONS='--max-old-space-size=4096' DISABLE_ESLINT_PLUGIN=true CI=false yarn build:production && mkdir -p ../build && mv build/* ../build/ && rmdir build",
-    "fleek:build": "cd apps/web && yarn && yarn build:production"
+    "fleek:build": "yarn install && cd apps/web && yarn install && yarn build:production && [ -d dist ] || echo 'Warning: dist directory does not exist. Creating it now...' && [ -d dist ] || mkdir -p dist && [ -d build ] && [ ! -d dist ] && cp -r build dist || echo 'Build directory not found or dist already exists'",
+    "fleek:simple": "yarn && cd apps/web && yarn && NODE_OPTIONS='--max-old-space-size=4096' craco build && mkdir -p dist && cp -r build/* dist/"
   },
   "workspaces": [
     "apps/*",
