@@ -25,6 +25,10 @@ legacy-peer-deps=true
 node-linker=node-modules
 EOL
 
+# Clear any previous dist directory at the root level
+echo "Clearing any previous root dist directory..."
+rm -rf dist
+
 # Move to the web app directory
 cd apps/web
 
@@ -57,22 +61,26 @@ if [ ! -d "build" ]; then
   echo "<html><body><h1>Build failed but deployment continued</h1></body></html>" > build/index.html
 fi
 
-# Create dist directory and copy files
-echo "Creating dist directory..."
-mkdir -p dist
+# IMPORTANT: For IPFS deployment, we create a dist directory at the root level
+echo "Creating dist directory at the root level..."
+mkdir -p ../../dist
 
-echo "Copying build files to dist..."
-cp -r build/* dist/ || { 
-  echo "Warning: Failed to copy build files to dist! Creating minimal content instead."; 
-  echo "<html><body><h1>Build process encountered issues</h1></body></html>" > dist/index.html; 
+echo "Copying build files to root dist directory..."
+cp -r build/* ../../dist/ || { 
+  echo "Warning: Failed to copy build files to root dist! Creating minimal content instead."; 
+  echo "<html><body><h1>Build process encountered issues</h1></body></html>" > ../../dist/index.html; 
 }
 
+# Ensure index.html exists at the root
+if [ ! -f "../../dist/index.html" ]; then
+  echo "WARNING: No index.html at root! Creating one..."
+  echo "<html><head><meta http-equiv='refresh' content='0;url=./index.html'></head><body>Redirecting...</body></html>" > ../../dist/index.html
+fi
+
 # List contents of both directories for debugging
-echo "Contents of current directory:"
-ls -la
 echo "Contents of build directory (if it exists):"
 ls -la build/ || echo "build directory cannot be listed"
-echo "Contents of dist directory:"
-ls -la dist/ || echo "dist directory cannot be listed"
+echo "Contents of root dist directory:"
+ls -la ../../dist/ || echo "root dist directory cannot be listed"
 
-echo "Build process completed!" 
+echo "Build process completed successfully!" 
