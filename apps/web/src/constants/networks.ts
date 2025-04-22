@@ -131,20 +131,20 @@ export const PUBLIC_RPC_URLS: Record<SupportedInterfaceChain, string[]> = {
  * These are URLs which may only be used by the interface, due to origin policies, &c.
  */
 export const APP_RPC_URLS: Record<SupportedInterfaceChain, string[]> = {
-  [ChainId.MAINNET]: [`https://mainnet.infura.io/v3/${INFURA_KEY}`, QUICKNODE_MAINNET_RPC_URL],
+  [ChainId.MAINNET]: ['https://eth-mainnet.g.alchemy.com/v2/0YqWz-rV6gjJssYXXtNHk6ixfj8JcUYX','https://eth-mainnet.public.blastapi.io',`https://mainnet.infura.io/v3/${INFURA_KEY}`, QUICKNODE_MAINNET_RPC_URL],
   [ChainId.GOERLI]: [`https://goerli.infura.io/v3/${INFURA_KEY}`],
   [ChainId.SEPOLIA]: [`https://sepolia.infura.io/v3/${INFURA_KEY}`],
-  [ChainId.OPTIMISM]: [`https://optimism-mainnet.infura.io/v3/${INFURA_KEY}`],
+  [ChainId.OPTIMISM]: ['https://mainnet.optimism.io/',`https://optimism-mainnet.infura.io/v3/${INFURA_KEY}`],
   [ChainId.OPTIMISM_GOERLI]: [`https://optimism-goerli.infura.io/v3/${INFURA_KEY}`],
-  [ChainId.ARBITRUM_ONE]: [`https://arbitrum-mainnet.infura.io/v3/${INFURA_KEY}`, QUICKNODE_ARBITRUM_RPC_URL],
+  [ChainId.ARBITRUM_ONE]: ['https://arb1.arbitrum.io/rpc',`https://arbitrum-mainnet.infura.io/v3/${INFURA_KEY}`, QUICKNODE_ARBITRUM_RPC_URL],
   [ChainId.ARBITRUM_GOERLI]: [`https://arbitrum-goerli.infura.io/v3/${INFURA_KEY}`],
-  [ChainId.POLYGON]: [`https://polygon-mainnet.infura.io/v3/${INFURA_KEY}`],
+  [ChainId.POLYGON]: ['https://polygon-rpc.com/',`https://polygon-mainnet.infura.io/v3/${INFURA_KEY}`],
   [ChainId.POLYGON_MUMBAI]: [`https://polygon-mumbai.infura.io/v3/${INFURA_KEY}`],
-  [ChainId.CELO]: [`https://celo-mainnet.infura.io/v3/${INFURA_KEY}`],
+  [ChainId.CELO]: ['https://alfajores-forno.celo-testnet.org',`https://celo-mainnet.infura.io/v3/${INFURA_KEY}`],
   [ChainId.CELO_ALFAJORES]: [`https://celo-alfajores.infura.io/v3/${INFURA_KEY}`],
-  [ChainId.BNB]: [QUICKNODE_BNB_RPC_URL],
-  [ChainId.AVALANCHE]: [`https://avalanche-mainnet.infura.io/v3/${INFURA_KEY}`],
-  [ChainId.BASE]: [`https://base-mainnet.infura.io/v3/${INFURA_KEY}`],
+  [ChainId.BNB]: ['https://bsc-rpc.publicnode.com',QUICKNODE_BNB_RPC_URL],
+  [ChainId.AVALANCHE]: [`https://avalanche-c-chain.publicnode.com`],
+  [ChainId.BASE]: [`https://mainnet.base.org/`],
 }
 
 export const INFURA_PREFIX_TO_CHAIN_ID: { [prefix: string]: ChainId } = {
