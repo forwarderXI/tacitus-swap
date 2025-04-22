@@ -1,7 +1,7 @@
 import { ChainId } from '@uniswap/sdk-core'
 import { SupportedInterfaceChain } from 'constants/chains'
 
-const INFURA_KEY = process.env.REACT_APP_INFURA_KEY
+const INFURA_KEY = 'e265018bdbde45419dce0f3e98bd982d'
 if (typeof INFURA_KEY === 'undefined') {
   throw new Error(`REACT_APP_INFURA_KEY must be a defined environment variable`)
 }
