@@ -5,7 +5,11 @@ import 'inter-ui'
 import 'polyfills'
 import 'tracing'
 import 'connection/eagerlyConnect'
+import { initializeIPFSWorkarounds } from 'utils/cors-helper'
 /* eslint-enable prettier/prettier */
+
+// Initialize CORS workarounds for IPFS deployments
+initializeIPFSWorkarounds()
 
 import { FeatureFlagsProvider } from 'featureFlags'
 import { Provider as ApolloProvider } from 'graphql/data/apollo/Provider'

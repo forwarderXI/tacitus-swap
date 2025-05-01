@@ -1,6 +1,7 @@
 import { INFURA_PREFIX_TO_CHAIN_ID } from 'constants/networks'
 import { CHAIN_ID_TO_BACKEND_NAME } from 'graphql/data/util'
 import { TraceContext } from 'tracing/types'
+import { isIPFSDeployment } from 'utils/cors-helper'
 import { Chain } from '../graphql/data/__generated__/types-and-hooks'
 import { trace as startTrace } from './trace'
 
@@ -19,6 +20,22 @@ export function patchFetch(api: Pick<typeof globalThis, 'fetch'>) {
     } catch {
       return apiFetch(input, init)
     }
+    
+    // Check if we're running on IPFS/Fleek
+    const onIPFS = isIPFSDeployment()
+    
+    // If on IPFS and request is to Uniswap gateway, use no-cors mode
+    if (onIPFS && (
+      url.host.includes('gateway.uniswap.org') ||
+      url.host.includes('api.uniswap.org')
+    )) {
+      const modifiedInit = { 
+        ...init,
+        mode: 'no-cors' as RequestMode
+      }
+      return apiFetch(input, modifiedInit)
+    }
+    
     const traceContext = getTraceContext(url, init, !!zonedTrace)
     if (traceContext) {
       const trace = zonedTrace || startTrace

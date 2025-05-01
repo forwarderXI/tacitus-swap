@@ -2,6 +2,7 @@ import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 import { Reference, relayStylePagination } from '@apollo/client/utilities'
 import { createSubscriptionLink } from 'utilities/src/apollo/SubscriptionLink'
 import { splitSubscription } from 'utilities/src/apollo/splitSubscription'
+import { isIPFSDeployment } from 'utils/cors-helper'
 
 const API_URL = process.env.REACT_APP_AWS_API_ENDPOINT
 const REALTIME_URL = process.env.REACT_APP_AWS_REALTIME_ENDPOINT
@@ -10,7 +11,30 @@ if (!API_URL || !REALTIME_URL || !REALTIME_TOKEN) {
   throw new Error('AWS CONFIG MISSING FROM ENVIRONMENT')
 }
 
-const httpLink = new HttpLink({ uri: API_URL })
+// Custom fetch function with CORS workaround for IPFS deployment
+const customFetch = (input: RequestInfo | URL, options: RequestInit = {}) => {
+  // Check if we're running on IPFS/Fleek
+  const onIPFS = isIPFSDeployment()
+  
+  // If on IPFS and request is to Uniswap gateway, use no-cors mode
+  if (onIPFS && typeof input === 'string' && (
+    input.includes('gateway.uniswap.org') ||
+    input.includes('api.uniswap.org')
+  )) {
+    return fetch(input, {
+      ...options,
+      mode: 'no-cors' as RequestMode
+    })
+  }
+  
+  // Otherwise use normal fetch
+  return fetch(input, options)
+}
+
+const httpLink = new HttpLink({ 
+  uri: API_URL,
+  fetch: customFetch
+})
 
 export const apolloClient = new ApolloClient({
   connectToDevTools: true,
