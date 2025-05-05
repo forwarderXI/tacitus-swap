@@ -71,6 +71,14 @@ cp -r build/* ../../dist/ || {
   echo "<html><body><h1>Build process encountered issues</h1></body></html>" > ../../dist/index.html; 
 }
 
+# Make sure _headers file is included
+if [ -f "public/_headers" ]; then
+  echo "Copying _headers file to root dist directory..."
+  cp public/_headers ../../dist/
+else
+  echo "Warning: _headers file not found in public directory!"
+fi
+
 # Ensure index.html exists at the root
 if [ ! -f "../../dist/index.html" ]; then
   echo "WARNING: No index.html at root! Creating one..."
