@@ -13482,7 +13482,7 @@ __metadata:
     d3: 7.6.1
     date-fns: 2.30.0
     dotenv: 16.0.3
-    env-cmd: 10.1.0
+    env-cmd: ^10.1.0
     eslint: 8.44.0
     eslint-plugin-import: 2.27.5
     eslint-plugin-rulesdir: 0.2.2
@@ -22073,7 +22073,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"env-cmd@npm:10.1.0":
+"env-cmd@npm:10.1.0, env-cmd@npm:^10.1.0":
   version: 10.1.0
   resolution: "env-cmd@npm:10.1.0"
   dependencies:
