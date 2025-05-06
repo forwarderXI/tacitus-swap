@@ -105,7 +105,7 @@ export function patchFetchForCORS() {
   const originalFetch = window.fetch;
   
   // Replace the global fetch with our patched version
-  window.fetch = function(input, init) {
+  window.fetch = async function(input, init) {
     // Get the URL from the input
     let url = input;
     if (input instanceof Request) {
@@ -115,7 +115,30 @@ export function patchFetchForCORS() {
     if (typeof url === 'string') {
       // Check if this is a URL that should return mock data on IPFS
       if (shouldUseMockResponse(url)) {
-        return getMockResponseForUrl(url);
+        // For GraphQL endpoints, we need to extract the request body to determine what data to mock
+        let requestBody = null;
+        
+        // Try to get the request body from init if it exists
+        if (init?.body) {
+          try {
+            // If it's a string, use it directly, otherwise try to read it from the object
+            if (typeof init.body === 'string') {
+              requestBody = init.body;
+            } else if (init.body instanceof FormData || init.body instanceof URLSearchParams) {
+              // Skip for now, these aren't typically used for GraphQL
+            } else if (init.body instanceof ReadableStream) {
+              // Skip for now, these can only be read once
+            } else {
+              // Try to convert to string
+              requestBody = JSON.stringify(init.body);
+            }
+          } catch (e) {
+            console.log('Error extracting request body:', e);
+          }
+        }
+        
+        console.log(`Intercepting request with method: ${init?.method || 'GET'}`);
+        return getMockResponseForUrl(url, requestBody);
       }
       
       // For Uniswap API requests, add proper headers
@@ -137,7 +160,7 @@ export function patchFetchForCORS() {
     return originalFetch(input, init);
   };
   
-  console.log('Patched global fetch for CORS workarounds');
+  console.log('Patched global fetch for CORS workarounds with GraphQL support');
 }
 
 /**
