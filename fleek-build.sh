@@ -344,198 +344,130 @@ ls -la | tee -a $LOG_FILE
 # Check for package.json
 if [ ! -f "package.json" ]; then
     handle_error "package.json not found in $(pwd). Cannot proceed with build."
+    cp -rv $FALLBACK_BUILD_DIR/* dist/
     exit 1
 else
     echo "✅ Found package.json in $(pwd)" | tee -a $LOG_FILE
-    # Check package.json content
     echo "Package.json contents:" | tee -a $LOG_FILE
     cat package.json | tee -a $LOG_FILE
 fi
 
-# Install dependencies, with fallback options
-echo "📦 Installing dependencies..." | tee -a $LOG_FILE
-# Force NPM registry for more reliability
-npm config set registry https://registry.npmjs.org/
-yarn config set registry https://registry.npmjs.org/ 2>/dev/null || echo "Could not configure yarn registry" | tee -a $LOG_FILE
-
-# Use yarn install with timeout in case it hangs
-echo "Running yarn install with timeout..." | tee -a $LOG_FILE
-timeout 300 yarn install > >(tee -a $LOG_FILE) 2> >(tee -a $LOG_FILE >&2) || 
-    { echo "Yarn install failed, trying npm install..." | tee -a $LOG_FILE; 
-      npm install > >(tee -a $LOG_FILE) 2> >(tee -a $LOG_FILE >&2) || 
-      { handle_error "Dependency installation failed"; 
-        echo "Continuing anyway to see if build still works with existing dependencies" | tee -a $LOG_FILE; } }
-
-# Display node_modules to verify dependencies were installed
-echo "Checking if node_modules exists:" | tee -a $LOG_FILE
-if [ -d "node_modules" ]; then
-    echo "✅ node_modules directory exists" | tee -a $LOG_FILE
-    echo "Top-level directories in node_modules:" | tee -a $LOG_FILE
-    ls -la node_modules | head -n 10 | tee -a $LOG_FILE
-else
-    echo "⚠️ node_modules directory not found after installation" | tee -a $LOG_FILE
-    handle_error "node_modules directory not found after dependency installation"
+# Check if we are in the right directory
+if [[ ! -f "package.json" ]]; then
+    echo "📦 package.json not found in current directory, searching for workspace root..." | tee -a $LOG_FILE
+    find_workspace_root
 fi
 
-# Check for build script in package.json
-if grep -q '"build"' package.json; then
-    echo "✅ Found build script in package.json" | tee -a $LOG_FILE
+# Handle monorepo structure if present
+echo "🔍 Analyzing project structure..." | tee -a $LOG_FILE
+handle_monorepo
+
+echo "📂 Current directory after project analysis: $(pwd)" | tee -a $LOG_FILE
+ls -la | tee -a $LOG_FILE
+
+# Check if package.json exists
+if [[ -f "package.json" ]]; then
+    echo "📦 Found package.json" | tee -a $LOG_FILE
+    cat package.json | tee -a $LOG_FILE
 else
-    handle_error "No build script found in package.json"
-    # Continue anyway, but log the issue
+    handle_error "package.json not found in $(pwd) after project analysis"
+    mkdir -p dist
+    cp -rv $FALLBACK_BUILD_DIR/* dist/
+    cp_log_to_dist
+    exit 1
 fi
 
-# Check if Yarn exists and install if needed
-if command -v yarn >/dev/null 2>&1; then
-    echo "✅ Yarn is installed" | tee -a $LOG_FILE
-else
-    echo "Installing Yarn..." | tee -a $LOG_FILE
-    npm install -g yarn
-    yarn --version | tee -a $LOG_FILE
-fi
-
-# Build the application, with fallback options
-echo "🏗️ Building the application..." | tee -a $LOG_FILE
-echo "Current directory: $(pwd)" | tee -a $LOG_FILE
-echo "Available scripts in package.json:" | tee -a $LOG_FILE
-grep -A 20 '"scripts"' package.json | tee -a $LOG_FILE
-
-# Check if we have access to the script content
-if [ -f "package.json" ]; then
-    echo "✅ Verifying build script in package.json" | tee -a $LOG_FILE
+# Check for node_modules
+if [[ ! -d "node_modules" ]]; then
+    echo "📥 node_modules not found, installing dependencies..." | tee -a $LOG_FILE
     
-    # Check if it's a Next.js project
-    if grep -q "\"next\"" package.json; then
-        echo "🔍 Detected Next.js project" | tee -a $LOG_FILE
+    # Try installing with yarn first with longer timeout
+    echo "📥 Installing dependencies with yarn (timeout: 10 minutes)..." | tee -a $LOG_FILE
+    timeout 600 yarn install --frozen-lockfile > >(tee -a $LOG_FILE) 2> >(tee -a $LOG_FILE >&2) || {
+        echo "⚠️ Yarn install failed, trying alternative yarn install..." | tee -a $LOG_FILE
+        timeout 600 yarn install --network-timeout 300000 > >(tee -a $LOG_FILE) 2> >(tee -a $LOG_FILE >&2) || {
+            echo "⚠️ Alternative yarn install failed, trying npm install..." | tee -a $LOG_FILE
+            timeout 600 npm install > >(tee -a $LOG_FILE) 2> >(tee -a $LOG_FILE >&2) || {
+                handle_error "Failed to install dependencies with both yarn and npm"
+                mkdir -p dist
+                cp -rv $FALLBACK_BUILD_DIR/* dist/
+                cp_log_to_dist
+                exit 1
+            }
+        }
+    }
+else
+    echo "📦 node_modules directory already exists" | tee -a $LOG_FILE
+fi
+
+# Determine which build script to use
+echo "Checking for build scripts in package.json..." | tee -a $LOG_FILE
+if [ -f "package.json" ]; then
+    # First, check for explicit build scripts (Fleek often looks for these specific ones)
+    if grep -q '"build:production"' package.json; then
+        BUILD_SCRIPT="build:production"
+        echo "✅ Found build:production script" | tee -a $LOG_FILE
+    elif grep -q '"build:fleek"' package.json; then
+        BUILD_SCRIPT="build:fleek"
+        echo "✅ Found build:fleek script" | tee -a $LOG_FILE
+    elif grep -q '"build:vercel"' package.json; then
+        BUILD_SCRIPT="build:vercel"
+        echo "✅ Found build:vercel script" | tee -a $LOG_FILE
+    elif grep -q '"build"' package.json; then
+        BUILD_SCRIPT="build"
+        echo "✅ Found build script" | tee -a $LOG_FILE
+    elif grep -q '"export"' package.json; then
+        BUILD_SCRIPT="export"
+        echo "✅ Found export script" | tee -a $LOG_FILE
+    else
+        echo "⚠️ No standard build script found in package.json" | tee -a $LOG_FILE
+        # List all available scripts for debugging
+        echo "Available scripts in package.json:" | tee -a $LOG_FILE
+        grep -A 20 '"scripts"' package.json | tee -a $LOG_FILE
         
-        # Check if Next.js is installed
-        if [ -d "node_modules/next" ]; then
-            echo "✅ Next.js is installed" | tee -a $LOG_FILE
+        # Try to find any script that contains 'build' in its name
+        BUILD_SCRIPT=$(grep -oP '"([^"]*build[^"]*)"' package.json | head -1 | sed 's/"//g')
+        
+        if [ -n "$BUILD_SCRIPT" ]; then
+            echo "✅ Found alternative build script: $BUILD_SCRIPT" | tee -a $LOG_FILE
         else
-            echo "⚠️ Next.js not found in node_modules" | tee -a $LOG_FILE
+            echo "❌ No build script found, setting fallback to 'build'" | tee -a $LOG_FILE
+            BUILD_SCRIPT="build"
         fi
     fi
-    
-    # Check for React dependencies
-    if grep -q "\"react\"" package.json; then
-        echo "🔍 Detected React project" | tee -a $LOG_FILE
-    fi
-    
-    # Output actual build command from package.json
-    BUILD_CMD=$(grep -o '"build": *"[^"]*"' package.json | cut -d '"' -f 4)
-    if [ -n "$BUILD_CMD" ]; then
-        echo "🔧 Build command from package.json: $BUILD_CMD" | tee -a $LOG_FILE
-    fi
+else
+    echo "❌ package.json not found!" | tee -a $LOG_FILE
+    BUILD_SCRIPT="build"  # Fallback
 fi
 
-# Check disk space before building
-echo "Disk space before build:" | tee -a $LOG_FILE
-df -h | tee -a $LOG_FILE
-
-# Create output directory preemptively in case build script fails to do so
-mkdir -p build
-touch build/.placeholder
+# Main execution flow after determining build script
+echo "🚀 Starting build process with script: ${BUILD_SCRIPT}" | tee -a $LOG_FILE
 
 # Attempt yarn build with a timeout and more verbose output
-echo "Running yarn build with timeout..." | tee -a $LOG_FILE
-DEBUG=* NEXT_TELEMETRY_DISABLED=1 timeout 900 yarn build --verbose > >(tee -a $LOG_FILE) 2> >(tee -a $LOG_FILE >&2) || { 
-    echo "Yarn build failed, trying npm run build..." | tee -a $LOG_FILE; 
-    DEBUG=* NEXT_TELEMETRY_DISABLED=1 timeout 900 npm run build --verbose > >(tee -a $LOG_FILE) 2> >(tee -a $LOG_FILE >&2) || { 
+echo "Running yarn ${BUILD_SCRIPT} with timeout..." | tee -a $LOG_FILE
+BUILD_SUCCESS=false
+DEBUG=* NEXT_TELEMETRY_DISABLED=1 timeout 900 yarn ${BUILD_SCRIPT} --verbose > >(tee -a $LOG_FILE) 2> >(tee -a $LOG_FILE >&2) && BUILD_SUCCESS=true || { 
+    echo "Yarn ${BUILD_SCRIPT} failed, trying npm run ${BUILD_SCRIPT}..." | tee -a $LOG_FILE; 
+    DEBUG=* NEXT_TELEMETRY_DISABLED=1 timeout 900 npm run ${BUILD_SCRIPT} --verbose > >(tee -a $LOG_FILE) 2> >(tee -a $LOG_FILE >&2) && BUILD_SUCCESS=true || { 
         # Last resort - try direct next build if it's a Next.js project
         if [ -d "node_modules/next" ] && [ -f "node_modules/.bin/next" ]; then
             echo "🔧 Trying direct next build command..." | tee -a $LOG_FILE
-            DEBUG=* NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next build > >(tee -a $LOG_FILE) 2> >(tee -a $LOG_FILE >&2) || {
-                handle_error "All build commands failed"; 
-                cp -rv $FALLBACK_BUILD_DIR/* dist/
-                cp_log_to_dist
-                exit 1;
+            DEBUG=* NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next build > >(tee -a $LOG_FILE) 2> >(tee -a $LOG_FILE >&2) && BUILD_SUCCESS=true || {
+                echo "❌ All build commands failed" | tee -a $LOG_FILE; 
+                BUILD_SUCCESS=false;
             }
         else
-            handle_error "Build command failed with both yarn and npm"; 
-            cp -rv $FALLBACK_BUILD_DIR/* dist/
-            cp_log_to_dist
-            exit 1;
+            echo "❌ Build command failed with both yarn and npm" | tee -a $LOG_FILE; 
+            BUILD_SUCCESS=false;
         fi
     }
 }
 
-# Check disk space after building (may help debug out-of-space issues)
-echo "Disk space after build:" | tee -a $LOG_FILE
-df -h | tee -a $LOG_FILE
-
-# More extensive search for build output
-echo "🔍 Searching for build output in all locations:" | tee -a $LOG_FILE
-
-# Check common build output directories
-POSSIBLE_BUILD_DIRS=("build" "dist" "out" ".next" "public" "dist-client" "build-client")
-
-# Log the contents of the current directory after build
-echo "Directory contents after build:" | tee -a $LOG_FILE
-ls -la | tee -a $LOG_FILE
-
-for dir in "${POSSIBLE_BUILD_DIRS[@]}"; do
-    if [ -d "$dir" ]; then
-        echo "✅ Found potential build directory: $dir" | tee -a $LOG_FILE
-        echo "Contents of $dir:" | tee -a $LOG_FILE
-        ls -la "$dir" | tee -a $LOG_FILE
-        
-        # If we found a build directory with content, prefer it
-        if [ -n "$(ls -A "$dir" 2>/dev/null)" ]; then
-            echo "✅ Using build directory: $dir" | tee -a $LOG_FILE
-            BUILD_DIR="$dir"
-            break
-        fi
-    fi
-done
-
-# If no build directory found, do a deeper search
-if [ -z "$BUILD_DIR" ] || [ ! -d "$BUILD_DIR" ]; then
-    echo "⚠️ No standard build directory found. Searching for any build directories:" | tee -a $LOG_FILE
-    find . -type d -name "build" -o -name "dist" -o -name "out" -o -name ".next" | tee -a $LOG_FILE
-    
-    # Try to find any directory with an index.html file
-    echo "🔍 Searching for index.html files:" | tee -a $LOG_FILE
-    INDEX_FILES=$(find . -name "index.html" | sort)
-    echo "$INDEX_FILES" | tee -a $LOG_FILE
-    
-    if [ -n "$INDEX_FILES" ]; then
-        # Use the first directory containing an index.html
-        FIRST_INDEX=$(echo "$INDEX_FILES" | head -n 1)
-        BUILD_DIR=$(dirname "$FIRST_INDEX")
-        echo "✅ Found index.html, using directory: $BUILD_DIR" | tee -a $LOG_FILE
-    else
-        echo "⚠️ No index.html found. Using fallback." | tee -a $LOG_FILE
-        BUILD_DIR="$FALLBACK_BUILD_DIR"
-    fi
-fi
-
-# Create and prepare the dist directory
-echo "📦 Creating dist directory for IPFS deployment..." | tee -a $LOG_FILE
-
-# Make sure we have a clean dist directory
-echo "Removing old dist directory if it exists..." | tee -a $LOG_FILE
-rm -rf dist
-mkdir -p dist
-
-# Attempt to copy build files to dist directory with verbose output
-echo "Copying from $BUILD_DIR to dist..." | tee -a $LOG_FILE
-if [ -d "$BUILD_DIR" ] && [ -n "$(ls -A "$BUILD_DIR" 2>/dev/null)" ]; then
-    # Use verbose copy and show what's being copied
-    echo "Contents of $BUILD_DIR before copy:" | tee -a $LOG_FILE
-    ls -la "$BUILD_DIR" | tee -a $LOG_FILE
-    
-    cp -rv "$BUILD_DIR"/* dist/ 2>&1 | tee -a $LOG_FILE || {
-        echo "⚠️ Error copying from $BUILD_DIR to dist, using alternative copy method..." | tee -a $LOG_FILE
-        find "$BUILD_DIR" -type f -exec cp -v {} dist/ \; 2>&1 | tee -a $LOG_FILE
-    }
-else
-    echo "⚠️ Build directory empty or not found. Using fallback content." | tee -a $LOG_FILE
-    cp -rv "$FALLBACK_BUILD_DIR"/* dist/ 2>&1 | tee -a $LOG_FILE
-    
-    # Create a minimal index.html if we don't have one
-    if [ ! -f "dist/index.html" ]; then
-        echo "Creating minimal index.html in dist..." | tee -a $LOG_FILE
-        cat > dist/index.html << 'EOF'
+# Create a fallback HTML file in case the build fails
+create_fallback_content() {
+    echo "📝 Creating fallback content..." | tee -a $LOG_FILE
+    mkdir -p dist
+    cat > dist/index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -543,15 +475,20 @@ else
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tacitus Swap - Build Issues</title>
     <style>
-        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
-        pre { background: #f0f0f0; padding: 10px; overflow-x: auto; }
-        .error { color: #c00; }
-        .success { color: #0a0; }
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
+        h1 { color: #0066cc; }
+        pre { background: #f5f5f5; padding: 15px; border-radius: 4px; overflow-x: auto; border: 1px solid #ddd; }
+        .error { color: #c00; font-weight: bold; }
+        .success { color: #0a0; font-weight: bold; }
+        .info { background: #f0f7ff; padding: 15px; border-radius: 4px; border-left: 4px solid #0066cc; margin-bottom: 20px; }
     </style>
 </head>
 <body>
     <h1>Tacitus Swap</h1>
-    <p>The site is currently having build issues. Please check back later.</p>
+    <div class="info">
+        <p>The site is currently having build issues. Our team has been notified and is working on a solution.</p>
+        <p>Please check back soon, or visit our <a href="https://github.com/forwarderXI/tacitus-swap">GitHub repository</a> for project updates.</p>
+    </div>
     <h2>Build Log</h2>
     <pre id="buildLog">Loading build log...</pre>
     <script>
@@ -567,26 +504,19 @@ else
 </body>
 </html>
 EOF
-    fi
+    echo "✅ Created fallback index.html" | tee -a $LOG_FILE
+}
+
+# Search for build output and copy to dist
+echo "🔍 Looking for build output..." | tee -a $LOG_FILE
+if find_and_copy_build_output; then
+    echo "✅ Build output found and copied to dist/" | tee -a $LOG_FILE
+else
+    echo "❌ Could not find build output, using fallback content" | tee -a $LOG_FILE
+    create_fallback_content
 fi
 
-# After copying to dist, check contents
-echo "Contents of dist after copy:" | tee -a $LOG_FILE
-ls -la dist/ | tee -a $LOG_FILE
-
-# Create _headers file in dist with proper CORS settings
-echo "Creating _headers file in dist with CORS settings..." | tee -a $LOG_FILE
-cat > dist/_headers << 'EOF'
-/*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.google-analytics.com https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; frame-src 'self' https://verify.walletconnect.com https://verify.walletconnect.org https://connect.uniswapwallet.io https://www.google.com; connect-src 'self' https://api.uniswap.org https://gateway.uniswap.org https://beta.gateway.uniswap.org https://*.infura.io wss://*.infura.io https://*.alchemyapi.io https://ethgas-api.onrender.com https://api.1inch.io https://api-spot.deepl.com https://api.opensea.io https://*.ipfs.localhost:* https://localhostouni.org:* https://localhostuniswap.org:* data: blob: https://api.coingecko.com https://tokens.coingecko.com https://raw.githubusercontent.com https://gateway.pinata.cloud https://cloudflare-ipfs.com https://ipfs.fleek.co https://bafybeifd3epckfzpzsy453s2ru2jxfwxyh7mmx7a7lpurpofvowykwh6qu.ipfs.cf-ipfs.com/ https://tokenlist.arbitrum.io https://static.optimism.io https://api.thegraph.com https://api.coingecko.com https://vercel.live https://static.cloudflareinsights.com https://cloudflare-eth.com https://cdn.live.ledger.com wss://relay.walletconnect.org wss://relay.walletconnect.com https://*.bridge.walletconnect.org https://api.blocknative.com; worker-src 'self' blob:
-  Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET, POST, OPTIONS
-  Access-Control-Allow-Headers: *
-  Cross-Origin-Opener-Policy: same-origin
-  Cross-Origin-Embedder-Policy: require-corp
-EOF
-
-# Add the build log to the dist directory
+# Copy the build log to the dist directory for debugging
 cp_log_to_dist
 
 echo "🎉 Build process completed! Files ready in dist/ directory" | tee -a $LOG_FILE
@@ -598,3 +528,94 @@ echo "✅ Build script completed at $(date)" | tee -a $LOG_FILE
 
 # Disable debugging
 set +x 
+
+# Function to fix workspace protocol in package.json
+fix_workspace_protocol() {
+    echo "🔧 Checking for workspace: protocol in package.json..." | tee -a $LOG_FILE
+    
+    # Back up the original package.json
+    if [ -f "package.json" ]; then
+        cp package.json package.json.bak
+        echo "📥 Created backup of package.json" | tee -a $LOG_FILE
+        
+        # Replace workspace:^ with ^ to avoid workspace protocol errors
+        if grep -q "workspace:" package.json; then
+            echo "🔧 Fixing workspace: protocol references in package.json" | tee -a $LOG_FILE
+            sed -i 's/"workspace:\^/"^/g' package.json
+            sed -i 's/"workspace:~/"~/g' package.json
+            sed -i 's/"workspace:\*/"*/g' package.json
+            # Generic replacement for any other workspace: references
+            sed -i 's/"workspace:/"@/g' package.json
+            echo "✅ Fixed workspace protocol references" | tee -a $LOG_FILE
+            
+            # Print the differences for debugging
+            echo "📝 Changes made to package.json:" | tee -a $LOG_FILE
+            diff -u package.json.bak package.json | tee -a $LOG_FILE
+        else
+            echo "✅ No workspace: protocol found in package.json" | tee -a $LOG_FILE
+        fi
+    else
+        echo "⚠️ package.json not found, cannot fix workspace protocol" | tee -a $LOG_FILE
+    fi
+}
+
+# Function to identify and install in monorepo structure
+handle_monorepo() {
+    echo "🔍 Checking if this is a monorepo..." | tee -a $LOG_FILE
+    
+    # Check for common monorepo indicators
+    if [ -f "lerna.json" ] || [ -f "pnpm-workspace.yaml" ] || grep -q '"workspaces"' package.json; then
+        echo "📦 Monorepo structure detected" | tee -a $LOG_FILE
+        
+        # If workspaces are defined in package.json, get the patterns
+        if grep -q '"workspaces"' package.json; then
+            echo "📋 Workspace patterns from package.json:" | tee -a $LOG_FILE
+            grep -A 10 '"workspaces"' package.json | tee -a $LOG_FILE
+        fi
+        
+        # Check if we're already in a package directory
+        if [ -f "package.json" ] && ! grep -q '"workspaces"' package.json; then
+            echo "✅ Already in a package directory with its own package.json" | tee -a $LOG_FILE
+            # Fix any workspace protocol references
+            fix_workspace_protocol
+            return 0
+        fi
+        
+        # Look for packages/apps directory for common monorepo structures
+        for dir in "packages" "apps" "modules"; do
+            if [ -d "$dir" ]; then
+                echo "📂 Found $dir directory, checking for deployable packages" | tee -a $LOG_FILE
+                
+                # Look for web, frontend, or app packages
+                for app_dir in "$dir/web" "$dir/frontend" "$dir/app" "$dir"/*; do
+                    if [ -d "$app_dir" ] && [ -f "$app_dir/package.json" ]; then
+                        echo "🎯 Found potential app in $app_dir" | tee -a $LOG_FILE
+                        
+                        # Check if this package has a build script
+                        if grep -q '"build"' "$app_dir/package.json" || 
+                           grep -q '"build:production"' "$app_dir/package.json" || 
+                           grep -q '"build:vercel"' "$app_dir/package.json" || 
+                           grep -q '"build:fleek"' "$app_dir/package.json"; then
+                            echo "✅ $app_dir has a build script, changing to this directory" | tee -a $LOG_FILE
+                            cd "$app_dir"
+                            # Fix any workspace protocol references
+                            fix_workspace_protocol
+                            return 0
+                        fi
+                    fi
+                done
+            fi
+        done
+        
+        echo "⚠️ Could not find a specific app package with build script" | tee -a $LOG_FILE
+        echo "⚠️ Continuing with root package.json, but monorepo builds may fail" | tee -a $LOG_FILE
+        # Fix any workspace protocol references in the root package.json
+        fix_workspace_protocol
+        return 1
+    else
+        echo "📦 Not a monorepo, continuing with standard installation" | tee -a $LOG_FILE
+        # Still fix any workspace protocol references that might exist
+        fix_workspace_protocol
+        return 0
+    fi
+} 
