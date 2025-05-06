@@ -129,37 +129,90 @@ export function createMockResponse(data: any, status = 200) {
 export function shouldUseMockResponse(url: string): boolean {
   if (!isIPFSDeployment()) return false;
   
-  return (
-    url.includes('cloudflare-ipfs.com') || 
-    url.includes('ipns/tokens') || 
-    url.includes('ipfs') && url.includes('tokens') ||
-    url.includes('statsig') ||
-    url.includes('amplitude') ||
-    url.includes('beta.gateway.uniswap.org')
-  );
+  // Create specific patterns for URLs to mock
+  const patternsToMock = [
+    // Token lists
+    'cloudflare-ipfs.com',
+    'ipns/tokens',
+    'ipns/extendedtokens',
+    'ipns/unsupportedtokens',
+    'tokens.uniswap.org',
+    'extendedtokens.uniswap.org',
+    'unsupportedtokens.uniswap.org',
+    'ipfs/Qm', // IPFS content hashes
+    
+    // Analytics
+    'statsig',
+    'amplitude',
+    'statsigapi.net',
+    
+    // API gateways
+    'gateway.uniswap.org',
+    'api.uniswap.org',
+    'interface.gateway.uniswap.org'
+  ];
+  
+  // Check if URL matches any of the patterns
+  return patternsToMock.some(pattern => url.includes(pattern));
 }
 
 // Get a mock response based on URL pattern
 export function getMockResponseForUrl(url: string) {
-  if (url.includes('tokens') || url.includes('tokenlist')) {
+  console.log(`Intercepting URL for IPFS deployment: ${url}`);
+  
+  // Token lists
+  if (
+    url.includes('tokens') || 
+    url.includes('tokenlist') || 
+    url.includes('cloudflare-ipfs') ||
+    url.includes('ipfs/Qm')
+  ) {
+    console.log(`Returning mock token list for: ${url}`);
     return createMockResponse(getMockTokenList());
   }
   
-  if (url.includes('statsig') || url.includes('amplitude')) {
+  // Analytics services - return empty successful responses
+  if (url.includes('statsig')) {
+    console.log(`Mocking statsig response for: ${url}`);
+    if (url.includes('initialize')) {
+      return createMockResponse({
+        "feature_gates": {},
+        "dynamic_configs": {},
+        "layer_configs": {},
+        "time": Date.now(),
+        "has_updates": false,
+        "evaluated_keys": {},
+        "sticky_experiments": {}
+      });
+    }
     return createMockResponse({ success: true });
   }
   
-  if (url.includes('quote') || url.includes('beta.gateway.uniswap.org')) {
-    return createMockResponse({
-      error: {
-        data: {
-          errorCode: "NO_ROUTE",
-          detail: "No quotes available on IPFS deployment"
+  if (url.includes('amplitude') || url.includes('statsigapi.net')) {
+    console.log(`Mocking analytics response for: ${url}`);
+    return createMockResponse({ success: true, data: {} });
+  }
+  
+  // Uniswap API/Gateway requests
+  if (url.includes('gateway.uniswap.org') || url.includes('api.uniswap.org')) {
+    console.log(`Mocking Uniswap API response for: ${url}`);
+    
+    if (url.includes('quote')) {
+      return createMockResponse({
+        error: {
+          data: {
+            errorCode: "NO_ROUTE",
+            detail: "No quotes available on IPFS deployment"
+          }
         }
-      }
-    }, 200);
+      }, 200);
+    }
+    
+    // Generic success response for other API calls
+    return createMockResponse({ status: "success", message: "Mocked for IPFS deployment" });
   }
   
   // Default mock for unknown URLs
+  console.log(`Using default mock for: ${url}`);
   return createMockResponse({ ipfsDeployment: true, mockData: true });
 } 
