@@ -443,6 +443,10 @@ fi
 # Main execution flow after determining build script
 echo "🚀 Starting build process with script: ${BUILD_SCRIPT}" | tee -a $LOG_FILE
 
+# Ensure dist directory exists before we do anything else
+mkdir -p dist
+chmod -R 755 dist
+
 # Attempt yarn build with a timeout and more verbose output
 echo "Running yarn ${BUILD_SCRIPT} with timeout..." | tee -a $LOG_FILE
 BUILD_SUCCESS=false
@@ -461,6 +465,128 @@ DEBUG=* NEXT_TELEMETRY_DISABLED=1 timeout 900 yarn ${BUILD_SCRIPT} --verbose > >
             BUILD_SUCCESS=false;
         fi
     }
+}
+
+# Find build output and copy to dist
+find_and_copy_build_output() {
+    echo "🔍 Searching for build output directories..." | tee -a $LOG_FILE
+    
+    # List of common build output directories to check
+    build_dirs=(".next" "out" "build" "dist" "public" ".output" ".vercel/output")
+    
+    # Track if we found any build output
+    FOUND_BUILD_OUTPUT=false
+    
+    # Check each potential build directory
+    for dir in "${build_dirs[@]}"; do
+        if [ -d "$dir" ]; then
+            echo "📂 Found potential build directory: $dir" | tee -a $LOG_FILE
+            
+            # Check if this directory has files
+            if [ -n "$(ls -A $dir 2>/dev/null)" ]; then
+                echo "✅ $dir contains files" | tee -a $LOG_FILE
+                
+                # Special handling for Next.js output
+                if [ "$dir" = ".next" ]; then
+                    echo "🔧 Detected Next.js build output in .next" | tee -a $LOG_FILE
+                    
+                    # If standalone output exists (for Next.js 12+)
+                    if [ -d ".next/standalone" ]; then
+                        echo "📦 Using Next.js standalone output" | tee -a $LOG_FILE
+                        cp -rv .next/standalone/* dist/ | tee -a $LOG_FILE
+                        if [ -d ".next/static" ]; then
+                            mkdir -p dist/.next/static
+                            cp -rv .next/static/* dist/.next/static/ | tee -a $LOG_FILE
+                        fi
+                        FOUND_BUILD_OUTPUT=true
+                    else
+                        # For regular Next.js builds, we still need to check if it's static export
+                        if [ -d "out" ] && [ -f "out/index.html" ]; then
+                            echo "📦 Found static export in out directory" | tee -a $LOG_FILE
+                            cp -rv out/* dist/ | tee -a $LOG_FILE
+                            FOUND_BUILD_OUTPUT=true
+                        else
+                            echo "⚠️ Found .next directory but no static export" | tee -a $LOG_FILE
+                            # Copy the .next directory anyway in case it's needed
+                            mkdir -p dist/.next
+                            cp -rv .next/* dist/.next/ | tee -a $LOG_FILE
+                            # Also copy package.json, node_modules, and public
+                            if [ -f "package.json" ]; then
+                                cp -v package.json dist/ | tee -a $LOG_FILE
+                            fi
+                            if [ -d "public" ]; then
+                                cp -rv public/* dist/ | tee -a $LOG_FILE
+                            fi
+                            FOUND_BUILD_OUTPUT=true
+                        fi
+                    fi
+                # Special handling for Vercel output
+                elif [ "$dir" = ".vercel/output" ]; then
+                    echo "📦 Using Vercel build output" | tee -a $LOG_FILE
+                    if [ -d ".vercel/output/static" ]; then
+                        cp -rv .vercel/output/static/* dist/ | tee -a $LOG_FILE
+                        FOUND_BUILD_OUTPUT=true
+                    fi
+                # For regular build directories, copy the content directly to dist
+                elif [ -f "$dir/index.html" ] || [ -n "$(find $dir -name '*.html' 2>/dev/null)" ]; then
+                    echo "📦 Copying contents from $dir to dist/" | tee -a $LOG_FILE
+                    cp -rv $dir/* dist/ | tee -a $LOG_FILE
+                    FOUND_BUILD_OUTPUT=true
+                fi
+            fi
+        fi
+    done
+    
+    # Search for any directory with an index.html as a last resort
+    if [ "$FOUND_BUILD_OUTPUT" = false ]; then
+        echo "🔍 No standard build directory found, searching for any directory with index.html..." | tee -a $LOG_FILE
+        
+        # Find any index.html in the current directory tree (up to depth 3)
+        index_html_paths=$(find . -maxdepth 3 -name "index.html" -not -path "./node_modules/*" -not -path "./dist/*" | sort)
+        
+        if [ -n "$index_html_paths" ]; then
+            echo "📋 Found these index.html files:" | tee -a $LOG_FILE
+            echo "$index_html_paths" | tee -a $LOG_FILE
+            
+            # Get the directory of the first index.html
+            first_index_dir=$(dirname "$(echo "$index_html_paths" | head -1)")
+            
+            echo "📦 Using $first_index_dir as build output" | tee -a $LOG_FILE
+            cp -rv "$first_index_dir"/* dist/ | tee -a $LOG_FILE
+            FOUND_BUILD_OUTPUT=true
+        fi
+    fi
+    
+    # Always ensure we have an index.html file
+    if [ ! -f "dist/index.html" ]; then
+        echo "❌ No index.html found in dist, using fallback content" | tee -a $LOG_FILE
+        create_fallback_content
+        FOUND_BUILD_OUTPUT=true
+    fi
+    
+    # Check if we found and copied any build output
+    if [ "$FOUND_BUILD_OUTPUT" = true ]; then
+        echo "✅ Successfully copied build output to dist/" | tee -a $LOG_FILE
+        # Create _headers file with CORS settings for IPFS
+        create_headers_file
+        return 0
+    else
+        echo "❌ Could not find any build output to copy to dist/" | tee -a $LOG_FILE
+        create_fallback_content
+        return 1
+    fi
+}
+
+# Create _headers file with CORS settings for IPFS
+create_headers_file() {
+    echo "📝 Creating _headers file with CORS settings for IPFS..." | tee -a $LOG_FILE
+    cat > dist/_headers << EOL
+/*
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+  Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept
+EOL
+    echo "✅ Created _headers file" | tee -a $LOG_FILE
 }
 
 # Create a fallback HTML file in case the build fails
@@ -514,6 +640,29 @@ if find_and_copy_build_output; then
 else
     echo "❌ Could not find build output, using fallback content" | tee -a $LOG_FILE
     create_fallback_content
+fi
+
+# Final check to ensure we have at least an index.html file
+if [ ! -f "dist/index.html" ]; then
+    echo "‼️ No index.html found in dist after all processing. Creating emergency index.html" | tee -a $LOG_FILE
+    cat > dist/index.html << 'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tacitus Swap</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin: 50px; }
+    </style>
+</head>
+<body>
+    <h1>Tacitus Swap</h1>
+    <p>Website coming soon. Please check back later.</p>
+</body>
+</html>
+EOF
+    echo "✅ Created emergency index.html" | tee -a $LOG_FILE
 fi
 
 # Copy the build log to the dist directory for debugging
