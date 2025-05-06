@@ -15,7 +15,20 @@
                      window.location.hostname.endsWith('.eth');
         
         if (isIPFS) {
-          console.log('IPFS deployment detected, applying fixes...');
+          console.log('IPFS deployment detected, applying most aggressive fixes...');
+          
+          // Completely disable CSP by setting an extremely permissive policy
+          var cspMeta = document.createElement('meta');
+          cspMeta.httpEquiv = 'Content-Security-Policy';
+          cspMeta.content = "default-src * 'self' data: blob: 'unsafe-inline' 'unsafe-eval'; script-src * 'self' data: blob: 'unsafe-inline' 'unsafe-eval'; connect-src * 'self' data: blob: 'unsafe-inline'; img-src * 'self' data: blob: 'unsafe-inline'; frame-src * 'self' data: blob:; style-src * 'self' data: blob: 'unsafe-inline'; font-src * 'self' data: blob: 'unsafe-inline';";
+          cspMeta.id = "ipfs-permissive-csp";
+          
+          // Add it as the first element in head to override any other CSP
+          if (document.head.firstChild) {
+            document.head.insertBefore(cspMeta, document.head.firstChild);
+          } else {
+            document.head.appendChild(cspMeta);
+          }
           
           // Fix 1: Create inline Space Grotesk font styles to avoid Google Fonts CSP issues
           var fontStyle = document.createElement('style');
@@ -26,39 +39,38 @@
               font-style: normal;
               font-weight: 300;
               src: url('https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUXskPMBBSSJLm2E.woff2') format('woff2');
+              font-display: swap;
             }
             @font-face {
               font-family: 'Space Grotesk';
               font-style: normal;
               font-weight: 400;
               src: url('https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUXskPMBBSSJLm2E.woff2') format('woff2');
+              font-display: swap;
             }
             @font-face {
               font-family: 'Space Grotesk';
               font-style: normal;
               font-weight: 500;
               src: url('https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUXskPMBBSSJLm2E.woff2') format('woff2');
+              font-display: swap;
             }
             @font-face {
               font-family: 'Space Grotesk';
               font-style: normal;
               font-weight: 600;
               src: url('https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUXskPMBBSSJLm2E.woff2') format('woff2');
+              font-display: swap;
             }
             @font-face {
               font-family: 'Space Grotesk';
               font-style: normal;
               font-weight: 700;
               src: url('https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUXskPMBBSSJLm2E.woff2') format('woff2');
+              font-display: swap;
             }
           `;
           document.head.appendChild(fontStyle);
-          
-          // Fix 2: Override CSP with a more permissive policy for IPFS deployments
-          var cspMeta = document.createElement('meta');
-          cspMeta.httpEquiv = 'Content-Security-Policy';
-          cspMeta.content = "default-src 'self'; connect-src * 'self' data: blob: https://*.gateway.uniswap.org https://beta.gateway.uniswap.org; img-src * data: blob:; media-src * data:; font-src * data:; style-src 'self' 'unsafe-inline' *; script-src 'self' 'unsafe-inline' 'unsafe-eval';";
-          document.head.appendChild(cspMeta);
           
           // Fix 3: Patch fetch for CORS issues
           var originalFetch = window.fetch;
@@ -81,10 +93,53 @@
             return originalFetch(input, init);
           };
           
+          // Function to remove all CSP meta tags except our permissive one
+          function removeOtherCSP() {
+            var metaTags = document.querySelectorAll('meta[http-equiv="Content-Security-Policy"]');
+            for (var i = 0; i < metaTags.length; i++) {
+              if (metaTags[i].id !== 'ipfs-permissive-csp') {
+                console.log('Removing conflicting CSP tag:', metaTags[i]);
+                metaTags[i].parentNode.removeChild(metaTags[i]);
+              }
+            }
+          }
+          
           // Remove Google Fonts links to avoid CSP issues
-          var links = document.querySelectorAll('link[href*="fonts.googleapis.com"]');
-          links.forEach(function(link) {
-            link.parentNode.removeChild(link);
+          function removeGoogleFonts() {
+            var links = document.querySelectorAll('link[href*="fonts.googleapis.com"]');
+            links.forEach(function(link) {
+              console.log('Removing Google Fonts link:', link);
+              link.parentNode.removeChild(link);
+            });
+          }
+          
+          // Run immediately
+          removeOtherCSP();
+          removeGoogleFonts();
+          
+          // Also set up a MutationObserver to catch dynamically added elements
+          var observer = new MutationObserver(function(mutations) {
+            var needsCheck = false;
+            
+            mutations.forEach(function(mutation) {
+              if (mutation.type === 'childList' && mutation.addedNodes.length) {
+                needsCheck = true;
+              }
+            });
+            
+            if (needsCheck) {
+              removeOtherCSP();
+              removeGoogleFonts();
+            }
+          });
+          
+          // Start observing the document with the configured parameters
+          observer.observe(document, { childList: true, subtree: true });
+          
+          // Additionally run cleanup after DOM is fully loaded
+          document.addEventListener('DOMContentLoaded', function() {
+            removeOtherCSP();
+            removeGoogleFonts();
           });
         }
       })();
@@ -108,11 +163,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#0a0b0e" />
-    <% const cspConfig = require('./csp.json'); %>
-    <meta
-      http-equiv="Content-Security-Policy" 
-      content="default-src <%= cspConfig.defaultSrc.join(' ') %>; script-src <%= cspConfig.scriptSrc.join(' ') %>; style-src <%= cspConfig.styleSrc.join(' ') %> https://fonts.googleapis.com; font-src <%= cspConfig.fontSrc ? cspConfig.fontSrc.join(' ') : '\'self\'' %> https://fonts.gstatic.com; img-src <%= cspConfig.imgSrc.join(' ') %>; frame-src <%= cspConfig.frameSrc.join(' ') %>; connect-src <%= cspConfig.connectSrc.join(' ') %> https://beta.gateway.uniswap.org; worker-src <%= cspConfig.workerSrc.join(' ') %>;"
-    >
+    <% const cspConfig = require('./csp.json'); /* We need to keep this cspConfig definition for the build process */ %>
+    <!-- CSP meta tag is intentionally removed for IPFS deployments - see script above -->
     
     <!-- 
       Apple Smart App Banner for Safari on iOS - Removed Uniswap app reference
