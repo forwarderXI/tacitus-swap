@@ -76,43 +76,17 @@ const standardBaseQuery = fetchBaseQuery();
 
 // Custom fetch function for routing API with IPFS support
 const customFetch = async (args: any, api: any, extraOptions: any) => {
-  const isIPFS = isIPFSDeployment();
-  const originalFetch = fetch;
-
-  // If on IPFS deployment, add headers to mimic app.uniswap.org
-  if (isIPFS) {
-    console.log('IPFS routing fix: Adding headers to routing API request');
-    
-    // Add all necessary headers to make it look like the request comes from app.uniswap.org
-    const enhancedHeaders = {
-      ...args.headers,
-      'Origin': 'https://app.uniswap.org',
-      'Referer': 'https://app.uniswap.org/',
-      'x-request-source': 'uniswap-web',
-      'Content-Type': 'application/json'
+  // If on IPFS deployment, skip server requests and go directly to client router
+  if (isIPFSDeployment()) {
+    console.log('IPFS routing fix: Skipping server request and using client-side router directly');
+    return { 
+      error: { 
+        status: 'FETCH_ERROR',
+        data: { 
+          detail: 'IPFS_DEPLOYMENT_SKIP_SERVER' 
+        }
+      } 
     };
-    
-    // Try first with no-cors mode removed (which might work with our CSP overrides)
-    try {
-      const response = await originalFetch(args.url, {
-        method: args.method,
-        headers: enhancedHeaders,
-        body: args.body,
-        credentials: 'omit'
-      });
-      
-      return { data: await response.json(), status: response.status };
-    } catch (error) {
-      console.log('Routing API primary request failed, trying fallback', error);
-      
-      // Fallback to client-side router
-      return { 
-        error: { 
-          status: 'FETCH_ERROR',
-          data: { detail: 'IPFS deployment request failed' }
-        } 
-      };
-    }
   }
   
   // For non-IPFS deployments, use the standard fetch implementation
@@ -151,6 +125,40 @@ export const routingApi = createApi({
             configs: getRoutingAPIConfig(args),
           }
 
+          // If on IPFS, skip server request and go directly to client-side router
+          if (isIPFSDeployment()) {
+            console.log('IPFS routing strategy: Using client-side router for IPFS deployment');
+            
+            try {
+              return trace.child({ name: 'Quote on client for IPFS', op: 'quote.client' }, async (clientTrace) => {
+                const { getRouter, getClientSideQuote } = await import('lib/hooks/routing/clientSideSmartOrderRouter')
+                const router = getRouter(args.tokenInChainId)
+                const quoteResult = await getClientSideQuote(args, router, CLIENT_PARAMS)
+                
+                if (quoteResult.state === QuoteState.SUCCESS) {
+                  const trade = await transformQuoteToTrade(args, quoteResult.data, QuoteMethod.CLIENT_SIDE_FALLBACK)
+                  return {
+                    data: { ...trade, latencyMs: trace.now() },
+                  }
+                } else {
+                  clientTrace.setStatus('not_found')
+                  trace.setStatus('not_found')
+                  return { data: { ...quoteResult, latencyMs: trace.now() } }
+                }
+              })
+            } catch (error: any) {
+              console.warn(`GetQuote on IPFS failed: ${error}`)
+              trace.setError(error)
+              return {
+                error: {
+                  status: 'CUSTOM_ERROR',
+                  error: error?.detail ?? error?.message ?? error,
+                },
+              }
+            }
+          }
+
+          // For non-IPFS deployments, try server first
           const baseURL = gatewayDNSUpdateEnabled ? UNISWAP_GATEWAY_DNS_URL : UNISWAP_API_URL
           try {
             return trace.child({ name: 'Quote on server', op: 'quote.server' }, async (serverTrace) => {
