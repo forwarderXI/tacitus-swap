@@ -5,6 +5,91 @@
 
     <title>Tacitus Swap</title>
 
+    <!-- IPFS/Fleek deployment fixes -->
+    <script>
+      // Early-executing script to fix CORS and CSP issues on IPFS/Fleek
+      (function() {
+        var isIPFS = window.location.hostname.includes('.on-fleek.app') || 
+                     window.location.hostname.includes('.ipfs.') || 
+                     window.location.hostname.includes('.eth.limo') ||
+                     window.location.hostname.endsWith('.eth');
+        
+        if (isIPFS) {
+          console.log('IPFS deployment detected, applying fixes...');
+          
+          // Fix 1: Create inline Space Grotesk font styles to avoid Google Fonts CSP issues
+          var fontStyle = document.createElement('style');
+          fontStyle.textContent = `
+            /* Space Grotesk font */
+            @font-face {
+              font-family: 'Space Grotesk';
+              font-style: normal;
+              font-weight: 300;
+              src: url('https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUXskPMBBSSJLm2E.woff2') format('woff2');
+            }
+            @font-face {
+              font-family: 'Space Grotesk';
+              font-style: normal;
+              font-weight: 400;
+              src: url('https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUXskPMBBSSJLm2E.woff2') format('woff2');
+            }
+            @font-face {
+              font-family: 'Space Grotesk';
+              font-style: normal;
+              font-weight: 500;
+              src: url('https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUXskPMBBSSJLm2E.woff2') format('woff2');
+            }
+            @font-face {
+              font-family: 'Space Grotesk';
+              font-style: normal;
+              font-weight: 600;
+              src: url('https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUXskPMBBSSJLm2E.woff2') format('woff2');
+            }
+            @font-face {
+              font-family: 'Space Grotesk';
+              font-style: normal;
+              font-weight: 700;
+              src: url('https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUXskPMBBSSJLm2E.woff2') format('woff2');
+            }
+          `;
+          document.head.appendChild(fontStyle);
+          
+          // Fix 2: Override CSP with a more permissive policy for IPFS deployments
+          var cspMeta = document.createElement('meta');
+          cspMeta.httpEquiv = 'Content-Security-Policy';
+          cspMeta.content = "default-src 'self'; connect-src * 'self' data: blob: https://*.gateway.uniswap.org https://beta.gateway.uniswap.org; img-src * data: blob:; media-src * data:; font-src * data:; style-src 'self' 'unsafe-inline' *; script-src 'self' 'unsafe-inline' 'unsafe-eval';";
+          document.head.appendChild(cspMeta);
+          
+          // Fix 3: Patch fetch for CORS issues
+          var originalFetch = window.fetch;
+          window.fetch = function(input, init) {
+            var url = input;
+            if (input instanceof Request) {
+              url = input.url;
+            }
+            
+            if (typeof url === 'string' && (
+              url.includes('gateway.uniswap.org') || 
+              url.includes('api.uniswap.org') ||
+              url.includes('beta.gateway.uniswap.org')
+            )) {
+              console.log('IPFS CORS fix: Using no-cors for ' + url);
+              var newInit = Object.assign({}, init || {}, { mode: 'no-cors' });
+              return originalFetch(input, newInit);
+            }
+            
+            return originalFetch(input, init);
+          };
+          
+          // Remove Google Fonts links to avoid CSP issues
+          var links = document.querySelectorAll('link[href*="fonts.googleapis.com"]');
+          links.forEach(function(link) {
+            link.parentNode.removeChild(link);
+          });
+        }
+      })();
+    </script>
+
     <!--
       %PUBLIC_URL% will be replaced with the URL of the `public` folder during build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -26,7 +111,7 @@
     <% const cspConfig = require('./csp.json'); %>
     <meta
       http-equiv="Content-Security-Policy" 
-      content="default-src <%= cspConfig.defaultSrc.join(' ') %>; script-src <%= cspConfig.scriptSrc.join(' ') %>; style-src <%= cspConfig.styleSrc.join(' ') %>; img-src <%= cspConfig.imgSrc.join(' ') %>; frame-src <%= cspConfig.frameSrc.join(' ') %>; connect-src <%= cspConfig.connectSrc.join(' ') %>; worker-src <%= cspConfig.workerSrc.join(' ') %>;"
+      content="default-src <%= cspConfig.defaultSrc.join(' ') %>; script-src <%= cspConfig.scriptSrc.join(' ') %>; style-src <%= cspConfig.styleSrc.join(' ') %> https://fonts.googleapis.com; font-src <%= cspConfig.fontSrc ? cspConfig.fontSrc.join(' ') : '\'self\'' %> https://fonts.gstatic.com; img-src <%= cspConfig.imgSrc.join(' ') %>; frame-src <%= cspConfig.frameSrc.join(' ') %>; connect-src <%= cspConfig.connectSrc.join(' ') %> https://beta.gateway.uniswap.org; worker-src <%= cspConfig.workerSrc.join(' ') %>;"
     >
     
     <!-- 

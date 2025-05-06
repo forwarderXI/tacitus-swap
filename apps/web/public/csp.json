@@ -17,7 +17,13 @@
   "styleSrc": [
     "'self'",
     "'unsafe-inline'",
-    "'unsafe-eval'"
+    "'unsafe-eval'",
+    "https://fonts.googleapis.com"
+  ],
+  "fontSrc": [
+    "'self'",
+    "data:",
+    "https://fonts.gstatic.com"
   ],
   "imgSrc": [
     "*",
@@ -55,6 +61,7 @@
     "data:",
     "https://*.gateway.uniswap.org",
     "https://gateway.uniswap.org",
+    "https://beta.gateway.uniswap.org",
     "https://statsigapi.net",
     "https://api.moonpay.com/",
     "https://api.opensea.io",
