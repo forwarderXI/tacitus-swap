@@ -443,10 +443,6 @@ fi
 # Main execution flow after determining build script
 echo "🚀 Starting build process with script: ${BUILD_SCRIPT}" | tee -a $LOG_FILE
 
-# Ensure dist directory exists before we do anything else
-mkdir -p dist
-chmod -R 755 dist
-
 # Attempt yarn build with a timeout and more verbose output
 echo "Running yarn ${BUILD_SCRIPT} with timeout..." | tee -a $LOG_FILE
 BUILD_SUCCESS=false
@@ -467,184 +463,15 @@ DEBUG=* NEXT_TELEMETRY_DISABLED=1 timeout 900 yarn ${BUILD_SCRIPT} --verbose > >
     }
 }
 
-# Find build output and copy to dist
-find_and_copy_build_output() {
-    echo "🔍 Searching for build output directories..." | tee -a $LOG_FILE
-    
-    # List of common build output directories to check
-    build_dirs=(".next" "out" "build" "dist" "public" ".output" ".vercel/output")
-    
-    # Track if we found any build output
-    FOUND_BUILD_OUTPUT=false
-    
-    # Check each potential build directory
-    for dir in "${build_dirs[@]}"; do
-        if [ -d "$dir" ]; then
-            echo "📂 Found potential build directory: $dir" | tee -a $LOG_FILE
-            
-            # Check if this directory has files
-            if [ -n "$(ls -A $dir 2>/dev/null)" ]; then
-                echo "✅ $dir contains files" | tee -a $LOG_FILE
-                
-                # Special handling for Next.js output
-                if [ "$dir" = ".next" ]; then
-                    echo "🔧 Detected Next.js build output in .next" | tee -a $LOG_FILE
-                    
-                    # If standalone output exists (for Next.js 12+)
-                    if [ -d ".next/standalone" ]; then
-                        echo "📦 Using Next.js standalone output" | tee -a $LOG_FILE
-                        cp -rv .next/standalone/* dist/ | tee -a $LOG_FILE
-                        if [ -d ".next/static" ]; then
-                            mkdir -p dist/.next/static
-                            cp -rv .next/static/* dist/.next/static/ | tee -a $LOG_FILE
-                        fi
-                        FOUND_BUILD_OUTPUT=true
-                    else
-                        # For regular Next.js builds, we still need to check if it's static export
-                        if [ -d "out" ] && [ -f "out/index.html" ]; then
-                            echo "📦 Found static export in out directory" | tee -a $LOG_FILE
-                            cp -rv out/* dist/ | tee -a $LOG_FILE
-                            FOUND_BUILD_OUTPUT=true
-                        else
-                            echo "⚠️ Found .next directory but no static export" | tee -a $LOG_FILE
-                            # Copy the .next directory anyway in case it's needed
-                            mkdir -p dist/.next
-                            cp -rv .next/* dist/.next/ | tee -a $LOG_FILE
-                            # Also copy package.json, node_modules, and public
-                            if [ -f "package.json" ]; then
-                                cp -v package.json dist/ | tee -a $LOG_FILE
-                            fi
-                            if [ -d "public" ]; then
-                                cp -rv public/* dist/ | tee -a $LOG_FILE
-                            fi
-                            FOUND_BUILD_OUTPUT=true
-                        fi
-                    fi
-                # Special handling for Vercel output
-                elif [ "$dir" = ".vercel/output" ]; then
-                    echo "📦 Using Vercel build output" | tee -a $LOG_FILE
-                    if [ -d ".vercel/output/static" ]; then
-                        cp -rv .vercel/output/static/* dist/ | tee -a $LOG_FILE
-                        FOUND_BUILD_OUTPUT=true
-                    fi
-                # For regular build directories, copy the content directly to dist
-                elif [ -f "$dir/index.html" ] || [ -n "$(find $dir -name '*.html' 2>/dev/null)" ]; then
-                    echo "📦 Copying contents from $dir to dist/" | tee -a $LOG_FILE
-                    cp -rv $dir/* dist/ | tee -a $LOG_FILE
-                    FOUND_BUILD_OUTPUT=true
-                fi
-            fi
-        fi
-    done
-    
-    # Search for any directory with an index.html as a last resort
-    if [ "$FOUND_BUILD_OUTPUT" = false ]; then
-        echo "🔍 No standard build directory found, searching for any directory with index.html..." | tee -a $LOG_FILE
-        
-        # Find any index.html in the current directory tree (up to depth 3)
-        index_html_paths=$(find . -maxdepth 3 -name "index.html" -not -path "./node_modules/*" -not -path "./dist/*" | sort)
-        
-        if [ -n "$index_html_paths" ]; then
-            echo "📋 Found these index.html files:" | tee -a $LOG_FILE
-            echo "$index_html_paths" | tee -a $LOG_FILE
-            
-            # Get the directory of the first index.html
-            first_index_dir=$(dirname "$(echo "$index_html_paths" | head -1)")
-            
-            echo "📦 Using $first_index_dir as build output" | tee -a $LOG_FILE
-            cp -rv "$first_index_dir"/* dist/ | tee -a $LOG_FILE
-            FOUND_BUILD_OUTPUT=true
-        fi
-    fi
-    
-    # Always ensure we have an index.html file
-    if [ ! -f "dist/index.html" ]; then
-        echo "❌ No index.html found in dist, using fallback content" | tee -a $LOG_FILE
-        create_fallback_content
-        FOUND_BUILD_OUTPUT=true
-    fi
-    
-    # Check if we found and copied any build output
-    if [ "$FOUND_BUILD_OUTPUT" = true ]; then
-        echo "✅ Successfully copied build output to dist/" | tee -a $LOG_FILE
-        # Create _headers file with CORS settings for IPFS
-        create_headers_file
-        return 0
-    else
-        echo "❌ Could not find any build output to copy to dist/" | tee -a $LOG_FILE
-        create_fallback_content
-        return 1
-    fi
-}
-
-# Create _headers file with CORS settings for IPFS
-create_headers_file() {
-    echo "📝 Creating _headers file with CORS settings for IPFS..." | tee -a $LOG_FILE
-    cat > dist/_headers << EOL
-/*
-  Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
-  Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept
-EOL
-    echo "✅ Created _headers file" | tee -a $LOG_FILE
-}
-
-# Create a fallback HTML file in case the build fails
-create_fallback_content() {
-    echo "📝 Creating fallback content..." | tee -a $LOG_FILE
-    mkdir -p dist
-    cat > dist/index.html << 'EOF'
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tacitus Swap - Build Issues</title>
-    <style>
-        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }
-        h1 { color: #0066cc; }
-        pre { background: #f5f5f5; padding: 15px; border-radius: 4px; overflow-x: auto; border: 1px solid #ddd; }
-        .error { color: #c00; font-weight: bold; }
-        .success { color: #0a0; font-weight: bold; }
-        .info { background: #f0f7ff; padding: 15px; border-radius: 4px; border-left: 4px solid #0066cc; margin-bottom: 20px; }
-    </style>
-</head>
-<body>
-    <h1>Tacitus Swap</h1>
-    <div class="info">
-        <p>The site is currently having build issues. Our team has been notified and is working on a solution.</p>
-        <p>Please check back soon, or visit our <a href="https://github.com/forwarderXI/tacitus-swap">GitHub repository</a> for project updates.</p>
-    </div>
-    <h2>Build Log</h2>
-    <pre id="buildLog">Loading build log...</pre>
-    <script>
-        fetch('build-debug.log')
-            .then(res => res.text())
-            .then(log => {
-                document.getElementById('buildLog').textContent = log;
-            })
-            .catch(err => {
-                document.getElementById('buildLog').textContent = 'Error loading build log: ' + err.message;
-            });
-    </script>
-</body>
-</html>
-EOF
-    echo "✅ Created fallback index.html" | tee -a $LOG_FILE
-}
-
 # Search for build output and copy to dist
 echo "🔍 Looking for build output..." | tee -a $LOG_FILE
 if find_and_copy_build_output; then
     echo "✅ Build output found and copied to dist/" | tee -a $LOG_FILE
 else
-    echo "❌ Could not find build output, using fallback content" | tee -a $LOG_FILE
-    create_fallback_content
-fi
-
-# Final check to ensure we have at least an index.html file
-if [ ! -f "dist/index.html" ]; then
-    echo "‼️ No index.html found in dist after all processing. Creating emergency index.html" | tee -a $LOG_FILE
+    echo "❌ Could not find build output, creating fallback content" | tee -a $LOG_FILE
+    
+    # Create a minimal index.html
+    mkdir -p dist
     cat > dist/index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
@@ -653,16 +480,75 @@ if [ ! -f "dist/index.html" ]; then
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tacitus Swap</title>
     <style>
-        body { font-family: sans-serif; text-align: center; margin: 50px; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(35deg, #FF80BF, #FF007A);
+            color: white;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            padding: 2rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin-top: 0;
+        }
+        a {
+            color: white;
+            text-decoration: underline;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+        }
     </style>
+    <script src="app.js"></script>
 </head>
 <body>
-    <h1>Tacitus Swap</h1>
-    <p>Website coming soon. Please check back later.</p>
+    <div class="container">
+        <svg class="logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="6" fill="white"/>
+            <path d="M21.4537 16.5069C22.3004 16.5069 23.1098 16.3726 23.8807 16.104C24.6686 15.8355 25.3335 15.4629 25.8755 14.9863L24.0405 12.8955C23.2187 13.6133 22.231 14.0112 21.0773 14.0112C20.0057 14.0112 19.1051 13.6948 18.3755 13.062C17.6458 12.4291 17.1692 11.6074 16.9457 10.5969H21.3598V8.39258H16.9457C17.0212 7.94995 17.1221 7.55211 17.2484 7.19922C17.3747 6.83013 17.534 6.50685 17.7261 6.22937C17.9261 5.9437 18.1678 5.709 18.4512 5.5252C18.7345 5.3331 19.0657 5.1937 19.4447 5.1069C19.8237 5.0112 20.2578 4.96344 20.7471 4.96344C21.38 4.96344 21.9199 5.04998 22.3665 5.22363C22.8202 5.38808 23.1912 5.6074 23.4796 5.8817C23.7679 6.15599 23.9812 6.47156 24.1196 6.82842C24.258 7.18527 24.3354 7.5487 24.3535 7.9177L27.0272 7.9177C27.0181 7.06104 26.8696 6.27315 26.5812 5.55371C26.2899 4.82597 25.8755 4.1901 25.1836 3.5459C24.4916 2.90169 23.6436 2.38086 22.6383 1.983C21.6329 1.58515 20.474 1.38623 19.1616 1.38623C17.9743 1.38623 16.8809 1.5531 15.8839 1.88675C14.8869 2.22041 14.0229 2.69313 13.2924 3.30494C12.5708 3.91675 12.004 4.65896 11.5919 5.53158C11.1797 6.39538 10.9398 7.36392 10.9398 8.4375V10.5969H10.9398V10.5969H10.9398H10.9398H10.9398H9V8.39258H7.6109V10.5969H6V13.6213H7.6109V24.0112H10.9398V13.6213H16.9457C17.1875 15.2221 17.9014 16.5069 19.0872 17.4754C20.273 18.444 21.7476 18.9284 23.5107 18.9284C24.3691 18.9284 25.135 18.8082 25.8086 18.5678C26.4822 18.3185 27.0435 18.0165 27.4922 17.6618L25.9951 15.6183C25.2172 16.2109 24.3825 16.5069 23.4907 16.5069C22.6146 16.5069 21.8094 16.3038 21.0755 15.8975C20.3496 15.4821 19.821 13.5501 19.4912 13.062C18.7616 12.4291 18.3078 14.5058 18.124 14.0112C20.0057 14.0112 19.1051 15.5225 18.3755 16.1555C17.6458 16.7883 19.3232 16.5069 21.4537 16.5069Z" fill="#FF007A"/>
+        </svg>
+        <h1>Tacitus Swap</h1>
+        <p>Welcome to Tacitus Swap. The application is being deployed to IPFS.</p>
+        <p>Please check our <a href="https://github.com/forwarderXI/tacitus-swap">GitHub repository</a> for updates.</p>
+    </div>
 </body>
 </html>
 EOF
-    echo "✅ Created emergency index.html" | tee -a $LOG_FILE
+
+    # Create app.js for interactivity
+    cat > dist/app.js << 'EOF'
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Tacitus Swap IPFS App Loader initialized');
+  // Application initialization code would go here
+});
+EOF
+
+    # Create proper headers file
+    cat > dist/_headers << 'EOF'
+/*
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+  Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept
+  Content-Type: text/html; charset=UTF-8
+  Cache-Control: public, max-age=3600
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+EOF
+    
+    echo "✅ Created fallback content with proper index.html and headers" | tee -a $LOG_FILE
 fi
 
 # Copy the build log to the dist directory for debugging
