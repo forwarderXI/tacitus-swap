@@ -202,6 +202,20 @@ export const routingApi = createApi({
                 } catch {
                   throw response.error
                 }
+                
+                // If we reached here, it means there was an error but it wasn't a NO_ROUTE error
+                throw response.error
+              }
+
+              // Make sure response has data before trying to transform it
+              if (!('data' in response)) {
+                console.warn('Unexpected response format from routing API')
+                return {
+                  data: {
+                    state: QuoteState.NOT_FOUND,
+                    latencyMs: trace.now(),
+                  },
+                }
               }
 
               const uraQuoteResponse = response.data as URAQuoteResponse

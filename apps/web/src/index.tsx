@@ -5,11 +5,14 @@ import 'inter-ui'
 import 'polyfills'
 import 'tracing'
 import 'connection/eagerlyConnect'
-import { initializeIPFSWorkarounds } from 'utils/cors-helper'
+import { initializeIPFSWorkarounds, isIPFSDeployment } from 'utils/cors-helper'
 /* eslint-enable prettier/prettier */
 
-// Initialize CORS workarounds for IPFS deployments
-initializeIPFSWorkarounds()
+// Apply IPFS fixes at the very top of the file to catch all network requests
+if (isIPFSDeployment()) {
+  console.log('IPFS deployment detected, applying fixes before app initialization...')
+  initializeIPFSWorkarounds()
+}
 
 import { FeatureFlagsProvider } from 'featureFlags'
 import { Provider as ApolloProvider } from 'graphql/data/apollo/Provider'

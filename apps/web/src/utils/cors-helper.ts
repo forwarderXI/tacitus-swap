@@ -2,6 +2,8 @@
  * Utility functions to help with CORS issues on IPFS deployments
  */
 
+import { getMockResponseForUrl, shouldUseMockResponse } from './ipfs-fallbacks'
+
 /**
  * Check if the app is running on IPFS/Fleek
  */
@@ -71,12 +73,24 @@ export function fixContentSecurityPolicy() {
   }
   
   // Log IPFS deployment detected
-  console.log('IPFS deployment detected. Applying CORS workarounds...')
+  console.log('IPFS deployment detected, applying most aggressive fixes...')
 
-  // Create a meta tag to modify CSP for IPFS deployments
+  // Remove existing CSP meta tags to avoid conflicts
+  document.querySelectorAll('meta[http-equiv="Content-Security-Policy"]').forEach(tag => {
+    console.log('Removing conflicting CSP tag:', tag.outerHTML)
+    tag.remove()
+  })
+
+  // Remove Google Fonts links to avoid CORS issues
+  document.querySelectorAll('link[href*="fonts.googleapis.com"]').forEach(link => {
+    console.log('Removing Google Fonts link:', link.outerHTML)
+    link.remove()
+  })
+
+  // Create a meta tag with completely permissive CSP for IPFS deployments
   const meta = document.createElement('meta')
   meta.httpEquiv = 'Content-Security-Policy'
-  meta.content = "default-src 'self'; connect-src * 'self' data: blob: https://beta.gateway.uniswap.org; img-src * data: blob:; media-src * data:; font-src * data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' 'unsafe-eval';"
+  meta.content = "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;"
   document.head.appendChild(meta)
 }
 
@@ -98,16 +112,25 @@ export function patchFetchForCORS() {
       url = input.url;
     }
     
-    // Check if this is a Uniswap API or gateway request
-    if (typeof url === 'string' && (
-      url.includes('gateway.uniswap.org') || 
-      url.includes('api.uniswap.org') ||
-      url.includes('beta.gateway.uniswap.org')
-    )) {
-      // For Uniswap API requests, use no-cors mode
-      const newInit = { ...init, mode: 'no-cors' };
-      console.log(`IPFS CORS workaround: Setting no-cors mode for request to ${url}`);
-      return originalFetch(input, newInit);
+    if (typeof url === 'string') {
+      // Check if this is a URL that should return mock data on IPFS
+      if (shouldUseMockResponse(url)) {
+        return getMockResponseForUrl(url);
+      }
+      
+      // For Uniswap API requests, add proper headers
+      if (url.includes('gateway.uniswap.org') || url.includes('api.uniswap.org')) {
+        const headers = new Headers(init?.headers || {});
+        headers.set('Origin', 'https://app.uniswap.org');
+        headers.set('Referer', 'https://app.uniswap.org/');
+        
+        const newInit = { 
+          ...init, 
+          mode: 'no-cors' as RequestMode,
+          headers 
+        };
+        return originalFetch(input, newInit);
+      }
     }
     
     // For all other requests, use the original fetch
@@ -128,4 +151,50 @@ export function initializeIPFSWorkarounds() {
   injectFontsWithoutGoogleFonts()
   fixContentSecurityPolicy()
   patchFetchForCORS()
+  
+  // Disable analytics services on IPFS
+  disableAnalyticsOnIPFS()
+} 
+
+/**
+ * Completely disable analytics services on IPFS
+ */
+function disableAnalyticsOnIPFS() {
+  if (!isIPFSDeployment() || typeof window === 'undefined') {
+    return
+  }
+  
+  // Create noops for common analytics methods
+  const noop = () => {};
+  
+  // Mock Statsig
+  if (!window.Statsig) {
+    window.Statsig = {
+      initialize: noop,
+      logEvent: noop,
+      checkGate: () => false,
+      getExperiment: () => ({ get: () => null }),
+    };
+  }
+  
+  // Mock Amplitude
+  if (!window.amplitude) {
+    window.amplitude = {
+      getInstance: () => ({
+        init: noop,
+        logEvent: noop,
+        setUserId: noop,
+      }),
+    };
+  }
+  
+  console.log('Disabled analytics services for IPFS deployment');
+}
+
+// Declare global types for the mocked services
+declare global {
+  interface Window {
+    Statsig?: any;
+    amplitude?: any;
+  }
 } 
