@@ -5,13 +5,18 @@ import 'inter-ui'
 import 'polyfills'
 import 'tracing'
 import 'connection/eagerlyConnect'
-import { initializeIPFSWorkarounds, isIPFSDeployment } from 'utils/cors-helper'
+import { initializeIPFSWorkarounds, isIPFSDeployment, createMissingAssets } from 'utils/cors-helper'
 /* eslint-enable prettier/prettier */
 
 // Apply IPFS fixes at the very top of the file to catch all network requests
 if (isIPFSDeployment()) {
   console.log('IPFS deployment detected, applying fixes before app initialization...')
   initializeIPFSWorkarounds()
+  
+  // Apply DOM-related fixes after the document is fully loaded
+  window.addEventListener('DOMContentLoaded', () => {
+    createMissingAssets()
+  })
 }
 
 import { FeatureFlagsProvider } from 'featureFlags'

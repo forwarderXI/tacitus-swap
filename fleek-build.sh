@@ -62,6 +62,66 @@ if [ -d "apps/web/build" ]; then
         ls -la apps/web/build/ || echo "Cannot list build directory";
     }
     
+    # Create fonts directory and add Basel-Grotesk font files
+    echo "Creating fonts directory and adding fallback font files..."
+    mkdir -p dist/fonts
+    
+    # Download necessary fallback fonts directly into the fonts directory
+    curl -s -o dist/fonts/Basel-Grotesk-Medium.woff2 https://fonts.gstatic.com/s/sourcesanspro/v22/6xKydSBYKcSV-LCoeQqfX1RYOo3ig4vwlxdu.woff2
+    curl -s -o dist/fonts/Basel-Grotesk-Book.woff2 https://fonts.gstatic.com/s/sourcesanspro/v22/6xK3dSBYKcSV-LCoeQqfX1RYOo3qOK7l.woff2
+    curl -s -o dist/fonts/Basel-Grotesk-Medium.woff https://fonts.gstatic.com/s/sourcesanspro/v22/6xKydSBYKcSV-LCoeQqfX1RYOo3ig4vwlxdu.woff
+    curl -s -o dist/fonts/Basel-Grotesk-Book.woff https://fonts.gstatic.com/s/sourcesanspro/v22/6xK3dSBYKcSV-LCoeQqfX1RYOo3qOK7l.woff
+    
+    # Create favicon files
+    echo "Creating favicon files..."
+    cat > dist/favicon.svg << 'EOL'
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="32" height="32" rx="6" fill="#ff7a7e"/>
+<path d="M21.4537 16.5069C22.3004 16.5069 23.1098 16.3726 23.8807 16.104C24.6686 15.8355 25.3335 15.4629 25.8755 14.9863L24.0405 12.8955C23.2187 13.6133 22.231 14.0112 21.0773 14.0112C20.0057 14.0112 19.1051 13.6948 18.3755 13.062C17.6458 12.4291 17.1692 11.6074 16.9457 10.5969H21.3598V8.39258H16.9457C17.0212 7.94995 17.1221 7.55211 17.2484 7.19922C17.3747 6.83013 17.534 6.50685 17.7261 6.22937C17.9261 5.9437 18.1678 5.709 18.4512 5.5252C18.7345 5.3331 19.0657 5.1937 19.4447 5.1069C19.8237 5.0112 20.2578 4.96344 20.7471 4.96344C21.38 4.96344 21.9199 5.04998 22.3665 5.22363C22.8202 5.38808 23.1912 5.6074 23.4796 5.8817C23.7679 6.15599 23.9812 6.47156 24.1196 6.82842C24.258 7.18527 24.3354 7.5487 24.3535 7.9177L27.0272 7.9177C27.0181 7.06104 26.8696 6.27315 26.5812 5.55371C26.2899 4.82597 25.8755 4.1901 25.1836 3.5459C24.4916 2.90169 23.6436 2.38086 22.6383 1.983C21.6329 1.58515 20.474 1.38623 19.1616 1.38623C17.9743 1.38623 16.8809 1.5531 15.8839 1.88675C14.8869 2.22041 14.0229 2.69313 13.2924 3.30494C12.5708 3.91675 12.004 4.65896 11.5919 5.53158C11.1797 6.39538 10.9398 7.36392 10.9398 8.4375V10.5969H10.9398V10.5969H10.9398H10.9398H10.9398H9V8.39258H7.6109V10.5969H6V13.6213H7.6109V24.0112H10.9398V13.6213H16.9457C17.1875 15.2221 17.9014 16.5069 19.0872 17.4754C20.273 18.444 21.7476 18.9284 23.5107 18.9284C24.3691 18.9284 25.135 18.8082 25.8086 18.5678C26.4822 18.3185 27.0435 18.0165 27.4922 17.6618L25.9951 15.6183C25.2172 16.2109 24.3825 16.5069 23.4907 16.5069C22.6146 16.5069 21.8094 16.3038 21.0755 15.8975C20.3496 15.4821 19.821 13.5501 19.4912 13.062C18.7616 12.4291 18.3078 14.5058 18.124 14.0112C20.0057 14.0112 19.1051 15.5225 18.3755 16.1555C17.6458 16.7883 19.3232 16.5069 21.4537 16.5069Z" fill="white"/>
+</svg>
+EOL
+    
+    # Create different sizes of favicons as PNG
+    for size in 32 48 96 144; do
+        cat > "dist/favicon-${size}x${size}.png" << 'EOL'
+iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEySURBVFhH7ZRNDoIwEIU5hSfRe3gDVm7cwC3cwj2sXbowJK5ci97B6J4TeBKfgWkwY6NtKCVx0S954Wfm9QsUSqlUqV6sYRhaNE3j0YtpmtZ0IV/qqmBZVsrb7XaXJMmGlnJxn4bv+z4DhDRNv/BdCDguLVPWdV2fRVH0cBOA0/yM+2q2x35rmmaL6QYIBkCsyrJ8qQEGrwe4vAKgF4SmaRZpmn6wDCIfAN7ApWVZblRVZXMJZqkAMMayLBs0fbIsO9Imx78LIAiCI5q+YRj7oihyXF4MQAcOw/BKm5blAxAul8slqHnbtjc0jwIwxvgbaMZxvKXNGxYA6J7oui6ieRKA67rHb/rWL+J3AYii6PC9gXwjkQpQFMWZx7Zpmi3LPFMAGGOiKHrQkg5gCTnnPsvIAlCpVP9VM/kGS/UewNfHwMgAAAAASUVORK5CYII=
+EOL
+    done
+    
+    # Create a basic manifest file
+    echo "Creating manifest file..."
+    cat > dist/manifest.json << 'EOL'
+{
+  "name": "Uniswap Interface (IPFS)",
+  "short_name": "Uniswap",
+  "icons": [
+    {
+      "src": "/favicon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#ff007a",
+  "background_color": "#fff",
+  "display": "standalone"
+}
+EOL
+    
     # Create _headers file with proper CORS headers for Fleek
     echo "/*
   Access-Control-Allow-Origin: *
