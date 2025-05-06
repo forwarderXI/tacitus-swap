@@ -11,37 +11,61 @@ if (!API_URL || !REALTIME_URL || !REALTIME_TOKEN) {
   throw new Error('AWS CONFIG MISSING FROM ENVIRONMENT')
 }
 
-// Custom fetch function with CORS workaround for IPFS deployment
+// Enhanced fetch function for IPFS deployments
 const customFetch = (input: RequestInfo | URL, options: RequestInit = {}) => {
   // Check if we're running on IPFS/Fleek
   const onIPFS = isIPFSDeployment()
   
-  // If on IPFS and request is to Uniswap gateway, use no-cors mode
+  // If on IPFS and request is to Uniswap gateway
   if (onIPFS && typeof input === 'string' && (
     input.includes('gateway.uniswap.org') ||
-    input.includes('api.uniswap.org')
+    input.includes('api.uniswap.org') ||
+    input.includes('beta.gateway.uniswap.org')
   )) {
-    return fetch(input, {
+    // For Uniswap API, add proper headers but still use no-cors
+    console.log('IPFS GraphQL fix: Adding headers for Uniswap API request');
+    
+    // Create enhanced headers with proper origin
+    const enhancedHeaders = new Headers(options.headers || {});
+    enhancedHeaders.set('Origin', 'https://app.uniswap.org');
+    enhancedHeaders.set('Referer', 'https://app.uniswap.org/');
+    enhancedHeaders.set('x-request-source', 'uniswap-web');
+    
+    // Create enhanced options
+    const enhancedOptions = {
       ...options,
-      mode: 'no-cors' as RequestMode
-    })
+      headers: enhancedHeaders,
+      mode: 'no-cors' as RequestMode,
+      credentials: 'omit' as RequestCredentials
+    };
+    
+    return fetch(input, enhancedOptions);
   }
   
   // Otherwise use normal fetch
-  return fetch(input, options)
-}
+  return fetch(input, options);
+};
 
+// Create HTTP link with custom fetch function
 const httpLink = new HttpLink({ 
   uri: API_URL,
-  fetch: customFetch
-})
+  fetch: customFetch,
+  headers: {
+    'Content-Type': 'application/json',
+    'Origin': 'https://app.uniswap.org',
+    'Referer': 'https://app.uniswap.org/',
+    'x-request-source': 'uniswap-web'
+  }
+});
 
 export const apolloClient = new ApolloClient({
   connectToDevTools: true,
   link: httpLink,
   headers: {
     'Content-Type': 'application/json',
-    Origin: 'https://app.uniswap.org',
+    'Origin': 'https://app.uniswap.org',
+    'Referer': 'https://app.uniswap.org/',
+    'x-request-source': 'uniswap-web'
   },
   cache: new InMemoryCache({
     typePolicies: {

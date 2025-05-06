@@ -5,6 +5,7 @@ import { isUniswapXSupportedChain } from 'constants/chains'
 import ms from 'ms'
 import { logSwapQuoteRequest } from 'tracing/swapFlowLoggers'
 import { trace } from 'tracing/trace'
+import { isIPFSDeployment } from 'utils/cors-helper'
 
 import {
   GetQuoteArgs,
@@ -70,9 +71,57 @@ function getRoutingAPIConfig(args: GetQuoteArgs): RoutingConfig {
   return [uniswapx, classic]
 }
 
+// Create a standard fetchBaseQuery to use when not on IPFS
+const standardBaseQuery = fetchBaseQuery();
+
+// Custom fetch function for routing API with IPFS support
+const customFetch = async (args: any, api: any, extraOptions: any) => {
+  const isIPFS = isIPFSDeployment();
+  const originalFetch = fetch;
+
+  // If on IPFS deployment, add headers to mimic app.uniswap.org
+  if (isIPFS) {
+    console.log('IPFS routing fix: Adding headers to routing API request');
+    
+    // Add all necessary headers to make it look like the request comes from app.uniswap.org
+    const enhancedHeaders = {
+      ...args.headers,
+      'Origin': 'https://app.uniswap.org',
+      'Referer': 'https://app.uniswap.org/',
+      'x-request-source': 'uniswap-web',
+      'Content-Type': 'application/json'
+    };
+    
+    // Try first with no-cors mode removed (which might work with our CSP overrides)
+    try {
+      const response = await originalFetch(args.url, {
+        method: args.method,
+        headers: enhancedHeaders,
+        body: args.body,
+        credentials: 'omit'
+      });
+      
+      return { data: await response.json(), status: response.status };
+    } catch (error) {
+      console.log('Routing API primary request failed, trying fallback', error);
+      
+      // Fallback to client-side router
+      return { 
+        error: { 
+          status: 'FETCH_ERROR',
+          data: { detail: 'IPFS deployment request failed' }
+        } 
+      };
+    }
+  }
+  
+  // For non-IPFS deployments, use the standard fetch implementation
+  return standardBaseQuery(args, api, extraOptions);
+};
+
 export const routingApi = createApi({
   reducerPath: 'routingApi',
-  baseQuery: fetchBaseQuery(),
+  baseQuery: customFetch,
   endpoints: (build) => ({
     getQuote: build.query<TradeResult, GetQuoteArgs>({
       queryFn(args, _api, _extraOptions, fetch) {
@@ -111,6 +160,8 @@ export const routingApi = createApi({
                 body: JSON.stringify(requestBody),
                 headers: {
                   'x-request-source': 'uniswap-web',
+                  'Origin': 'https://app.uniswap.org',
+                  'Referer': 'https://app.uniswap.org/'
                 },
               })
 
@@ -188,7 +239,7 @@ export const routingApi = createApi({
       keepUnusedDataFor: ms(`10s`),
       extraOptions: {
         maxRetries: 0,
-      },
+      } as any,
     }),
   }),
 })
